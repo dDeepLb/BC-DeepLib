@@ -1,0 +1,21 @@
+{
+  "include": [
+    "src/**/*.ts",
+    ".types/*.d.ts",
+    "node_modules/bc-stubs/bc/**/*.d.ts"
+  ],
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+		"esModuleInterop": true,
+    
+    "allowJs": false,
+    "removeComments": true,
+    "strict": true,
+    "skipLibCheck": true,
+
+    "outDir": "dist",
+    "declaration": true,
+  }
+}

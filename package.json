@@ -1,0 +1,25 @@
+{
+  "name": "bc-deeplib",
+  "version": "1.0.1",
+  "author": "dDeepLb",
+  "description": "Package for easier development of BC mods without need to repeat myself in every mod",
+  "license": "MIT",
+  "files": [
+    "/dist"
+  ],
+  "main": "./dist/DeepLib.js",
+  "types": "./dist/DeepLib.d.ts",
+  "scripts": {
+    "build": "npm run clean && tsc",
+    "clean": "rimraf dist/"
+  },
+  "dependencies": {
+    "bondage-club-mod-sdk": "^1.2.0",
+    "rimraf": "^5.0.5"
+  },
+  "devDependencies": {
+    "@types/lz-string": "^1.5.0",
+    "bc-stubs": "~103.0.0",
+    "typescript": "^5.3.3"
+  }
+}
