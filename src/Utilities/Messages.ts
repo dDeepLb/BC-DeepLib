@@ -1,33 +1,38 @@
-export function sendLocalSmart(id: string, message: string, timeoutInSeconds?: number) {
+export function sendLocalMessage(id: string, message: string, timeoutInSeconds?: number) {
   const div = document.createElement('div');
   div.id = id;
-  div.setAttribute('class', 'ChatMessage DeepLibMessage');
+  const specialId = id + Date.now();
+  div.classList.add('ChatMessage', 'deeplib-message', specialId);
   div.setAttribute('data-time', ChatRoomCurrentTime());
   div.setAttribute('data-sender', Player?.MemberNumber + '');
 
-  div.innerHTML =
-    message.replaceAll('\n\t', '') +
-    /*html*/ `<br><a class="DeepLibText" onClick='document.getElementById("${id}").remove();'><b>Close (Click)</b></a>`;
+  const messageContent = message.replaceAll('\n\t', '') + '<br>';
+  const closeButton = document.createElement('a');
+  closeButton.classList.add('deeplib-text');
+  closeButton.addEventListener('click', () => {
+    div?.remove();
+  });
+  closeButton.innerHTML = '<b>Close (Click)</b>';
+
+  div.innerHTML = messageContent;
+  div.append(closeButton);
 
   ChatRoomAppendChat(div);
   if (!timeoutInSeconds) return;
   setTimeout(() => div?.remove(), timeoutInSeconds * 1000);
 }
 
-export function sendAction(msg: string) {
+export function sendActionMessage(msg: string) {
   ServerSend('ChatRoomChat', {
     Content: 'Beep',
     Type: 'Action',
     Dictionary: [
-      // EN
       { Tag: 'Beep', Text: 'msg' },
-      // CN
       { Tag: '发送私聊', Text: 'msg' },
-      // DE
+      { Tag: '發送私聊', Text: 'msg' },
       { Tag: 'Biep', Text: 'msg' },
-      // FR
       { Tag: 'Sonner', Text: 'msg' },
-      // Message itself
+      { Tag: 'Звуковой сигнал', Text: 'msg' },
       { Tag: 'msg', Text: msg }
     ]
   });
