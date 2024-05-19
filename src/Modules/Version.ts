@@ -1,9 +1,4 @@
-import { BaseModule } from '../Base/BaseModule';
-import { deepLibLogger } from '../DeepLib';
-import { BaseMigrator } from '../Migrators/BaseMigrator';
-import { PlayerStorage, dataStore } from '../Utilities/Data';
-import { sendLocalSmart } from '../Utilities/Messages';
-import { HookPriority, bcSdkMod } from '../Utilities/SDK';
+import { BaseMigrator, BaseModule, HookPriority, PlayerStorage, bcSdkMod, dataStore, deepLibLogger, sendLocalMessage } from '../DeepLib';
 
 export class VersionModule extends BaseModule {
   private static isItNewVersion: boolean = false;
@@ -19,8 +14,8 @@ export class VersionModule extends BaseModule {
       HookPriority.Observe,
       (args, next) => {
         next(args);
-        if (PlayerStorage().GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
-        }
+        // if (PlayerStorage().GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
+        // }
         VersionModule.sendNewVersionMessage();
       },
       999
@@ -44,7 +39,7 @@ export class VersionModule extends BaseModule {
     for (const migrator of VersionModule.Migrators) {
       if (this.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
         saveRequired = saveRequired || migrator.Migrate();
-        deepLibLogger.info(`Migrating from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
+        deepLibLogger.info(`Migrating ${bcSdkMod.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
       }
     }
 
@@ -62,12 +57,11 @@ export class VersionModule extends BaseModule {
   }
 
   static sendNewVersionMessage() {
-    sendLocalSmart('deeplib-new-version', VersionModule.NewVersionMessage);
+    sendLocalMessage('deeplib-new-version', VersionModule.NewVersionMessage);
   }
 
   private static isNewVersion(current: string | undefined, candidate: string) {
-    return true;
-    /* if (current !== undefined) {
+    if (current !== undefined) {
       const CURRENT_ = current.split('.'),
         CANDIDATE_ = candidate.split('.');
       for (let i = 0; i < 3; i++) {
@@ -80,7 +74,7 @@ export class VersionModule extends BaseModule {
     if (current === undefined || current === '' || !current) {
       return true;
     }
-    return false; */
+    return false;
   }
 
   private static saveVersion() {

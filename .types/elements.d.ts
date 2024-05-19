@@ -34,5 +34,5 @@ export type Input = BaseElementModel & {
 export type Label = BaseElementModel & {
   type: 'label';
   label: string;
-  description: string;
+  description?: string;
 };

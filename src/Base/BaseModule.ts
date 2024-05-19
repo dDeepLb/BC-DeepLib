@@ -1,8 +1,6 @@
-import { BaseSettingsModel } from "../Models/Base";
-import { SettingsModel } from "../Models/Settings";
-import { PlayerStorage } from "../Utilities/Data.js";
-import { bcSdkMod } from '../Utilities/SDK';
-import { Subscreen } from "./SettingDefinitions";
+import { BaseSettingsModel, BaseSubscreen, PlayerStorage, SettingsModel, bcSdkMod } from '../DeepLib';
+
+export type Subscreen = new (module?: BaseModule) => BaseSubscreen;
 
 export abstract class BaseModule {
   get settingsScreen(): Subscreen | null {

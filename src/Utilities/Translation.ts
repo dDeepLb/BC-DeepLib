@@ -9,7 +9,7 @@ export class Localization {
   constructor(options: {
     pathToTranslationsFolder: string;
   }) {
-    Localization.PathToTranslation = options.pathToTranslationsFolder.endsWith("/") ? options.pathToTranslationsFolder : options.pathToTranslationsFolder + '/';
+    Localization.PathToTranslation = options.pathToTranslationsFolder.endsWith('/') ? options.pathToTranslationsFolder : options.pathToTranslationsFolder + '/';
 
     Localization.init();
   }

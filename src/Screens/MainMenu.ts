@@ -1,13 +1,12 @@
 
-import { GuiSubscreen } from '../Base/BaseSetting.js';
-import { GUI } from '../Base/SettingUtils.js';
-import { elementCreateButton, elementRemoveSubscreenDiv, elementSetSize } from '../DeepLib.js';
-import { getText } from '../Utilities/Translation.js';
-// import { GuiReset } from './Reset.js';
-import { GuiSupport } from './Support.js';
+import { Checkbox, SettingElement } from 'Types/elements';
+import { BaseSubscreen, GUI, GuiSupport, elementAppendToMiscDiv, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateMiscDiv, elementSetPosSizeFont, getText } from '../DeepLib';
 
-export class MainMenu extends GuiSubscreen {
-  subscreens: GuiSubscreen[] = [];
+export class MainMenu extends BaseSubscreen {
+  subscreens: BaseSubscreen[] = [];
+
+  static wikiLink: string = '';
+  static resetSubscreen: BaseSubscreen | null = null;
 
   get name(): string {
     return 'mainmenu';
@@ -19,6 +18,21 @@ export class MainMenu extends GuiSubscreen {
     this.subscreens = module.subscreens;
   }
 
+  get currentPage(): SettingElement[] {
+    return [
+      <Checkbox>{
+        type: 'checkbox',
+        id: 'deeplib-mainmenu-show-wiki',
+        label: getText('mainmenu.checkbox.show_wiki'),
+        setElementValue: () => {
+          return true;
+        },
+        setSettingValue: (val) => {
+          this.settings.modEnabled = val;
+        },
+      }
+    ];
+  }
 
   Load(): void {
     if (!GUI.instance?.currentSubscreen) {
@@ -28,100 +42,101 @@ export class MainMenu extends GuiSubscreen {
 
     super.Load();
 
-    /* let i = 0;
+    const exitButton = elementCreateButton({
+      type: 'button',
+      id: 'exit',
+      position: [1815, 75],
+      size: [90, 90],
+      image: 'Icons/Exit.png',
+      onClick: () => {
+        this.Exit();
+      },
+      hoverHint: getText('settings.button.back_button_hint')
+    });
+    elementAppendToSubscreenDiv(exitButton);
+
     for (const screen of this.subscreens) {
-      const PX = Math.floor(i / 6);
-      const PY = i % 6;
 
       if (screen.name == 'mainmenu') continue;
 
       const button = elementCreateButton({
         type: 'button',
-        id: screen.name,
+        id: `${screen.name}-button`,
+        image: screen.icon,
         label: getText(`mainmenu.button.${screen.name}`),
-        onClick: () => MainMenu.prototype.setSubscreen(screen),
-        image: screen.icon
+        onClick: () => {
+          this.setSubscreen(screen);
+        },
+        size: [450, 90],
       });
 
-      GuiSubscreen.settingsElement.appendChild(button);
-      elementSetSize({ element: button }, 450, 90);
+      elementAppendToSettingsDiv(button);
+    }
 
-      i++;
-    } */
+    const miscDiv = elementCreateMiscDiv();
+    elementAppendToSubscreenDiv(miscDiv);
 
+    if (MainMenu.resetSubscreen) {
+      const resetButton = elementCreateButton({
+        type: 'button',
+        id: 'deeplib-reset-button',
+        image: 'Icons/ServiceBell.png',
+        label: 'Reset',
+        onClick: () => {
+          this.setSubscreen(MainMenu.resetSubscreen);
+        },
+        size: [405, 80],
+      });
+      elementAppendToMiscDiv(resetButton);
+    }
+
+    if (MainMenu.wikiLink) {
+      const wikiButton = elementCreateButton({
+        type: 'button',
+        id: 'deeplib-wiki-button',
+        image: 'Icons/Introduction.png',
+        label: 'Wiki',
+        onClick: () => {
+          window.open(MainMenu.wikiLink, '_blank');
+        },
+        size: [405, 80],
+      });
+      elementAppendToMiscDiv(wikiButton);
+    }
+
+    const supportButton = elementCreateButton({
+      type: 'button',
+      id: 'deeplib-support-button',
+      image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
+      label: 'Support',
+      onClick: () => {
+        this.setSubscreen(new GuiSupport());
+      },
+      size: [405, 80],
+    });
+    elementAppendToMiscDiv(supportButton);
+    elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
   }
 
   Run() {
-    /* super.Run();
-    let tmp = GuiSubscreen.START_X;
-    var prev = MainCanvas.textAlign;
-
-    GuiSubscreen.START_X = 550;
-    MainCanvas.textAlign = 'left';
-
-    MainCanvas.textAlign = 'center';
-    let i = 0;
-    for (const screen of this.subscreens) {
-      const PX = Math.floor(i / 6);
-      const PY = i % 6;
-
-      if (screen.name == 'mainmenu') continue;
-
-      DrawButton(GuiSubscreen.START_X + 430 * PX, 190 + 120 * PY, 450, 90, '', 'White', '', '');
-      DrawImageResize(screen.icon, GuiSubscreen.START_X + 430 * PX + 10, 190 + 120 * PY + 10, 70, 70);
-
-      MainCanvas.textAlign = 'left';
-      DrawTextFit(getText(`mainmenu.button.${screen.name}`), GuiSubscreen.START_X + 100 + 430 * PX, 235 + 120 * PY, 340, 'Black');
-
-      i++;
-    }
-
-    DrawButton(1500, 630, 405, 80, '', 'IndianRed');
-    DrawImageResize('Icons/ServiceBell.png', 1510, 640, 60, 60);
-    DrawTextFit('Reset', 1580, 670, 320, 'Black');
-
-    DrawButton(1500, 730, 405, 80, '', '#BDA203', '', 'Open Responsive Wiki on GitHub.', false);
-    DrawImageResize('Icons/Introduction.png', 1510, 740, 60, 60);
-    DrawTextFit('Wiki', 1580, 770, 320, 'Black');
-
-    DrawButton(1500, 830, 405, 80, '', '#49225C', '', 'Buy me a coffee.', false);
-    DrawImageResize('Assets/Female3DCG/Emoticon/Coffee/Icon.png', 1510, 840, 60, 60);
-    DrawTextFit('Support Me❤', 1580, 870, 320, 'Black');
-
-    GuiSubscreen.START_X = tmp;
-    MainCanvas.textAlign = prev; */
+    super.Run();
   }
 
-  Click() {
-    /* if (MouseIn(1815, 75, 90, 90)) return this.Exit();
-
-    let tmp = GuiSubscreen.START_X;
-    GuiSubscreen.START_X = 550;
-        let i = 0;
-        for (const screen of this.subscreens) {
-          const PX = Math.floor(i / 6);
-          const PY = i % 6;
-    
-          if (screen.name == 'mainmenu') continue;
-    
-          if (MouseIn(GuiSubscreen.START_X + 430 * PX, 190 + 120 * PY, 450, 90)) {
-            MainMenu.prototype.setSubscreen(screen);
-            return;
-          }
-    
-          i++;
-        }
-    GuiSubscreen.START_X = tmp;
-
-    // if (MouseIn(1500, 630, 405, 80)) this.setSubscreen(this.resetSubscreen);
-    if (MouseIn(1500, 730, 400, 80)) window.open('this.wikiLink', '_blank');
-    if (MouseIn(1500, 830, 400, 80)) this.setSubscreen(new GuiSupport()); */
-  }
+  Click() { }
 
   Exit(): void {
-    /* elementRemoveSubscreenDiv();
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
-    this.setSubscreen(null); */
+    this.setSubscreen(null);
   }
+
+  OnResize(): void {
+    super.OnResize();
+    elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
+  }
+};
+
+export function setMainMenuOptions(wikiLink: string, resetSubscreen: BaseSubscreen | null) {
+  MainMenu.wikiLink = wikiLink;
+  MainMenu.resetSubscreen = resetSubscreen;
 }

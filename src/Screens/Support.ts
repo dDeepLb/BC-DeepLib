@@ -1,6 +1,5 @@
 import { Button, SettingElement } from '../../.types/elements';
-import { GuiSubscreen } from '../Base/BaseSetting.js';
-import { getText } from '../Utilities/Translation.js';
+import { BaseSubscreen, elementSetPosSizeFont, getText } from '../DeepLib';
 
 export class SupportHelper {
   private static thankYouList: string[] = ['Ellena', 'weboos'];
@@ -19,69 +18,50 @@ export class SupportHelper {
   }
 }
 
-export class GuiSupport extends GuiSubscreen {
+export class GuiSupport extends BaseSubscreen {
   get name(): string {
     return 'Support';
   }
 
-  /* get structure(): Element[] {
+  get currentPage(): SettingElement[] {
     return [
-      <any>{
+      <Button>{
         type: 'button',
-        position: [GuiSubscreen.START_X, GuiSubscreen.START_Y],
+        id: 'deeplib-support-kofi',
         size: [405, 80],
-        label: 'support.button.ko-fi',
-        color: '#49225C',
+        label: getText('support.button.ko-fi'),
         image: 'https://storage.ko-fi.com/cdn/nav-logo-stroke.png',
-        disabled: false,
-        callback() {
+        onClick() {
           window.open('https://ko-fi.com/monikka_bc', '_blank');
         }
       },
-      <any>{
+      <Button>{
         type: 'button',
-        position: [GuiSubscreen.START_X, GuiSubscreen.START_Y + GuiSubscreen.Y_MOD + 20],
+        id: 'deeplib-support-patreon',
         size: [405, 80],
-        label: 'support.button.patreon',
-        color: '#49225C',
+        label: getText('support.button.patreon'),
         image: 'https://c5.patreon.com/external/favicon/rebrand/favicon-32.png?v=af5597c2ef',
-        disabled: false,
-        callback() {
+        onClick() {
           window.open('https://patreon.com/monikka_bc', '_blank');
         }
       }
     ];
-  } */
+  }
 
   Load() {
     SupportHelper.doNextThankYou();
-
-    ElementCreateDiv('DeepLibGratitude');
-    let elm = document.getElementById('DeepLibGratitude') as HTMLElement;
-    ElementContent('DeepLibGratitude', gratitudeHtml);
-
-    const font =
-      MainCanvas.canvas.clientWidth <= MainCanvas.canvas.clientHeight * 2
-        ? MainCanvas.canvas.clientWidth / 50
-        : MainCanvas.canvas.clientHeight / 25;
-
-    Object.assign(elm.style, <CSSStyleDeclaration>{
-      fontFamily: CommonGetFontName(),
-      fontSize: font + 'px'
-    });
-
     super.Load();
+    ElementRemove('deeplib-settngs');
+
+    ElementCreateDiv('deeplib-gratitude');
+    const elm = document.getElementById('deeplib-gratitude') as HTMLElement;
+    ElementContent('deeplib-gratitude', gratitudeHtml);
+    elementSetPosSizeFont({ element: elm }, 1000, 250, 400, 400);
+
   }
 
   Run() {
     super.Run();
-
-    let tmp = GuiSubscreen.START_X;
-    GuiSubscreen.START_X = 550;
-
-    DrawText(SupportHelper.getSupporter(), GuiSubscreen.START_X + 300, GuiSubscreen.START_Y - GuiSubscreen.Y_MOD, 'Black', '#D7F6E9');
-
-    GuiSubscreen.START_X = tmp;
   }
 
   Click() {
@@ -89,26 +69,31 @@ export class GuiSupport extends GuiSubscreen {
   }
 
   Exit() {
-    ElementRemove('Gratitude');
+    ElementRemove('deeplib-gratitude');
     super.Exit();
+  }
+
+  OnResize(): void {
+    super.OnResize();
+    elementSetPosSizeFont({ elementId: 'deeplib-gratitude' }, 1000, 250, 400, 400);
   }
 }
 
 const gratitudeHtml = /*html*/ `
-<h1 class="ResponsiveH">Dear Supporters!</h1>
-<p class="ResponsiveP">
+<h1>Dear Supporters!</h1>
+<p>
   I want to take a moment to express my heartfelt gratitude for considering supporting me. Your willingness to stand by
   my side in this creative journey means the world to me, and I am truly humbled by your generosity.
 </p>
-<p class="ResponsiveP">
+<p>
   Your support goes far beyond the financial contributions; it represents belief in my work and a shared passion for
   what I do. Your encouragement inspires me to continue developing.
 </p>
-<p class="ResponsiveP">
+<p>
   Your support not only helps me sustain and grow as a developer, but also enables me to dedicate more time and
   resources to producing high-quality mods. It allows me to explore new ideas, enhance my skills, and bring even more
   meaningful and enjoyable content to you.
 </p>
-<p class="ResponsiveP">Thank you all~</p>
-<p class="ResponsiveP">With love, Monikka♥</p>
+<p>Thank you all~</p>
+<p>With love, Monikka♥</p>
 `;

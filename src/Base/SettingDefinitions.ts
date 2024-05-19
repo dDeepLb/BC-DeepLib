@@ -1,22 +1,14 @@
-import { BaseModule } from "./BaseModule";
-import { GuiSubscreen } from "./BaseSetting";
-import { GUI } from "./SettingUtils";
+import { BaseSubscreen, GUI } from '../DeepLib';
 
-export const SETTING_FUNC_PREFIX: string = "PreferenceSubscreen";
-export let SETTING_NAME_PREFIX: string = "BCR";
-export const SETTING_FUNC_NAMES: string[] = ["Load", "Run", "Click", "Unload", "Exit"];
-
-export type Subscreen = new (module: BaseModule) => GuiSubscreen;
-
-export function getCurrentSubscreen(): GuiSubscreen | null {
+export function getCurrentSubscreen(): BaseSubscreen | null {
   return GUI.instance && GUI.instance.currentSubscreen;
 }
 
-export function setSubscreen(subscreen: GuiSubscreen | string | null): GuiSubscreen | null {
+export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubscreen | null {
   if (!GUI.instance) {
-    throw new Error("Attempt to set subscreen before init");
+    throw new Error('Attempt to set subscreen before init');
   }
-  // GUI.instance.currentSubscreen?.OnScreenChange();
+  GUI.instance.currentSubscreen?.OnScreenChange();
   GUI.instance.currentSubscreen = subscreen;
 
   return GUI.instance.currentSubscreen;
