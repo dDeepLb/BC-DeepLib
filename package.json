@@ -5,21 +5,30 @@
   "description": "Package for easier development of BC mods without need to repeat myself in every mod",
   "license": "MIT",
   "files": [
-    "/dist"
+    "/dist",
+    ".types"
   ],
   "main": "./dist/DeepLib.js",
   "types": "./dist/DeepLib.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
-    "clean": "rimraf dist/"
-  },
-  "dependencies": {
-    "bondage-club-mod-sdk": "^1.2.0",
-    "rimraf": "^5.0.5"
+    "build": "tsc && pnpm run copy",
+    "cleanbuild": "pnpm run clean && tsc && pnpm run copy",
+    "lint": "eslint src/",
+    "clean": "rimraf dist/",
+    "copy": "copyfiles -u 1 src/**/*.html src/**/*.css dist/"
   },
   "devDependencies": {
-    "@types/lz-string": "^1.5.0",
-    "bc-stubs": "~103.0.0",
-    "typescript": "^5.3.3"
+    "@eslint/js": "^9.2.0",
+    "@stylistic/eslint-plugin": "^2.0.0",
+    "bc-stubs": "^103.0.0",
+    "copyfiles": "^2.4.1",
+    "eslint": "^9.2.0",
+    "globals": "^15.1.0",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.8.0"
+  },
+  "dependencies": {
+    "bondage-club-mod-sdk": "^1.2.0"
   }
 }
