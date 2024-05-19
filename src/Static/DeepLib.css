@@ -1,0 +1,113 @@
+/************/
+/* ELEMENTS */
+/************/
+
+.deeplib-subscreen {
+  padding: 0;
+  margin: 0;
+}
+
+.deeplib-settings {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 0.3em;
+}
+
+.deeplib-misc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column-reverse;
+}
+
+.deeplib-button {
+  box-sizing: border-box;
+  background-color: var(--elementBackground, white);
+  border: 2px solid var(--elementBorder, black);
+  border-radius: 0px;
+
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text);
+  user-select: none;
+}
+
+.deeplib-button:hover {
+  background-color: var(--elementBackgroundHover, cyan);
+}
+
+.deeplib-button img {
+  height: 95%;
+  aspect-ratio: 1 / 1;
+}
+
+.deeplib-button img::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: multiply;
+  background: var(--accent)
+}
+
+.deeplib-button span {
+  width: 100%;
+}
+
+#deeplib-subscreen-title {
+  text-align: center;
+}
+
+#deeplib-reset-button {
+  background-color: indianred;
+}
+
+#deeplib-wiki-button {
+  background-color: #BDA203;
+}
+
+#deeplib-support-button {
+  background-color: #5e4969;
+}
+
+/*************/
+/* MESSAGES */
+/*************/
+
+.deeplib-highlight-text {
+  font-weight: bold;
+  color: rgb(203, 185, 23);
+}
+
+#TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.deeplib-message,
+#TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.deeplib-message {
+  background-color: var(--elementBackground);
+  border: 2px solid var(--accent);
+  color: var(--text);
+}
+
+#TextAreaChatLog div.ChatMessage.deeplib-message {
+  background-color: #eee;
+  border: 2px solid #440171;
+  color: #111;
+  padding-left: 5px;
+  display: block;
+  white-space: normal;
+}
+
+#TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.deeplib-message a,
+#TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.deeplib-message a {
+  color: var(--text);
+}
+
+#TextAreaChatLog div.ChatMessage.deeplib-message a {
+  cursor: pointer;
+  font-weight: bold;
+  color: #111;
+}
