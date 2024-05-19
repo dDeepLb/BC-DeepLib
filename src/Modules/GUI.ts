@@ -1,20 +1,13 @@
-import { BaseModule } from './BaseModule';
-import { modules } from './Modules';
-import { RibbonMenu } from '../Utilities/RibbonMenu.js';
-import { HookPriority, bcSdkMod } from '../Utilities/SDK.js';
-import { MainMenu } from '../Screens/MainMenu.js';
-import { GuiSubscreen } from './BaseSetting';
-import { setSubscreen, SETTING_NAME_PREFIX } from './SettingDefinitions';
-import { getText } from '../Utilities/Translation';
+import { BaseModule, BaseSubscreen, bcSdkMod, getText, HookPriority, MainMenu, modules, RibbonMenu, setSubscreen, SETTING_NAME_PREFIX } from '../DeepLib';
 
 export class GUI extends BaseModule {
   static instance: GUI | null = null;
 
-  private _subscreens: GuiSubscreen[];
+  private _subscreens: BaseSubscreen[];
   private _mainMenu: MainMenu;
-  private _currentSubscreen: GuiSubscreen | null = null;
+  private _currentSubscreen: BaseSubscreen | null = null;
 
-  get subscreens(): GuiSubscreen[] {
+  get subscreens(): BaseSubscreen[] {
     return this._subscreens;
   }
 
@@ -22,11 +15,11 @@ export class GUI extends BaseModule {
     return this._mainMenu;
   }
 
-  get currentSubscreen(): GuiSubscreen | null {
+  get currentSubscreen(): BaseSubscreen | null {
     return this._currentSubscreen;
   }
 
-  set currentSubscreen(subscreen: GuiSubscreen | string | null) {
+  set currentSubscreen(subscreen: BaseSubscreen | string | null) {
     if (this._currentSubscreen) {
       this._currentSubscreen.Unload();
     }
@@ -50,14 +43,14 @@ export class GUI extends BaseModule {
     PreferenceSubscreen = subscreenName as PreferenceSubscreenName;
   }
 
-  get currentCharacter(): Character {
-    return Player;
-  }
-
   constructor() {
     super();
     if (GUI.instance) {
       throw new Error('Duplicate initialization');
+    }
+
+    for (const module of modules()) {
+      if (!module.settingsScreen) continue;
     }
 
     this._mainMenu = new MainMenu(this);
@@ -79,7 +72,7 @@ export class GUI extends BaseModule {
 
     this._mainMenu.subscreens = this._subscreens;
 
-    let modIndex = RibbonMenu.getModIndex('Responsive');
+    const modIndex = RibbonMenu.getModIndex('Responsive');
 
     bcSdkMod.prototype.hookFunction('PreferenceRun', HookPriority.OverrideBehavior, (args, next) => {
       if (this._currentSubscreen) {
@@ -105,7 +98,7 @@ export class GUI extends BaseModule {
 
       next(args);
 
-      RibbonMenu.handleModClick(modIndex, (modIndex) => {
+      RibbonMenu.handleModClick(modIndex, () => {
         setSubscreen(new MainMenu(this));
       });
     });
@@ -116,6 +109,14 @@ export class GUI extends BaseModule {
         return;
       }
       return next(args);
+    });
+
+
+    window.addEventListener('resize', () => {
+      if (this._currentSubscreen) {
+        this._currentSubscreen.OnResize();
+        return;
+      }
     });
   }
 }
