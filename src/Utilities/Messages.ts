@@ -28,6 +28,7 @@ export function sendActionMessage(msg: string) {
     Type: 'Action',
     Dictionary: [
       { Tag: 'Beep', Text: 'msg' },
+      { Tag: 'Гудок', Text: 'msg' },
       { Tag: '发送私聊', Text: 'msg' },
       { Tag: '發送私聊', Text: 'msg' },
       { Tag: 'Biep', Text: 'msg' },
