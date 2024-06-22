@@ -2,7 +2,7 @@ import { Button, SettingElement } from '../../.types/elements';
 import { BaseSubscreen, elementSetPosSizeFont, getText } from '../DeepLib';
 
 export class SupportHelper {
-  private static thankYouList: string[] = ['Ellena', 'weboos'];
+  private static thankYouList: string[] = ['Ellena', 'weboos', 'Jamie'];
   private static thankYouNext = 0;
   private static thankYou = '';
 
