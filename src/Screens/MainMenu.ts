@@ -134,7 +134,7 @@ export class MainMenu extends BaseSubscreen {
     super.OnResize();
     elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
   }
-};
+}
 
 export function setMainMenuOptions(wikiLink: string, resetSubscreen: BaseSubscreen | null) {
   MainMenu.wikiLink = wikiLink;

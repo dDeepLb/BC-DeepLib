@@ -33,7 +33,7 @@ export function dataStore() {
     if (!module.settingsStorage) continue;
 
     Data[module.settingsStorage] = PlayerStorage()[module.settingsStorage];
-  };
+  }
 
   Player.ExtensionSettings[modName] = _String.encode(Data);
   ServerPlayerExtensionSettingsSync(modName);
