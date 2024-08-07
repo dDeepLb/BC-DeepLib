@@ -19,6 +19,7 @@
     "declaration": true,
     "paths": {
       "Types/*": ["./.types/*"],
-    }
+    },
+    "incremental": true,
   }
 }
