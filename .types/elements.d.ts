@@ -2,8 +2,8 @@ export type SettingElement = Button | Checkbox | Input | Label;
 
 export type BaseElementModel = {
   id: string;
-  position?: [number, number];
-  size?: [number, number];
+  size?: [width: number, height: number];
+  position?: [x: number, y: number];
   disabled?: boolean;
 };
 
@@ -11,7 +11,7 @@ export type Button = BaseElementModel & {
   type: 'button';
   image?: string;
   label?: string;
-  hoverHint?: string;
+  tooltip?: string;
   onClick: () => void;
 };
 
