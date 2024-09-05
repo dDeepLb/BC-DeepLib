@@ -171,7 +171,11 @@ export abstract class BaseSubscreen {
 
   resize(onLoad: boolean = false) {
     elementSetPosSizeFont({ element: elementGetSubscreenDiv() }, 0, 0, 2000, 1000);
-    elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 800, 735);
+    if (this.name === 'mainmenu') {
+      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 800, 735);
+    } else {
+      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 1000, 735);
+    }
 
     elementSetPosSizeFont({ elementId: 'deeplib-subscreen-title' }, 530, 75, 800, 90);
 
