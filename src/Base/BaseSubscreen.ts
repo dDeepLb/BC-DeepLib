@@ -89,7 +89,7 @@ export abstract class BaseSubscreen {
         onClick: () => {
           setSubscreen('mainmenu');
         },
-        hoverHint: getText('settings.button.back_button_hint')
+        tooltip: getText('settings.button.back_button_hint')
       });
       elementAppendToSubscreenDiv(exitButton);
     }

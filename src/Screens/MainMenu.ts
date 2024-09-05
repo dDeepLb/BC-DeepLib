@@ -35,7 +35,7 @@ export class MainMenu extends BaseSubscreen {
       onClick: () => {
         this.exit();
       },
-      hoverHint: getText('settings.button.back_button_hint')
+      tooltip: getText('settings.button.back_button_hint')
     });
     elementAppendToSubscreenDiv(exitButton);
 
