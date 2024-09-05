@@ -11,6 +11,7 @@ export * from './Models/Settings.js';
 export * from './Modules/GUI.js';
 export * from './Modules/Version.js';
 
+export * from './Screens/Debug.js';
 export * from './Screens/MainMenu.js';
 export * from './Screens/Support.js';
 

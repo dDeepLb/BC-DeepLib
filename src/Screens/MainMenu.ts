@@ -100,6 +100,18 @@ export class MainMenu extends BaseSubscreen {
     });
     elementAppendToMiscDiv(supportButton);
     elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
+
+    const debugButton = elementCreateButton({
+      type: 'button',
+      id: 'deeplib-debug-button',
+      image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
+      onClick: () => {
+        this.setSubscreen(new GuiDebug());
+      },
+      size: [90, 90],
+      position: [75, 75],
+    });
+    elementAppendToMiscDiv(debugButton);
   }
 
   run() {
