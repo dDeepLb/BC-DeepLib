@@ -69,7 +69,6 @@ export abstract class BaseSubscreen {
 
     const subscreenElement = elementCreateSubscreenDiv();
     const settingsElement = elementCreateSettingsDiv();
-    settingsElement.style.backgroundColor = 'lime';
     elementAppendToSubscreenDiv(settingsElement);
 
     const subscreenTitle = elementCreateLabel({
