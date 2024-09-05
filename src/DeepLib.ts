@@ -20,7 +20,6 @@ export * from './Utilities/Elements/ElementHelpers.js';
 export * from './Utilities/Elements/SettingElement.js';
 export * from './Utilities/Logger.js';
 export * from './Utilities/Messages.js';
-export * from './Utilities/RibbonMenu.js';
 export * from './Utilities/SDK.js';
 export * from './Utilities/String.js';
 export * from './Utilities/Style.js';

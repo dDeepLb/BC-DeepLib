@@ -112,6 +112,7 @@ export class MainMenu extends BaseSubscreen {
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
     this.setSubscreen(null);
+    PreferenceSubscreenExtensionsClear();
   }
 
   resize(): void {

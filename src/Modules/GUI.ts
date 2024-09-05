@@ -1,4 +1,16 @@
-import { BaseModule, BaseSubscreen, bcSdkMod, getText, HookPriority, MainMenu, modules, RibbonMenu, setSubscreen, SETTING_NAME_PREFIX } from '../DeepLib';
+import { BaseModule, BaseSubscreen, MainMenu, modules, setSubscreen } from '../DeepLib';
+
+type ModButtonOptions = {
+  Identifier: string;
+  ButtonText: string | (()=>string);
+  Image: string | (()=>string);
+
+  load?: () => void;
+  click?: () => void;
+  run?: () => void;
+  unload?: () => void;
+  exit?: () => boolean | void;
+};
 
 export class GUI extends BaseModule {
   static instance: GUI | null = null;
@@ -6,6 +18,7 @@ export class GUI extends BaseModule {
   private _subscreens: BaseSubscreen[];
   private _mainMenu: MainMenu;
   private _currentSubscreen: BaseSubscreen | null = null;
+  private _modButtonOptions: ModButtonOptions;
 
   get subscreens(): BaseSubscreen[] {
     return this._subscreens;
@@ -21,8 +34,9 @@ export class GUI extends BaseModule {
 
   set currentSubscreen(subscreen: BaseSubscreen | string | null) {
     if (this._currentSubscreen) {
-      this._currentSubscreen.Unload();
+      this._currentSubscreen.unload();
     }
+
     if (typeof subscreen === 'string') {
       const scr = this._subscreens?.find((s) => s.name === subscreen);
       if (!scr) throw `Failed to find screen name ${subscreen}`;
@@ -34,16 +48,13 @@ export class GUI extends BaseModule {
     PreferenceMessage = '';
     PreferencePageCurrent = 1;
 
-    let subscreenName = '';
     if (this._currentSubscreen) {
-      subscreenName = SETTING_NAME_PREFIX + this._currentSubscreen?.name;
-      this._currentSubscreen.Load();
+      this._currentSubscreen.load();
+      this._currentSubscreen.resize(true);
     }
-
-    PreferenceSubscreen = subscreenName as PreferenceSubscreenName;
   }
 
-  constructor() {
+  constructor(modButtonOptions: ModButtonOptions) {
     super();
     if (GUI.instance) {
       throw new Error('Duplicate initialization');
@@ -55,6 +66,7 @@ export class GUI extends BaseModule {
 
     this._mainMenu = new MainMenu(this);
     this._subscreens = [this._mainMenu];
+    this._modButtonOptions = modButtonOptions;
 
     GUI.instance = this;
   }
@@ -71,52 +83,41 @@ export class GUI extends BaseModule {
     }
 
     this._mainMenu.subscreens = this._subscreens;
-
-    const modIndex = RibbonMenu.getModIndex('Responsive');
-
-    bcSdkMod.prototype.hookFunction('PreferenceRun', HookPriority.OverrideBehavior, (args, next) => {
-      if (this._currentSubscreen) {
-        MainCanvas.textAlign = 'left';
-        this._currentSubscreen.Run();
-        MainCanvas.textAlign = 'center';
-
-        return;
-      }
-
-      next(args);
-
-      RibbonMenu.drawModButton(modIndex, (modIndex) => {
-        DrawButton(1815, RibbonMenu.getYPos(modIndex), 90, 90, '', 'White', 'Icons/Arousal.png', getText('infosheet.button.mod_button_hint'));
-      });
-    });
-
-    bcSdkMod.prototype.hookFunction('PreferenceClick', HookPriority.OverrideBehavior, (args, next) => {
-      if (this._currentSubscreen) {
-        this._currentSubscreen.Click();
-        return;
-      }
-
-      next(args);
-
-      RibbonMenu.handleModClick(modIndex, () => {
+    PreferenceRegisterExtensionSetting({
+      Identifier: this._modButtonOptions.Identifier,
+      ButtonText: this._modButtonOptions.ButtonText,
+      Image: this._modButtonOptions.Image,
+      load: this._modButtonOptions.load || (() => {
         setSubscreen(new MainMenu(this));
-      });
-    });
-
-    bcSdkMod.prototype.hookFunction('InformationSheetExit', HookPriority.OverrideBehavior, (args, next) => {
-      if (this._currentSubscreen) {
-        this._currentSubscreen.Exit();
-        return;
-      }
-      return next(args);
-    });
-
-
-    window.addEventListener('resize', () => {
-      if (this._currentSubscreen) {
-        this._currentSubscreen.OnResize();
-        return;
-      }
+      }),
+      run: this._modButtonOptions.run || (() => {
+        if (this._currentSubscreen) {
+          MainCanvas.textAlign = 'left';
+          this._currentSubscreen.run();
+          MainCanvas.textAlign = 'center';
+          
+          const newCanvasPosition: RectTuple = [MainCanvas.canvas.offsetLeft, MainCanvas.canvas.offsetTop, MainCanvas.canvas.clientWidth, MainCanvas.canvas.clientHeight];
+          if (!CommonArraysEqual(newCanvasPosition, DrawCanvasPosition)) {
+            DrawCanvasPosition = newCanvasPosition;
+            this._currentSubscreen.resize(false);
+          }
+        }
+      }),
+      click: this._modButtonOptions.click || (() => {
+        if (this._currentSubscreen) {
+          this._currentSubscreen.click();
+        }
+      }),
+      exit: this._modButtonOptions.exit || (() => {
+        if (this._currentSubscreen) {
+          this._currentSubscreen.exit();
+        }
+      }),
+      unload: this._modButtonOptions.unload || (() => {
+        if (this._currentSubscreen) {
+          this._currentSubscreen.unload();
+        }
+      })
     });
   }
 }
