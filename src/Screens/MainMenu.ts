@@ -1,6 +1,5 @@
 
-import { Checkbox, SettingElement } from 'Types/elements';
-import { BaseSubscreen, GUI, GuiSupport, elementAppendToMiscDiv, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateMiscDiv, elementSetPosSizeFont, getText } from '../DeepLib';
+import { BaseSubscreen, GUI, GuiDebug, GuiSupport, elementAppendToMiscDiv, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateMiscDiv, elementSetPosSizeFont, getText } from '../DeepLib';
 
 export class MainMenu extends BaseSubscreen {
   subscreens: BaseSubscreen[] = [];
