@@ -125,8 +125,11 @@ export abstract class BaseSubscreen {
     CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
   }
 
-  Run() {
-    ElementContent('deeplib-subscreen-title', getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter());
+    const newTitle = getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter();
+    const oldTitle = ElementContent('deeplib-subscreen-title');
+    if (newTitle !== oldTitle) {
+      ElementContent('deeplib-subscreen-title', newTitle);
+    }
     DrawCharacter(Player, 50, 50, 0.9, false);
 
     if (this.pageStructure.length > 1) {
