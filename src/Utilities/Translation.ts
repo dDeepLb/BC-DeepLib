@@ -27,7 +27,7 @@ export class Localization {
   }
 
   static getText(srcTag: string) {
-    return Localization.prototype.Translation[srcTag] || srcTag || '';
+    return Localization.prototype.Translation?.[srcTag] || srcTag || '';
   }
 
   private static async fetchLanguageFile(lang: string): Promise<TranslationDict> {
