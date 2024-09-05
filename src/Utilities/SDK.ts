@@ -1,4 +1,4 @@
-import bcModSdkRef, { ModSDKModAPI, ModSDKModInfo, ModSDKModOptions, PatchHook } from 'bondage-club-mod-sdk';
+import bcModSdkRef, { ModSDKModAPI, ModSDKModInfo, ModSDKModOptions } from 'bondage-club-mod-sdk';
 
 export enum HookPriority {
   Observe = 0,
@@ -10,9 +10,24 @@ export enum HookPriority {
 
 export type ModuleCategory = number;
 
+export declare type AnyFunction = (...args: any) => any;
+type PatchHook<TFunction extends AnyFunction = AnyFunction> = (args: [...Parameters<TFunction>], next: (args: [...Parameters<TFunction>]) => ReturnType<TFunction>) => ReturnType<TFunction>;
+
+interface IPatchedFunctionData {
+  name: string;
+  hooks: {
+    hook: PatchHook;
+    priority: number;
+    module: ModuleCategory | null;
+    removeCallback: () => void;
+  }[];
+}
+
+type GetDotedPathType<Base, DotedKey extends string> = DotedKey extends `${infer Key1}.${infer Key2}` ? GetDotedPathType<GetDotedPathType<Base, Key1>, Key2> : DotedKey extends keyof Base ? Base[DotedKey] : never;
+
 export class bcSdkMod {
   private static SDK: ModSDKModAPI;
-  private static patchedFunctions: Map<string, PatchedFunctionData> = new Map();
+  private static patchedFunctions: Map<string, IPatchedFunctionData> = new Map();
 
   public static ModInfo: ModSDKModInfo;
 
@@ -21,7 +36,7 @@ export class bcSdkMod {
     bcSdkMod.ModInfo = info;
   }
 
-  initPatchableFunction(target: string): PatchedFunctionData {
+  initPatchableFunction(target: string): IPatchedFunctionData {
     let result = bcSdkMod.patchedFunctions.get(target);
     if (!result) {
       result = {
@@ -33,10 +48,10 @@ export class bcSdkMod {
     return result;
   }
 
-  hookFunction(
-    target: string,
+  hookFunction<TargetName extends string>(
+    target: TargetName,
     priority: number,
-    hook: PatchHook,
+    hook: PatchHook<GetDotedPathType<typeof globalThis, TargetName>>,
     module: ModuleCategory | null = null
   ): () => void {
     const data = this.initPatchableFunction(target);
