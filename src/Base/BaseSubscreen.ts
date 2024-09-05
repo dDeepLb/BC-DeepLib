@@ -1,9 +1,6 @@
 import { SettingElement } from '../../.types/elements';
-import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementGetSettingsDiv, elementGetSubscreenDiv, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, getText, modules, setSubscreen } from '../DeepLib';
-
-export const SETTING_FUNC_PREFIX: string = 'PreferenceSubscreen';
-export let SETTING_NAME_PREFIX: string = 'DeepLib';
-export const SETTING_FUNC_NAMES: string[] = ['Load', 'Run', 'Click', 'Unload', 'Exit'];
+import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementGetSettingsDiv, elementGetSubscreenDiv, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, getText, modules, setSubscreen } from '../DeepLib';
+import elementCreateCheckbox from '../Utilities/Elements/Checkbox';
 
 export abstract class BaseSubscreen {
   static currentElements: [HTMLElement, SettingElement][] = [];
@@ -12,15 +9,6 @@ export abstract class BaseSubscreen {
 
   constructor(module?: BaseModule) {
     if (module) this.module = module;
-    SETTING_NAME_PREFIX = bcSdkMod.ModInfo.name;
-
-    SETTING_FUNC_NAMES.forEach((name) => {
-      const fName = SETTING_FUNC_PREFIX + SETTING_NAME_PREFIX + this.name + name;
-      if (typeof (<any>this)[name] === 'function' && typeof (<any>window)[fName] !== 'function')
-        (<any>window)[fName] = () => {
-          (<any>this)[name]();
-        };
-    });
   }
 
   get name(): string {
@@ -32,7 +20,7 @@ export abstract class BaseSubscreen {
   }
 
   get subscreenName(): string {
-    return SETTING_NAME_PREFIX + this.constructor.name;
+    return this.constructor.name;
   }
 
   setSubscreen(screen: BaseSubscreen | string | null) {
