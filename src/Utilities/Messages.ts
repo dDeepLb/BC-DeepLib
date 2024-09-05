@@ -22,19 +22,15 @@ export function sendLocalMessage(id: string, message: string, timeoutInSeconds?:
   setTimeout(() => div?.remove(), timeoutInSeconds * 1000);
 }
 
-export function sendActionMessage(msg: string) {
+export function sendActionMessage(msg: string, target: undefined | number = undefined, dictionary: ChatMessageDictionaryEntry[] = []) {
+  if (!msg) return;
   ServerSend('ChatRoomChat', {
-    Content: 'Beep',
+    Content: 'DEEPLIB_CUSTOM_ACTION',
     Type: 'Action',
+    Target: target ?? undefined,
     Dictionary: [
-      { Tag: 'Beep', Text: 'msg' },
-      { Tag: 'Гудок', Text: 'msg' },
-      { Tag: '发送私聊', Text: 'msg' },
-      { Tag: '發送私聊', Text: 'msg' },
-      { Tag: 'Biep', Text: 'msg' },
-      { Tag: 'Sonner', Text: 'msg' },
-      { Tag: 'Звуковой сигнал', Text: 'msg' },
-      { Tag: 'msg', Text: msg }
-    ]
+      { Tag: 'MISSING TEXT IN "Interface.csv": DEEPLIB_CUSTOM_ACTION', Text: msg },
+      ...dictionary,
+    ],
   });
 }
