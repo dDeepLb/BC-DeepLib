@@ -55,7 +55,7 @@ export abstract class BaseSubscreen {
       if (!module.settings || !Object.keys(module.settings).length) module.registerDefaultSettings();
     }
 
-    const subscreenElement = elementCreateSubscreenDiv();
+    elementCreateSubscreenDiv();
     const settingsElement = elementCreateSettingsDiv();
     elementAppendToSubscreenDiv(settingsElement);
 
@@ -168,7 +168,6 @@ export abstract class BaseSubscreen {
     elementSetPosSizeFont({ elementId: 'deeplib-subscreen-title' }, 530, 75, 800, 90);
 
     BaseSubscreen.currentElements.forEach((item) => {
-      const element = item[0];
       const options = item[1];
       if (options.position)
         elementSetPosition({ elementId: options.id }, options.position[0], options.position[1]);
