@@ -14,9 +14,9 @@ export class VersionModule extends BaseModule {
       HookPriority.Observe,
       (args, next) => {
         next(args);
-        // if (PlayerStorage().GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
-        // }
-        VersionModule.sendNewVersionMessage();
+        if (PlayerStorage().GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
+          VersionModule.sendNewVersionMessage();
+        }
       },
       999
     );
@@ -37,7 +37,7 @@ export class VersionModule extends BaseModule {
 
     let saveRequired = false;
     for (const migrator of VersionModule.Migrators) {
-      if (this.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
+      if (VersionModule.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
         saveRequired = saveRequired || migrator.Migrate();
         deepLibLogger.info(`Migrating ${bcSdkMod.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
       }
