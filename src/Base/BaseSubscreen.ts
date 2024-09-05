@@ -61,7 +61,7 @@ export abstract class BaseSubscreen {
     });
   }
 
-  Load() {
+  load() {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
       if (!module.settings || !Object.keys(module.settings).length) module.registerDefaultSettings();
@@ -125,6 +125,7 @@ export abstract class BaseSubscreen {
     CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
   }
 
+  run() {
     const newTitle = getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter();
     const oldTitle = ElementContent('deeplib-subscreen-title');
     if (newTitle !== oldTitle) {
@@ -141,11 +142,11 @@ export abstract class BaseSubscreen {
     this.hideElements();
   }
 
-  Click() {
+  click() {
     if (this.pageStructure.length > 1) PreferencePageChangeClick(1595, 75, this.pageStructure.length);
   }
 
-  Exit() {
+  exit() {
     this.pageStructure.forEach((s) =>
       s.forEach((item) => {
         switch (item.type) {
@@ -169,11 +170,7 @@ export abstract class BaseSubscreen {
     dataStore();
   }
 
-  OnScreenChange() {
-    elementRemoveSubscreenDiv();
-  }
-
-  OnResize() {
+  resize(onLoad: boolean = false) {
     elementSetPosSizeFont({ element: elementGetSubscreenDiv() }, 0, 0, 2000, 1000);
     elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 800, 735);
 
@@ -190,6 +187,8 @@ export abstract class BaseSubscreen {
     });
   }
 
-  Unload() { }
+  unload() {
+    elementRemoveSubscreenDiv();
+  }
 }
 

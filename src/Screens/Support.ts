@@ -48,9 +48,9 @@ export class GuiSupport extends BaseSubscreen {
     ];
   }
 
-  Load() {
+  load() {
     SupportHelper.doNextThankYou();
-    super.Load();
+    super.load();
     ElementRemove('deeplib-settngs');
 
     ElementCreateDiv('deeplib-gratitude');
@@ -60,21 +60,21 @@ export class GuiSupport extends BaseSubscreen {
 
   }
 
-  Run() {
-    super.Run();
+  run() {
+    super.run();
   }
 
-  Click() {
-    super.Click();
+  click() {
+    super.click();
   }
 
-  Exit() {
+  exit() {
     ElementRemove('deeplib-gratitude');
-    super.Exit();
+    super.exit();
   }
 
-  OnResize(): void {
-    super.OnResize();
+  resize(): void {
+    super.resize();
     elementSetPosSizeFont({ elementId: 'deeplib-gratitude' }, 1000, 250, 400, 400);
   }
 }

@@ -8,7 +8,6 @@ export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubs
   if (!GUI.instance) {
     throw new Error('Attempt to set subscreen before init');
   }
-  GUI.instance.currentSubscreen?.OnScreenChange();
   GUI.instance.currentSubscreen = subscreen;
 
   return GUI.instance.currentSubscreen;

@@ -21,7 +21,7 @@ export abstract class BaseModule {
     return PlayerStorage()[this.settingsStorage];
   }
 
-  Init() {
+  init() {
     this.registerDefaultSettings();
   }
 
@@ -37,9 +37,9 @@ export abstract class BaseModule {
     return null;
   }
 
-  Load() { }
+  load() { }
 
-  Run() { }
+  run() { }
 
-  Unload() { }
+  unload() { }
 }

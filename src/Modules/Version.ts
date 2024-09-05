@@ -6,7 +6,7 @@ export class VersionModule extends BaseModule {
   static NewVersionMessage: string = '';
   private static Migrators: BaseMigrator[] = [];
 
-  Load(): void {
+  load(): void {
     VersionModule.Version = bcSdkMod.ModInfo.version;
 
     bcSdkMod.prototype.hookFunction(

@@ -63,7 +63,7 @@ export class GUI extends BaseModule {
     return null;
   }
 
-  Load(): void {
+  load(): void {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
 

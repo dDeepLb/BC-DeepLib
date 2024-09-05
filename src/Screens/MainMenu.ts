@@ -18,29 +18,13 @@ export class MainMenu extends BaseSubscreen {
     this.subscreens = module.subscreens;
   }
 
-  get currentPage(): SettingElement[] {
-    return [
-      <Checkbox>{
-        type: 'checkbox',
-        id: 'deeplib-mainmenu-show-wiki',
-        label: getText('mainmenu.checkbox.show_wiki'),
-        setElementValue: () => {
-          return true;
-        },
-        setSettingValue: (val) => {
-          this.settings.modEnabled = val;
-        },
-      }
-    ];
-  }
-
-  Load(): void {
+  load(): void {
     if (!GUI.instance?.currentSubscreen) {
       this.setSubscreen(this);
       return;
     }
 
-    super.Load();
+    super.load();
 
     const exitButton = elementCreateButton({
       type: 'button',
@@ -49,7 +33,7 @@ export class MainMenu extends BaseSubscreen {
       size: [90, 90],
       image: 'Icons/Exit.png',
       onClick: () => {
-        this.Exit();
+        this.exit();
       },
       hoverHint: getText('settings.button.back_button_hint')
     });
@@ -118,20 +102,20 @@ export class MainMenu extends BaseSubscreen {
     elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
   }
 
-  Run() {
-    super.Run();
+  run() {
+    super.run();
   }
 
-  Click() { }
+  click() { }
 
-  Exit(): void {
+  exit(): void {
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
     this.setSubscreen(null);
   }
 
-  OnResize(): void {
-    super.OnResize();
+  resize(): void {
+    super.resize();
     elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
   }
 }
