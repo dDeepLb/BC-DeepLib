@@ -21,5 +21,6 @@
       "Types/*": ["./.types/*"],
     },
     "incremental": true,
+    "types": ["webpack/module", "node"]
   }
 }
