@@ -10,8 +10,6 @@ export class Localization {
     pathToTranslationsFolder: string;
   }) {
     Localization.PathToTranslation = options.pathToTranslationsFolder.endsWith('/') ? options.pathToTranslationsFolder : options.pathToTranslationsFolder + '/';
-
-    Localization.init();
   }
 
   static async init() {
