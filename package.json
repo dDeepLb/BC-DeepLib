@@ -4,12 +4,12 @@
   "author": "dDeepLb",
   "description": "Package for easier development of BC mods without need to repeat myself in every mod",
   "license": "MIT",
+  "type": "module",
   "files": [
-    "/dist",
+    "/src",
     ".types"
   ],
-  "main": "./dist/DeepLib.js",
-  "types": "./dist/DeepLib.d.ts",
+  "main": "./src/DeepLib.ts",
   "scripts": {
     "lint": "eslint src/"
   },
