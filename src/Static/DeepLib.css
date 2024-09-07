@@ -86,7 +86,7 @@
 
 #TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.deeplib-message,
 #TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.deeplib-message {
-  background-color: var(--elementBackground);
+  background-color: var(--element, --elementBackground);
   border: 2px solid var(--accent);
   color: var(--text);
 }
