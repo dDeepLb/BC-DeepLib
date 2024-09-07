@@ -68,6 +68,13 @@
   background-color: #5e4969;
 }
 
+.deeplib-checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3em;
+}
+
 /*************/
 /* MESSAGES */
 /*************/
