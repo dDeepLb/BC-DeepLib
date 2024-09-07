@@ -21,39 +21,31 @@
   flex-direction: column-reverse;
 }
 
-.deeplib-button {
-  box-sizing: border-box;
-  background-color: var(--elementBackground, white);
-  border: 2px solid var(--elementBorder, black);
-  border-radius: 0px;
+.deeplib-button.button-styling {
+  border-radius: 12px;
 
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  padding: 0;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
   color: var(--text);
-  user-select: none;
-}
-
-.deeplib-button:hover {
-  background-color: var(--elementBackgroundHover, cyan);
+  overflow: hidden;
 }
 
 .deeplib-button img {
-  height: 95%;
-  aspect-ratio: 1 / 1;
-}
-
-.deeplib-button img::after {
-  content: "";
   position: absolute;
+  top: 0%;
+  left: 0%;
   width: 100%;
   height: 100%;
-  mix-blend-mode: multiply;
-  background: var(--accent)
+  background-position: left;
+  background-color: var(--accent);
+  background-blend-mode: multiply;
+  background-size: contain;
+  mask-position: left;
+  mask-size: contain;
+  background-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  color: transparent;
+
+  background-image: var(--image);
+  mask-image: var(--image);
 }
 
 .deeplib-button span {
