@@ -17,12 +17,11 @@
     "@eslint/js": "^8.57.0",
     "@stylistic/eslint-plugin": "^2.7.2",
     "@types/node": "^22.5.4",
-    "bc-stubs": "^107.0.0",
+    "bc-stubs": "^110.0.0",
     "eslint": "^8.57.0",
     "globals": "^15.9.0",
     "typescript": "^5.5.4",
-    "typescript-eslint": "^7.18.0",
-    "webpack": "^5.94.0"
+    "typescript-eslint": "^7.18.0"
   },
   "dependencies": {
     "bondage-club-mod-sdk": "^1.2.0"
