@@ -14,7 +14,7 @@ export class SupportHelper {
   static doNextThankYou() {
     if (SupportHelper.thankYou && SupportHelper.thankYouList.length < 2) return;
     SupportHelper.thankYou = CommonRandomItemFromList(SupportHelper.thankYou, SupportHelper.thankYouList);
-    SupportHelper.thankYouNext = CommonTime() + 4000;
+    SupportHelper.thankYouNext = CommonTime() + 5000;
   }
 }
 
