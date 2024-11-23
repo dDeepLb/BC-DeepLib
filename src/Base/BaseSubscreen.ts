@@ -153,11 +153,27 @@ export abstract class BaseSubscreen {
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
-      if (options.position)
+      const elementDataAttrs = item[0].dataset;
+      
+      if (options.position) {
         elementSetPosition({ elementId: options.id }, options.position[0], options.position[1]);
-      if (options.size)
+      }
+
+      if (options.size) {
         elementSetSize({ elementId: options.id }, options.size[0], options.size[1]);
+      }
+
       elementAdjustFontSize({ elementId: options.id });
+
+      if (elementDataAttrs.size) {
+        const size = elementDataAttrs.size.split('x');
+        elementSetSize({ elementId: options.id }, parseInt(size[0]), parseInt(size[1]));
+      }
+
+      if (elementDataAttrs.position) {
+        const position = elementDataAttrs.position.split('x');
+        elementSetPosition({ elementId: options.id }, parseInt(position[0]), parseInt(position[1]));
+      }
     });
   }
 
