@@ -134,22 +134,6 @@ export abstract class BaseSubscreen {
   }
 
   exit() {
-    this.pageStructure.forEach((s) =>
-      s.forEach((item) => {
-        switch (item.type) {
-          case 'number':
-            if (!CommonIsNumeric(ElementValue(item.id))) {
-              ElementRemove(item.id);
-            }
-            break;
-          case 'text':
-            item.setSettingValue(ElementValue(item.id));
-            ElementRemove(item.id);
-            break;
-        }
-      })
-    );
-
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
 
@@ -178,6 +162,23 @@ export abstract class BaseSubscreen {
   }
 
   unload() {
+    this.pageStructure.forEach((s) =>
+      s.forEach((item) => {
+        switch (item.type) {
+          case 'text':
+            item.setSettingValue(ElementValue(item.id));
+            break;
+          case 'checkbox': {
+            const elem = document.getElementById(item.id) as HTMLInputElement;
+            const checked = elem.checked;
+            item.setSettingValue(checked);
+            break;
+          }
+        }
+      })
+    );
+    BaseSubscreen.currentElements = [];
+
     elementRemoveSubscreenDiv();
   }
 }
