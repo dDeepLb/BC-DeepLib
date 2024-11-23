@@ -88,10 +88,11 @@ function elementGet(_: ElementOrId, funcName: string) {
     return null;
   }
 
+  const elementId = _.elementId ?? _.element?.id;
   const element = _.element ?? document.getElementById(_.elementId!);
 
   if (!element) {
-    deepLibLogger.warn(`A call to ${funcName} was made on non-existent element`);
+    deepLibLogger.warn(`A call to ${funcName} was made on non-existent element with id ${elementId}`);
     return null;
   }
 
