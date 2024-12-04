@@ -1,3 +1,12 @@
+.deeplib-subscreen {
+  --deeplib-background-color: var(--main, white);
+  --deeplib-element-color: var(--element, white);
+  --deeplib-element-hover-color: var(--accentHover, cyan);
+  --deeplib-text-color: var(--text, black);
+  --deeplib-icon-color: var(--accent, white);
+  --deeplib-border-color: var(--accent, black);
+}
+
 /************/
 /* ELEMENTS */
 /************/
@@ -24,7 +33,7 @@
 .deeplib-button.button-styling {
   border-radius: 12px;
 
-  color: var(--text);
+  color: var(--deeplib-text-color);
   overflow: hidden;
 }
 
@@ -35,7 +44,7 @@
   width: 100%;
   height: 100%;
   background-position: left;
-  background-color: var(--accent);
+  background-color: var(--deeplib-icon-color);
   background-blend-mode: multiply;
   background-size: contain;
   mask-position: left;
@@ -50,10 +59,12 @@
 
 .deeplib-button span {
   width: 100%;
+  color: var(--deeplib-text-color);
 }
 
 #deeplib-subscreen-title {
   text-align: center;
+  color: var(--deeplib-text-color);
 }
 
 #deeplib-reset-button {
@@ -86,9 +97,9 @@
 
 #TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.deeplib-message,
 #TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.deeplib-message {
-  background-color: var(--element, --elementBackground);
-  border: 2px solid var(--accent);
-  color: var(--text);
+  background-color: var(--deeplib-element-color);
+  border: min(0.2dvh, 0.1dvw) solid var(--deeplib-border-color);
+  color: var(--deeplib-text-color);
 }
 
 #TextAreaChatLog div.ChatMessage.deeplib-message {
@@ -102,7 +113,7 @@
 
 #TextAreaChatLog[data-colortheme='dark'] div.ChatMessage.deeplib-message a,
 #TextAreaChatLog[data-colortheme='dark2'] div.ChatMessage.deeplib-message a {
-  color: var(--text);
+  color: var(--deeplib-text-color);
 }
 
 #TextAreaChatLog div.ChatMessage.deeplib-message a {
