@@ -11,6 +11,10 @@
 /* ELEMENTS */
 /************/
 
+.deeplib-text {
+  color: var(--deeplib-text-color);
+}
+
 .deeplib-subscreen {
   padding: 0;
   margin: 0;
@@ -86,12 +90,77 @@
   background-color: #5e4969;
 }
 
-.deeplib-checkbox {
+.deeplib-checkbox-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 0.3em;
 }
+
+.deeplib-input {
+  border-radius: min(1.0dvh, 0.5dvw);
+}
+
+.deeplib-input-container {
+  position: relative;
+  margin-top: min(1vh, 0.5vw);
+}
+
+.deeplib-input-container input.deeplib-input {
+  font-size: 20px;
+  width: 100%;
+  padding: 5px 0;
+  background-color: transparent;
+  outline: none;
+  padding-left: min(1vh, 0.5vw);
+  padding-right: min(1vh, 0.5vw);
+}
+
+.deeplib-input-container label.deeplib-text {
+  position: absolute;
+  top: min(0.6vh, 0.3vw);
+  left: min(0.6vh, 0.3vw);
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.deeplib-input-container input.deeplib-input:focus~label,
+.deeplib-input-container input.deeplib-input:not(:placeholder-shown)~label {
+  font-size: 0.7em;
+  transform: translate(20%, -70%);
+  background-color: var(--deeplib-background-color);
+  padding: 0px min(1vh, 0.5vw);
+}
+
+.deeplib-input-container .deeplib-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: var(--deeplib-element-hover-color);
+  transform: scaleX(0);
+  transition: all 0.3s ease;
+}
+
+.deeplib-input-container input.deeplib-input:focus~.deeplib-underline,
+.deeplib-input-container input.deeplib-input:not(:placeholder-shown)~.deeplib-underline {
+  transform: scaleX(0.98);
+}
+
+.deeplib-tooltip {
+  background-color: var(--deeplib-element-color);
+  color: var(--deeplib-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: min(1.0dvh, 0.5dvw);
+  padding: min(1vh, 0.5vw);
+  font-size: 0.8em;
+  border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
+}
+
+
 
 /*************/
 /* MESSAGES */
