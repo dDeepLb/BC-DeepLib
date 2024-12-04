@@ -19,7 +19,7 @@
 .deeplib-settings {
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: min(1.0dvh, 0.5dvw);
   gap: 0.3em;
 }
 
@@ -31,7 +31,7 @@
 }
 
 .deeplib-button.button-styling {
-  border-radius: 12px;
+  border-radius: min(1.0dvh, 0.5dvw);
 
   color: var(--deeplib-text-color);
   overflow: hidden;
@@ -61,6 +61,7 @@
   width: 100%;
   background-color: transparent;
   color: var(--deeplib-text-color);
+  font-size: min(3.6dvh, 1.8dvw);
 }
 
 #deeplib-subscreen-title {
@@ -105,9 +106,9 @@
 
 #TextAreaChatLog div.ChatMessage.deeplib-message {
   background-color: #eee;
-  border: 2px solid #440171;
+  border: min(0.2dvh, 0.1dvw) solid #440171;
   color: #111;
-  padding-left: 5px;
+  padding-left: min(0.6dvh, 0.3dvw);
   display: block;
   white-space: normal;
 }
