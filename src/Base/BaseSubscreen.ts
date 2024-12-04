@@ -140,11 +140,12 @@ export abstract class BaseSubscreen {
   resize(onLoad: boolean = false) {
     elementSetPosSizeFont({ element: elementGetSubscreenDiv() }, 0, 0, 2000, 1000);
     if (this.name === 'mainmenu') {
-      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 800, 735);
+      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 800, 660);
     } else {
-      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 1000, 735);
+      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 1000, 660);
     }
 
+    elementSetPosSizeFont({ elementId: 'deeplib-subscreen-title' }, 530, 75, 800, 60);
     
     elementSetPosition({ element: elementGetTooltip() }, 250, 850);
     elementSetSize({ element: elementGetTooltip() }, 1500, 60);
