@@ -16,6 +16,10 @@
   margin: 0;
 }
 
+.deeplib-subscreen * {
+  box-sizing: border-box;
+}
+
 .deeplib-settings {
   display: flex;
   flex-direction: column;
