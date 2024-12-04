@@ -2,10 +2,10 @@ import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, r
 
 export function initMod(initFunction: (() => void) | (() => Promise<void>), modules: BaseModule[], pathToTranslationsFolder: string) {
   const MOD_NAME = bcSdkMod.ModInfo.name;
-  deepLibLogger.log(`Init wait for ${MOD_NAME}`);
+  deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
     bcSdkMod.prototype.hookFunction('LoginResponse', 0, (args, next) => {
-      deepLibLogger.log(`Init for ${MOD_NAME}! LoginResponse caught: `, args);
+      deepLibLogger.debug(`Init for ${MOD_NAME}! LoginResponse caught: `, args);
       next(args);
       const response = args[0];
       if (response === 'InvalidNamePassword') return next(args);
@@ -14,7 +14,7 @@ export function initMod(initFunction: (() => void) | (() => Promise<void>), modu
       }
     });
   } else {
-    deepLibLogger.log(`Already logged in, initing ${MOD_NAME}`);
+    deepLibLogger.debug(`Already logged in, initing ${MOD_NAME}`);
     init(initFunction, modules, pathToTranslationsFolder);
   }
 }
@@ -63,7 +63,7 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
     module.run();
   }
 
-  deepLibLogger.log(`Modules Loaded for ${MOD_NAME}.`);
+  deepLibLogger.debug(`Modules Loaded for ${MOD_NAME}.`);
   return true;
 }
 
@@ -72,7 +72,7 @@ export function unloadMod(): true {
   unloadModules();
 
   delete (window as any)[MOD_NAME + 'Loaded'];
-  deepLibLogger.log(`Unloaded ${MOD_NAME}.`);
+  deepLibLogger.debug(`Unloaded ${MOD_NAME}.`);
   return true;
 }
 
