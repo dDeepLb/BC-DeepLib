@@ -65,7 +65,6 @@ export abstract class BaseSubscreen {
       label: getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter(),
     });
     elementAppendToSubscreenDiv(subscreenTitle);
-    elementSetPosSizeFont({ element: subscreenTitle }, 530, 75, 800, 90);
 
     if (this.name !== 'mainmenu') {
       const exitButton = elementCreateButton({
@@ -101,11 +100,6 @@ export abstract class BaseSubscreen {
             break;
         }
         elementAppendToSettingsDiv(element);
-
-        if (item.position)
-          elementSetPosition({ elementId: item.id }, item.position[0], item.position[1]);
-        if (item.size)
-          elementSetSize({ elementId: item.id }, item.size[0], item.size[1]);
       })
     );
 
@@ -155,25 +149,23 @@ export abstract class BaseSubscreen {
       const options = item[1];
       const elementDataAttrs = item[0].dataset;
       
-      if (options.position) {
-        elementSetPosition({ elementId: options.id }, options.position[0], options.position[1]);
+      if (options.position || elementDataAttrs.position) {
+        const position = elementDataAttrs?.position?.split('x');
+        const xPos = options?.position?.[0] || parseInt(position?.[0] || 0);
+        const yPos = options?.position?.[1] || parseInt(position?.[1] || 0);
+
+        elementSetPosition({ elementId: options.id }, xPos, yPos);
       }
 
-      if (options.size) {
-        elementSetSize({ elementId: options.id }, options.size[0], options.size[1]);
+      if (options.size || elementDataAttrs.size) {
+        const size = elementDataAttrs?.size?.split('x');
+        const width = options?.size?.[0] || parseInt(size?.[0] || 0);
+        const height = options?.size?.[1] || parseInt(size?.[1] || 0);
+
+        elementSetSize({ elementId: options.id }, width, height);
       }
 
       elementAdjustFontSize({ elementId: options.id });
-
-      if (elementDataAttrs.size) {
-        const size = elementDataAttrs.size.split('x');
-        elementSetSize({ elementId: options.id }, parseInt(size[0]), parseInt(size[1]));
-      }
-
-      if (elementDataAttrs.position) {
-        const position = elementDataAttrs.position.split('x');
-        elementSetPosition({ elementId: options.id }, parseInt(position[0]), parseInt(position[1]));
-      }
     });
   }
 

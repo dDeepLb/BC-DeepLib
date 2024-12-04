@@ -1,5 +1,3 @@
-import { elementSetPosSizeFont } from '../../DeepLib';
-
 export function elementCreateSubscreenDiv() {
   const subscreenDiv = elementGetSubscreenDiv();
   if (subscreenDiv) {
@@ -10,8 +8,6 @@ export function elementCreateSubscreenDiv() {
   const div = document.createElement('div');
   div.id = 'deeplib-subscreen';
   div.classList.add('deeplib-subscreen', 'HideOnPopup');
-
-  elementSetPosSizeFont({ element: div }, 0, 0, 2000, 1000);
 
   return document.body.appendChild(div);
 }
@@ -38,8 +34,6 @@ export function elementCreateSettingsDiv() {
   const div = document.createElement('div');
   div.id = 'deeplib-settings';
   div.classList.add('deeplib-settings');
-
-  elementSetPosSizeFont({ element: div }, 530, 170, 800, 735);
 
   return div;
 }
