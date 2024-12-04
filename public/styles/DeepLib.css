@@ -37,7 +37,7 @@
   overflow: hidden;
 }
 
-.deeplib-button img {
+.deeplib-button.button-styling img {
   position: absolute;
   top: 0%;
   left: 0%;
@@ -57,8 +57,9 @@
   mask-image: var(--image);
 }
 
-.deeplib-button span {
+.deeplib-button.button-styling .button-label {
   width: 100%;
+  background-color: transparent;
   color: var(--deeplib-text-color);
 }
 
