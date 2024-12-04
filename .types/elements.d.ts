@@ -19,16 +19,16 @@ export type Checkbox = BaseElementModel & {
   type: 'checkbox';
   label: string;
   description: string;
-  setElementValue: () => any;
-  setSettingValue: (val: any) => void;
+  getSettingValue: () => boolean;
+  setSettingValue: (val: boolean) => void;
 };
 
 export type Input = BaseElementModel & {
   type: 'text' | 'number';
   label: string;
   description: string;
-  setElementValue: () => any;
-  setSettingValue: (val: any) => void;
+  getElementValue: () => string;
+  setSettingValue: (val: string) => void;
 };
 
 export type Label = BaseElementModel & {
