@@ -1,6 +1,5 @@
 import { SettingElement } from '../../.types/elements';
-import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementGetSettingsDiv, elementGetSubscreenDiv, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, getText, modules, setSubscreen } from '../DeepLib';
-import elementCreateCheckbox from '../Utilities/Elements/Checkbox';
+import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, getText, modules, setSubscreen } from '../DeepLib';
 
 export abstract class BaseSubscreen {
   static currentElements: [HTMLElement, SettingElement][] = [];
@@ -81,6 +80,9 @@ export abstract class BaseSubscreen {
       elementAppendToSubscreenDiv(exitButton);
     }
 
+    const tooltip = elementCreateTooltip();
+    elementAppendToSubscreenDiv(tooltip);
+
     this.pageStructure.forEach((s) =>
       s.forEach((item) => {
         let element: HTMLElement;
@@ -143,7 +145,9 @@ export abstract class BaseSubscreen {
       elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 1000, 735);
     }
 
-    elementSetPosSizeFont({ elementId: 'deeplib-subscreen-title' }, 530, 75, 800, 90);
+    
+    elementSetPosition({ element: elementGetTooltip() }, 250, 850);
+    elementSetSize({ element: elementGetTooltip() }, 1500, 60);
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
