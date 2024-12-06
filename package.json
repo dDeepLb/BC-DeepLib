@@ -6,9 +6,9 @@
   "license": "MIT",
   "type": "module",
   "files": [
-    "/src",
     ".types",
-    "public"
+    "public",
+    "dist"
   ],
   "main": "./src/DeepLib.ts",
   "scripts": {
