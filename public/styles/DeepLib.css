@@ -41,9 +41,7 @@
 
 .deeplib-button.button-styling {
   border-radius: min(1.0dvh, 0.5dvw);
-
   color: var(--deeplib-text-color);
-  overflow: hidden;
 }
 
 .deeplib-button.button-styling img {
