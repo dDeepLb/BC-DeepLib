@@ -22,10 +22,11 @@ export function elementCreateButton(options: Button) {
             tag: 'img',
             attributes: {
               id: `${options.id}-image`,
-              alt: options.label,
+              alt: '',
               disabled: options.disabled,
               decoding: 'async', 
-              loading: 'lazy'
+              loading: 'lazy',
+              src: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' // 1x1 transparent image to get rid of broken image
             },
             dataAttributes: {
               'size': options.size?.join('x'),
