@@ -10,7 +10,7 @@
     "public",
     "dist"
   ],
-  "main": "./src/DeepLib.ts",
+  "main": "./dist/deeplib.js",
   "scripts": {
     "lint": "eslint src/",
     "build": "cross-env TS_NODE_PROJECT=\"tsconfig.webpack.json\" webpack --env prod --fail-on-warnings",

@@ -32,7 +32,7 @@ export default async function (env) {
       app: path.join(SRC_DIR, 'DeepLib.ts'),
     },
     output: {
-      filename: 'main.js',
+      filename: 'deeplib.js',
       path: DIST_DIR,
     },
     devServer: {
