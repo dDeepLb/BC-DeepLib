@@ -1,4 +1,5 @@
-import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, VersionModule } from '../DeepLib';
+import deeplib_style from '../../public/styles/DeepLib.css';
+import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../DeepLib';
 
 export function initMod(initFunction: (() => void) | (() => Promise<void>), modules: BaseModule[], pathToTranslationsFolder: string) {
   const MOD_NAME = bcSdkMod.ModInfo.name;
@@ -26,6 +27,7 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
   if ((window as any)[MOD_NAME + 'Loaded']) return;
 
   dataTake();
+  Style.inject('deeplib-style', deeplib_style);
 
   new Localization({ pathToTranslationsFolder: pathToTranslationsFolder });
   await Localization.init();
