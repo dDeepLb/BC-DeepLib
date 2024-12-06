@@ -1,6 +1,6 @@
 {
   "name": "bc-deeplib",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "dDeepLb",
   "description": "Package for easier development of BC mods without need to repeat myself in every mod",
   "license": "MIT",
