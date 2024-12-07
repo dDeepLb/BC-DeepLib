@@ -1,5 +1,5 @@
 
-import { Button, Checkbox, Input, Label, SettingElement } from '../base/elements_typings';
+import { Button, Checkbox, Input, Label, SettingElement } from '../.base/elements_typings';
 import { BaseSubscreen, deepLibLogger } from '../deep_lib';
 
 export class GuiDebug extends BaseSubscreen {

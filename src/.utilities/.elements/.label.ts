@@ -1,4 +1,4 @@
-import { Label } from '../../base/elements_typings';
+import { Label } from '../../.base/elements_typings';
 import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
 export function elementCreateLabel(options: Label) {

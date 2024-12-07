@@ -1,4 +1,4 @@
-import { Button } from '../../base/elements_typings';
+import { Button } from '../../.base/elements_typings';
 import { BaseSubscreen, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
 export function elementCreateButton(options: Button) {
