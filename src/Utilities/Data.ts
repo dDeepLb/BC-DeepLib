@@ -1,4 +1,4 @@
-import { SettingsModel, _String, bcSdkMod, modules } from '../DeepLib';
+import { SettingsModel, _String, bcSdkMod, modules } from '../deep_lib';
 
 export const PlayerStorage = (): Readonly<SettingsModel> => (
   typeof Player?.[bcSdkMod.ModInfo.name] === 'object' ?

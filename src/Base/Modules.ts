@@ -1,4 +1,4 @@
-import { BaseModule } from '../DeepLib';
+import { BaseModule } from '../deep_lib';
 
 export const modulesMap: Map<string, BaseModule> = new Map<string, BaseModule>();
 

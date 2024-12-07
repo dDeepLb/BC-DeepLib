@@ -1,5 +1,5 @@
-import { Input } from 'Types/elements';
-import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../DeepLib';
+import { Input } from '../../base/elements_typings';
+import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
 export function elementCreateInput(options: Input) {
   const elem = document.getElementById(options.id);

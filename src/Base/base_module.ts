@@ -1,4 +1,4 @@
-import { BaseSettingsModel, BaseSubscreen, PlayerStorage, SettingsModel, bcSdkMod } from '../DeepLib';
+import { BaseSettingsModel, BaseSubscreen, PlayerStorage, SettingsModel, bcSdkMod } from '../deep_lib';
 
 export type Subscreen = new (module?: BaseModule) => BaseSubscreen;
 

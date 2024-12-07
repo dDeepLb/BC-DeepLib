@@ -1,4 +1,4 @@
-import { deepLibLogger } from '../../DeepLib';
+import { deepLibLogger } from '../../deep_lib';
 
 type ElementOrId = { elementId?: string; element?: HTMLElement; };
 

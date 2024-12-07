@@ -1,5 +1,5 @@
-import { Checkbox } from 'Types/elements';
-import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../DeepLib';
+import { Checkbox } from '../../base/elements_typings';
+import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
 export function elementCreateCheckbox(options: Checkbox) {
   const elem = document.getElementById(options.id);

@@ -1,4 +1,4 @@
-import { BaseSubscreen, GUI } from '../DeepLib';
+import { BaseSubscreen, GUI } from '../deep_lib';
 
 export function getCurrentSubscreen(): BaseSubscreen | null {
   return GUI.instance && GUI.instance.currentSubscreen;

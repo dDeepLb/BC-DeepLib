@@ -1,5 +1,5 @@
-import { Button, SettingElement } from '../../.types/elements';
-import { BaseSubscreen, elementSetPosSizeFont, getText } from '../DeepLib';
+import { Button, SettingElement } from '../base/elements_typings';
+import { BaseSubscreen, elementSetPosSizeFont, getText } from '../deep_lib';
 
 export class SupportHelper {
   private static thankYouList: string[] = ['Ellena', 'weboos', 'Jamie'];

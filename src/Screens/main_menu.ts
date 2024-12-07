@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, GUI, GuiDebug, GuiSupport, elementAppendToMiscDiv, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateMiscDiv, elementSetPosSizeFont, getText } from '../DeepLib';
+import { BaseSubscreen, GUI, GuiDebug, GuiSupport, elementAppendToMiscDiv, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateMiscDiv, elementSetPosSizeFont, getText } from '../deep_lib';
 
 export class MainMenu extends BaseSubscreen {
   subscreens: BaseSubscreen[] = [];

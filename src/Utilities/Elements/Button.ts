@@ -1,5 +1,5 @@
-import { Button } from 'Types/elements';
-import { BaseSubscreen, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../DeepLib';
+import { Button } from '../../base/elements_typings';
+import { BaseSubscreen, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
 export function elementCreateButton(options: Button) {
   const width = options.size ? getRelativeWidth(options.size[0]) + 'px' : '';

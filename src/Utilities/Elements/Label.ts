@@ -1,5 +1,5 @@
-import { Label } from 'Types/elements';
-import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../DeepLib';
+import { Label } from '../../base/elements_typings';
+import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
 export function elementCreateLabel(options: Label) {
   const elem = document.getElementById(options.id);

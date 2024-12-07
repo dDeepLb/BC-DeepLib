@@ -1,5 +1,6 @@
 import deeplib_style from '../../public/styles/DeepLib.css';
-import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../DeepLib';
+import gratitude_style from '../../public/styles/Gratitude.css';
+import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
 
 export function initMod(initFunction: (() => void) | (() => Promise<void>), modules: BaseModule[], pathToTranslationsFolder: string) {
   const MOD_NAME = bcSdkMod.ModInfo.name;
@@ -27,6 +28,8 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
   if ((window as any)[MOD_NAME + 'Loaded']) return;
 
   dataTake();
+
+  Style.inject('gratitude-style', gratitude_style);
   Style.inject('deeplib-style', deeplib_style);
 
   new Localization({ pathToTranslationsFolder: pathToTranslationsFolder });

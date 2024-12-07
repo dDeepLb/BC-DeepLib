@@ -1,4 +1,4 @@
-import { BaseSettingsModel } from '../DeepLib';
+import { BaseSettingsModel } from '../deep_lib';
 
 export type SettingsModel = {
   [x: string]: any;

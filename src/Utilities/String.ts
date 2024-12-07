@@ -1,4 +1,4 @@
-import { deepLibLogger } from './Logger';
+import { deepLibLogger } from './logger';
 
 export class _String {
   static encode(string: string | object) {
