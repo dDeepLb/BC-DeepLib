@@ -1,4 +1,4 @@
-import { Button, SettingElement } from '../.base/elements_typings';
+import { Button, SettingElement } from '../base/elements_typings';
 import { BaseSubscreen, elementSetPosSizeFont, getText } from '../deep_lib';
 
 export class SupportHelper {

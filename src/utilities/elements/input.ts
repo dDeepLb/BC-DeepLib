@@ -1,7 +1,7 @@
-import { Checkbox } from '../../.base/elements_typings';
+import { Input } from '../../base/elements_typings';
 import { BaseSubscreen, elementSetTooltip, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
 
-export function elementCreateCheckbox(options: Checkbox) {
+export function elementCreateInput(options: Input) {
   const elem = document.getElementById(options.id);
 
   if (elem) return elem;
@@ -14,7 +14,7 @@ export function elementCreateCheckbox(options: Checkbox) {
 
   const retElem = ElementCreate({
     tag: 'div',
-    classList: ['deeplib-checkbox-container'],
+    classList: ['deeplib-input-container'],
     style: {
       width: width,
       height: height,
@@ -31,9 +31,9 @@ export function elementCreateCheckbox(options: Checkbox) {
         tag: 'input',
         classList: ['deeplib-input'],
         attributes: {
-          type: 'checkbox',
+          type: options.type,
           id: options.id,
-          checked: options.getSettingValue() || undefined,
+          placeholder: ' ',
         },
       },
       {
@@ -44,9 +44,18 @@ export function elementCreateCheckbox(options: Checkbox) {
         },
         children: [options.label]
       },
+      {
+        tag: 'div',
+        classList: ['deeplib-underline'],
+      }
     ]
   });
 
+  if (options.getElementValue?.()) {
+    const input = document.getElementById(options.id) as HTMLInputElement;
+    if (input) input.value = options.getElementValue();
+  }
+  
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
       elementSetTooltip(options.description);
