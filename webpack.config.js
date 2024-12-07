@@ -1,6 +1,6 @@
-import copyPlugin from 'copy-webpack-plugin';
 import path from 'path';
 import terser from 'terser-webpack-plugin';
+import TypescriptDeclarationPlugin from 'typescript-declaration-webpack-plugin';
 import { fileURLToPath } from 'url';
 import webpack from 'webpack';
 import 'webpack-dev-server';
@@ -17,7 +17,6 @@ const prodPath = 'https://ddeeplb.github.io/BC-Responsive';
 
 const SRC_DIR = path.join(__dirname, 'src');
 const DIST_DIR = path.join(__dirname, 'dist');
-const PUBLIC_DIR = path.join(__dirname, 'public');
 
 /**
  * @param {boolean} env
@@ -35,8 +34,9 @@ export default async function (env) {
       filename: 'deeplib.js',
       path: DIST_DIR,
       library: {
-        type: 'modern-module'
-      }
+        type: 'modern-module',
+      },
+      clean: true,
     },
     devServer: {
       hot: true,
@@ -60,9 +60,6 @@ export default async function (env) {
           test: /\.ts$/,
           use: {
             loader: 'ts-loader',
-            options: {
-              transpileOnly: true
-            }
           }
         },
         {
@@ -89,17 +86,12 @@ export default async function (env) {
       }
     },
     optimization: {
-      minimize: false,
+      minimize: true,
       minimizer: [
         new terser(),
       ],
     },
     plugins: [
-      new copyPlugin({
-        patterns: [
-          { from: PUBLIC_DIR, to: 'public' },
-        ],
-      }),
       new webpack.DefinePlugin({
         PUBLIC_URL: JSON.stringify(mode === 'development' ? testPath : prodPath),
         MOD_VERSION: JSON.stringify(modVersion),
@@ -108,7 +100,11 @@ export default async function (env) {
         banner: '/* eslint-disable */',
         raw: true,
       }),
+      new TypescriptDeclarationPlugin({
+        out: 'deeplib.d.ts',
+      }),
     ],
+    target: ['web', 'es6'],
     experiments: {
       outputModule: true,
     },
