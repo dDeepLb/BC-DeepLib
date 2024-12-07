@@ -34,6 +34,9 @@ export default async function (env) {
     output: {
       filename: 'deeplib.js',
       path: DIST_DIR,
+      library: {
+        type: 'modern-module'
+      }
     },
     devServer: {
       hot: true,
@@ -106,6 +109,9 @@ export default async function (env) {
         raw: true,
       }),
     ],
+    experiments: {
+      outputModule: true,
+    },
   };
 }
 
