@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, getText, modules, setSubscreen } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules, setSubscreen } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
 export abstract class BaseSubscreen {
@@ -35,14 +35,31 @@ export abstract class BaseSubscreen {
   }
 
   get currentPage(): SettingElement[] {
-    return this.pageStructure[Math.min(PreferencePageCurrent - 1, this.pageStructure.length - 1)];
+    return this.pageStructure[Math.min(BaseSubscreen.currentPage - 1, this.pageStructure.length - 1)];
   }
 
-  hideElements() {
+  changePage(page: number) {
+    const totalPages = this.pageStructure.length;
+
+    if (page > totalPages) page = 1;
+    if (page < 1) page = totalPages;
+    BaseSubscreen.currentPage = page;
+
+    this.managePageElementsVisibility();
+
+    const pageLabel = elementGet({ elementId: 'deeplib-page-label' }, 'changePage');
+    if (pageLabel) pageLabel.innerHTML = `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`;
+  }
+
+  managePageElementsVisibility() {
     this.pageStructure.forEach((item, ix) => {
-      if (ix != PreferencePageCurrent - 1) {
+      if (ix != BaseSubscreen.currentPage - 1) {
         item.forEach((setting) => {
           elementHide({ elementId: setting.id });
+        });
+      } else {
+        item.forEach((setting) => {
+          elementUnhide({ elementId: setting.id });
         });
       }
     });
@@ -57,6 +74,44 @@ export abstract class BaseSubscreen {
     elementCreateSubscreenDiv();
     const settingsElement = elementCreateSettingsDiv();
     elementAppendToSubscreenDiv(settingsElement);
+    
+    if (this.pageStructure.length > 1) {
+      const prev = elementCreateButton({
+        type: 'button',
+        id: 'deeplib-prev-page',
+        position: [1495, 75],
+        size: [90, 90],
+        image: 'Icons/Prev.png',
+        onClick: () => {
+          this.changePage(BaseSubscreen.currentPage - 1);
+        },
+        tooltip: getText('settings.button.prev_button_hint')
+      });
+      elementAppendToSubscreenDiv(prev);
+
+      const pageLabel = elementCreateLabel({
+        type: 'label',
+        id: 'deeplib-page-label',
+        position: [1585, 75],
+        size: [110, 90],
+        label: `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`,
+
+      });
+      elementAppendToSubscreenDiv(pageLabel);
+      
+      const next = elementCreateButton({
+        type: 'button',
+        id: 'deeplib-next-page',
+        position: [1695, 75],
+        size: [90, 90],
+        image: 'Icons/Next.png',
+        onClick: () => {
+          this.changePage(BaseSubscreen.currentPage + 1);
+        },
+        tooltip: getText('settings.button.next_button_hint')
+      });
+      elementAppendToSubscreenDiv(next);
+    }
 
     const subscreenTitle = elementCreateLabel({
       type: 'label',
@@ -105,6 +160,7 @@ export abstract class BaseSubscreen {
       })
     );
 
+    this.managePageElementsVisibility();
     CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
   }
 
@@ -115,18 +171,9 @@ export abstract class BaseSubscreen {
       ElementContent('deeplib-subscreen-title', newTitle);
     }
     DrawCharacter(Player, 50, 50, 0.9, false);
-
-    if (this.pageStructure.length > 1) {
-      MainCanvas.textAlign = 'center';
-      PreferencePageChangeDraw(1595, 75, this.pageStructure.length);
-      MainCanvas.textAlign = 'left';
-    }
-
-    this.hideElements();
   }
 
   click() {
-    if (this.pageStructure.length > 1) PreferencePageChangeClick(1595, 75, this.pageStructure.length);
   }
 
   exit() {
