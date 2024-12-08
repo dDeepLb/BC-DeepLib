@@ -1,13 +1,7 @@
 import { Button } from '../../base/elements_typings';
-import { BaseSubscreen, getRelativeHeight, getRelativeWidth, getRelativeX, getRelativeY } from '../../deep_lib';
+import { BaseSubscreen } from '../../deep_lib';
 
 export function elementCreateButton(options: Button) {
-  const width = options.size ? getRelativeWidth(options.size[0]) + 'px' : '';
-  const height = options.size ? getRelativeHeight(options.size[1]) + 'px' : '';
-  const left = options.position ? getRelativeX(options.position[0]) + 'px' : '';
-  const top = options.position ? getRelativeY(options.position[1]) + 'px' : '';
-  const position = options.position ? 'fixed' : '';
-
   const button = ElementButton.Create(options.id, () => options.onClick(),
     {
       tooltip: options.tooltip,
@@ -37,13 +31,6 @@ export function elementCreateButton(options: Button) {
             }
           },
         ],
-        style: {
-          width: width,
-          height: height,
-          left: left,
-          top: top,
-          position: position,
-        }
       },
     }
   );
