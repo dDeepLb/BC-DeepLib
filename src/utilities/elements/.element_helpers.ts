@@ -82,7 +82,7 @@ export function elementUnhide(_: ElementOrId) {
   element.style.display = '';
 }
 
-function elementGet(_: ElementOrId, funcName: string) {
+export function elementGet(_: ElementOrId, funcName: string) {
   if (!_) {
     deepLibLogger.warn(`${funcName} called without an elementId or element`);
     return null;
