@@ -77,6 +77,10 @@
   font-size: min(3.6dvh, 1.8dvw);
 }
 
+.deeplib-button.button-styling .button-tooltip {
+  border-radius: min(1.0dvh, 0.5dvw);
+}
+
 #deeplib-subscreen-title {
   text-align: center;
   color: var(--deeplib-text-color);
