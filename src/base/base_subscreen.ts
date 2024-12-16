@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAdjustFontSize, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules, setSubscreen } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules, setSubscreen } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
 export abstract class BaseSubscreen {
@@ -192,7 +192,8 @@ export abstract class BaseSubscreen {
       elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 1000, 660);
     }
 
-    elementSetPosSizeFont({ elementId: 'deeplib-subscreen-title' }, 530, 75, 800, 60);
+    elementSetPosition({ elementId: 'deeplib-subscreen-title' }, 530, 75); 
+    elementSetSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
     
     elementSetPosition({ element: elementGetTooltip() }, 250, 850);
     elementSetSize({ element: elementGetTooltip() }, 1500, 60);
@@ -216,8 +217,6 @@ export abstract class BaseSubscreen {
 
         elementSetSize({ elementId: options.id }, width, height);
       }
-
-      elementAdjustFontSize({ elementId: options.id });
     });
   }
 
