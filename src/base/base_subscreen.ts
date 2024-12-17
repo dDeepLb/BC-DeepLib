@@ -196,7 +196,7 @@ export abstract class BaseSubscreen {
     elementSetSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
     
     elementSetPosition({ element: elementGetTooltip() }, 250, 850);
-    elementSetSize({ element: elementGetTooltip() }, 1500, 60);
+    elementSetSize({ element: elementGetTooltip() }, 1500, 70);
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
