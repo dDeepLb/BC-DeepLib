@@ -73,7 +73,7 @@
 
 .deeplib-button.button-styling .button-label {
   width: 100%;
-  background-color: transparent;
+  background-color: transparent !important;
   color: var(--deeplib-text-color);
   font-size: min(3.6dvh, 1.8dvw);
 }
