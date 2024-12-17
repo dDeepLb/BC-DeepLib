@@ -55,11 +55,11 @@ export abstract class BaseSubscreen {
     this.pageStructure.forEach((item, ix) => {
       if (ix != BaseSubscreen.currentPage - 1) {
         item.forEach((setting) => {
-          elementHide({ elementId: setting.id });
+          elementHide({ elementId: `${setting.id}-container` });
         });
       } else {
         item.forEach((setting) => {
-          elementUnhide({ elementId: setting.id });
+          elementUnhide({ elementId: `${setting.id}-container` });
         });
       }
     });

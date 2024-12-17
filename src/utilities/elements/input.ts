@@ -9,6 +9,9 @@ export function elementCreateInput(options: Input) {
   const retElem = ElementCreate({
     tag: 'div',
     classList: ['deeplib-input-container'],
+    attributes: {
+      id: `${options.id}-container`,
+    },
     dataAttributes: {
       'size': options.size?.join('x'),
       'position': options.position?.join('x'),

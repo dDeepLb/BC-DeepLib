@@ -9,6 +9,9 @@ export function elementCreateCheckbox(options: Checkbox) {
   const retElem = ElementCreate({
     tag: 'div',
     classList: ['deeplib-checkbox-container'],
+    attributes: {
+      id: `${options.id}-container`,
+    },
     dataAttributes: {
       'size': options.size?.join('x'),
       'position': options.position?.join('x'),

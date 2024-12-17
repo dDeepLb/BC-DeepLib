@@ -34,8 +34,17 @@ export function elementCreateButton(options: Button) {
       },
     }
   );
-  
-  BaseSubscreen.currentElements.push([button, options]);
 
-  return button;
+  const buttonContainer = ElementCreate({
+    tag: 'div',
+    classList: ['deeplib-button-container'],
+    attributes: {
+      id: `${options.id}-container`,
+    },
+    children: [button],
+  });
+  
+  BaseSubscreen.currentElements.push([buttonContainer, options]);
+
+  return buttonContainer;
 }

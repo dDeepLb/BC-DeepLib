@@ -7,18 +7,28 @@ export function elementCreateLabel(options: Label) {
   if (elem) return elem;
 
   const retElem = ElementCreate({
-    tag: 'span',
-    classList: ['deeplib-label', 'deeplib-text'],
+    tag: 'div',
+    classList: ['deeplib-label-container'],
     attributes: {
-      id: options.id
-    },
-    dataAttributes: {
-      'size': options.size?.join('x'),
-      'position': options.position?.join('x'),
+      id: `${options.id}-container`,
     },
     children: [
-      options.label,
-    ],
+      {
+        tag: 'span',
+        classList: ['deeplib-label', 'deeplib-text'],
+        attributes: {
+          id: options.id
+        },
+        dataAttributes: {
+          'size': options.size?.join('x'),
+          'position': options.position?.join('x'),
+        },
+        children: [
+          options.label,
+        ],
+      } 
+    ]
+    
   });
   
   if (options.description) {
