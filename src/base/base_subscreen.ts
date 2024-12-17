@@ -212,8 +212,8 @@ export abstract class BaseSubscreen {
 
       if (options.size || elementDataAttrs.size) {
         const size = elementDataAttrs?.size?.split('x');
-        const width = options?.size?.[0] || parseInt(size?.[0] || 0);
-        const height = options?.size?.[1] || parseInt(size?.[1] || 0);
+        const width = options?.size?.[0] || (size?.[0] ? parseInt(size?.[0] || 0) : null);
+        const height = options?.size?.[1] || (size?.[1] ? parseInt(size?.[1] || 0) : null);
 
         elementSetSize({ elementId: options.id }, width, height);
       }

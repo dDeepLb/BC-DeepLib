@@ -35,17 +35,23 @@ export function elementSetPosition(_: ElementOrId, xPos: number, yPos: number) {
   });
 }
 
-export function elementSetSize(_: ElementOrId, width: number, height: number) {
+export function elementSetSize(_: ElementOrId, width: number | null, height: number | null) {
   const element = elementGet(_, 'elementSetSize');
   if (!element) return;
 
-  const Height = getRelativeHeight(height);
-  const Width = getRelativeWidth(width);
+  if (width !== null) {
+    const Width = getRelativeWidth(width);
+    Object.assign(element.style, {
+      width: Width + 'px',
+    });
+  }
 
-  Object.assign(element.style, {
-    width: Width + 'px',
-    height: Height + 'px',
-  });
+  if (height !== null) {
+    const Height = getRelativeHeight(height);
+    Object.assign(element.style, {
+      height: Height + 'px',
+    });
+  }
 }
 
 export function elementAdjustFontSize(_: ElementOrId) {

@@ -2,7 +2,7 @@ export type SettingElement = Button | Checkbox | Input | Label;
 
 export type BaseElementModel = {
   id: string;
-  size?: [width: number, height: number];
+  size?: [width: number | null, height: number | null];
   position?: [x: number, y: number];
   disabled?: boolean;
 };
