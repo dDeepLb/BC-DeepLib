@@ -70,6 +70,8 @@ export abstract class BaseSubscreen {
       if (!module.settingsScreen) continue;
       if (!module.settings || !Object.keys(module.settings).length) module.registerDefaultSettings();
     }
+    
+    BaseSubscreen.currentPage = 1;
 
     elementCreateSubscreenDiv();
     const settingsElement = elementCreateSettingsDiv();
