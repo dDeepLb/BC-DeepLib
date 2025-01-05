@@ -29,6 +29,10 @@ export abstract class BaseSubscreen {
   get settings(): BaseSettingsModel {
     return this.module.settings as BaseSettingsModel;
   }
+  
+  set settings(value) {
+    this.module.settings = value;
+  }
 
   get pageStructure(): SettingElement[][] {
     return [[]];
