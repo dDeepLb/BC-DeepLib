@@ -259,12 +259,12 @@ export abstract class BaseSubscreen {
       s.forEach((item) => {
         switch (item.type) {
           case 'text':
-            item.setSettingValue(ElementValue(item.id));
+            item?.setSettingValue?.(ElementValue(item.id));
             break;
           case 'checkbox': {
             const elem = document.getElementById(item.id) as HTMLInputElement;
             const checked = elem.checked;
-            item.setSettingValue(checked);
+            item?.setSettingValue?.(checked);
             break;
           }
         }

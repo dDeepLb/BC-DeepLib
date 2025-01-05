@@ -27,13 +27,13 @@ export function elementCreateLabel(options: Label) {
           options.label,
         ],
       } 
-    ]
-    
+    ],
+    ...options.customOptions
   });
   
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
-      elementSetTooltip(options.description as string);
+      elementSetTooltip(options.description || '');
     });
 
     retElem.addEventListener('mouseout', () => {

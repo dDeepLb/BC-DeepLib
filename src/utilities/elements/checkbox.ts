@@ -23,7 +23,7 @@ export function elementCreateCheckbox(options: Checkbox) {
         attributes: {
           type: 'checkbox',
           id: options.id,
-          checked: options.getSettingValue() || undefined,
+          checked: options?.getSettingValue?.() || undefined,
         },
       },
       {
@@ -34,12 +34,13 @@ export function elementCreateCheckbox(options: Checkbox) {
         },
         children: [options.label]
       },
-    ]
+    ],
+    ...options.customOptions
   });
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
-      elementSetTooltip(options.description);
+      elementSetTooltip(options.description || '');
     });
 
     retElem.addEventListener('mouseout', () => {

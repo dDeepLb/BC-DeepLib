@@ -7,34 +7,45 @@ export type BaseElementModel = {
   disabled?: boolean;
 };
 
+type CustomButtonOptions = {
+  id?: Parameters<typeof ElementButton.Create>[0];
+  onClick?: Parameters<typeof ElementButton.Create>[1];
+  options?: Parameters<typeof ElementButton.Create>[2];
+  htmlOptions?: Parameters<typeof ElementButton.Create>[3];
+};
+
 export type Button = BaseElementModel & {
   type: 'button';
   image?: string;
   label?: string;
   tooltip?: string;
-  onClick: () => void;
+  onClick?: () => void;
+  customOptions?: CustomButtonOptions;
 };
 
 export type Checkbox = BaseElementModel & {
   type: 'checkbox';
-  label: string;
-  description: string;
-  getSettingValue: () => boolean;
-  setSettingValue: (val: boolean) => void;
+  label?: string;
+  description?: string;
+  getSettingValue?: () => boolean;
+  setSettingValue?: (val: boolean) => void;
+  customOptions?: HTMLOptions<keyof HTMLElementTagNameMap>;
 };
 
 export type Input = BaseElementModel & {
   type: 'text' | 'number';
-  label: string;
-  description: string;
-  getElementValue: () => string;
-  setSettingValue: (val: string) => void;
+  label?: string;
+  description?: string;
+  getElementValue?: () => string;
+  setSettingValue?: (val: string) => void;
+  customOptions?: HTMLOptions<keyof HTMLElementTagNameMap>;
 };
 
 export type Label = BaseElementModel & {
   type: 'label';
-  label: string;
+  label?: string;
   description?: string;
+  customOptions?: HTMLOptions<keyof HTMLElementTagNameMap>;
 };
 
 export type Custom = BaseElementModel & {

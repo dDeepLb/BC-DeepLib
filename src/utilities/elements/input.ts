@@ -38,7 +38,8 @@ export function elementCreateInput(options: Input) {
         tag: 'div',
         classList: ['deeplib-underline'],
       }
-    ]
+    ],
+    ...options.customOptions
   });
 
   if (options.getElementValue?.()) {
@@ -48,7 +49,7 @@ export function elementCreateInput(options: Input) {
   
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
-      elementSetTooltip(options.description);
+      elementSetTooltip(options.description || '');
     });
 
     retElem.addEventListener('mouseout', () => {

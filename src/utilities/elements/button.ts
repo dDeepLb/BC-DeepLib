@@ -2,13 +2,17 @@ import { Button } from '../../base/elements_typings';
 import { BaseSubscreen } from '../../deep_lib';
 
 export function elementCreateButton(options: Button) {
-  const button = ElementButton.Create(options.id, () => options.onClick(),
+  const button = ElementButton.Create(
+    options.customOptions?.id ?? options.id, 
+    options.customOptions?.onClick ?? options?.onClick ?? (() => {}),
     {
+      ...options.customOptions?.options,
       tooltip: options.tooltip,
       label: options.label,
       labelPosition: 'center',
     },
     {
+      ...options.customOptions?.htmlOptions,
       button: {
         classList: ['deeplib-button'],
         children: [
