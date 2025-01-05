@@ -1,0 +1,22 @@
+#deeplib-page-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#deeplib-subscreen-title {
+  text-align: center;
+  color: var(--deeplib-text-color);
+}
+
+#deeplib-reset-button {
+  background-color: indianred;
+}
+
+#deeplib-wiki-button {
+  background-color: #BDA203;
+}
+
+#deeplib-support-button {
+  background-color: #5e4969;
+}

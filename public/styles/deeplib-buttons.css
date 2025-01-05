@@ -1,0 +1,40 @@
+.deeplib-button.button-styling {
+  color: var(--deeplib-text-color);
+  z-index: 1;
+}
+
+.deeplib-button.button-styling,
+.deeplib-button.button-styling::before {
+  border-radius: min(1.0dvh, 0.5dvw);
+}
+
+.deeplib-button.button-styling img {
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  width: 100%;
+  height: 100%;
+  background-position: left;
+  background-color: var(--deeplib-icon-color);
+  background-blend-mode: multiply;
+  background-size: contain;
+  mask-position: left;
+  mask-size: contain;
+  background-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  color: transparent;
+
+  background-image: var(--image);
+  mask-image: var(--image);
+}
+
+.deeplib-button.button-styling .button-label {
+  width: 100%;
+  background-color: transparent !important;
+  color: var(--deeplib-text-color);
+  font-size: min(3.6dvh, 1.8dvw);
+}
+
+.deeplib-button.button-styling .button-tooltip {
+  border-radius: min(1.0dvh, 0.5dvw);
+}

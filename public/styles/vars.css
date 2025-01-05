@@ -1,0 +1,8 @@
+.deeplib-subscreen {
+  --deeplib-background-color: var(--main, white);
+  --deeplib-element-color: var(--element, white);
+  --deeplib-element-hover-color: var(--accentHover, cyan);
+  --deeplib-text-color: var(--text, black);
+  --deeplib-icon-color: var(--accent, white);
+  --deeplib-border-color: var(--accent, black);
+}
