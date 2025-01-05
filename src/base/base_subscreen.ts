@@ -155,7 +155,7 @@ export abstract class BaseSubscreen {
         size: [90, 90],
         image: 'Icons/Exit.png',
         onClick: () => {
-          setSubscreen('mainmenu');
+          this.exit();
         },
         tooltip: getText('settings.button.back_button_hint')
       });
