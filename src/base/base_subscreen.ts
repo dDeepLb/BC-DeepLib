@@ -1,6 +1,12 @@
 import { BaseModule, BaseSettingsModel, GUI, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
+type SubscreenOptions = {
+  drawCharacter?: boolean
+};
+  
+export type Subscreen = new (subscreenOptions?: SubscreenOptions, module?: BaseModule) => BaseSubscreen;
+
 export function getCurrentSubscreen(): BaseSubscreen | null {
   return GUI.instance && GUI.instance.currentSubscreen;
 }
@@ -17,10 +23,12 @@ export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubs
 export abstract class BaseSubscreen {
   static currentElements: [HTMLElement, SettingElement][] = [];
   static currentPage: number = 1;
+  readonly options: SubscreenOptions;
   readonly module!: BaseModule;
 
-  constructor(module?: BaseModule) {
+  constructor(subscreenOptions?: SubscreenOptions, module?: BaseModule) {
     if (module) this.module = module;
+    this.options = subscreenOptions || {} as SubscreenOptions;
   }
 
   get name(): string {
@@ -189,7 +197,7 @@ export abstract class BaseSubscreen {
     if (newTitle !== oldTitle) {
       ElementContent('deeplib-subscreen-title', newTitle);
     }
-    DrawCharacter(Player, 50, 50, 0.9, false);
+    if (this.options.drawCharacter) DrawCharacter(Player, 50, 50, 0.9, false);
   }
 
   click() {

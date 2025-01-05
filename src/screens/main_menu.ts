@@ -12,7 +12,7 @@ export class MainMenu extends BaseSubscreen {
   }
 
   constructor(module: GUI) {
-    super(module);
+    super({ drawCharacter: true }, module);
 
     this.subscreens = module.subscreens;
   }

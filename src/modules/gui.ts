@@ -79,7 +79,7 @@ export class GUI extends BaseModule {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
 
-      this._subscreens.push(new module.settingsScreen(module));
+      this._subscreens.push(new module.settingsScreen({}, module));
     }
 
     this._mainMenu.subscreens = this._subscreens;
