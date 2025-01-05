@@ -2,7 +2,6 @@ export * from './base/base_module';
 export * from './base/base_subscreen';
 export * from './base/initialization';
 export * from './base/modules';
-export * from './base/setting_definitions';
 
 export * from './migrators/base_migrator';
 

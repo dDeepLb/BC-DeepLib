@@ -1,5 +1,18 @@
-import { BaseModule, BaseSettingsModel, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules, setSubscreen } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, GUI, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules } from '../deep_lib';
 import { SettingElement } from './elements_typings';
+
+export function getCurrentSubscreen(): BaseSubscreen | null {
+  return GUI.instance && GUI.instance.currentSubscreen;
+}
+
+export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubscreen | null {
+  if (!GUI.instance) {
+    throw new Error('Attempt to set subscreen before init');
+  }
+  GUI.instance.currentSubscreen = subscreen;
+
+  return GUI.instance.currentSubscreen;
+}
 
 export abstract class BaseSubscreen {
   static currentElements: [HTMLElement, SettingElement][] = [];
