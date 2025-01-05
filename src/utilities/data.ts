@@ -1,6 +1,6 @@
 import { SettingsModel, _String, bcSdkMod, modules } from '../deep_lib';
 
-export const PlayerStorage = (): Readonly<SettingsModel> => (
+export const PlayerStorage = (): SettingsModel => (
   typeof Player?.[bcSdkMod.ModInfo.name] === 'object' ?
     CommonCloneDeep(Player?.[bcSdkMod.ModInfo.name]) :
     undefined
