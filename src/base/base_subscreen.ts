@@ -212,14 +212,18 @@ export abstract class BaseSubscreen {
   }
 
   resize(onLoad: boolean = false) {
+    const offset = this.options.drawCharacter ? 0 : 380;
+
     elementSetPosSizeFont({ element: elementGetSubscreenDiv() }, 0, 0, 2000, 1000);
     if (this.name === 'mainmenu') {
-      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 800, 660);
+      elementSetPosition({ element: elementGetSettingsDiv() }, 530 - offset, 170);
+      elementSetSize({ element: elementGetSettingsDiv() }, 800 + offset, 660);
     } else {
-      elementSetPosSizeFont({ element: elementGetSettingsDiv() }, 530, 170, 1000, 660);
+      elementSetPosition({ element: elementGetSettingsDiv() }, 530 - offset, 170);
+      elementSetSize({ element: elementGetSettingsDiv() }, 1000 + offset, 660);
     }
 
-    elementSetPosition({ elementId: 'deeplib-subscreen-title' }, 530, 75); 
+    elementSetPosition({ elementId: 'deeplib-subscreen-title' }, 530 - offset, 75); 
     elementSetSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
     
     elementSetPosition({ element: elementGetTooltip() }, 250, 850);
