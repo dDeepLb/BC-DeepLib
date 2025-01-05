@@ -1,6 +1,4 @@
-import { BaseSettingsModel, BaseSubscreen, PlayerStorage, SettingsModel, bcSdkMod } from '../deep_lib';
-
-export type Subscreen = new (module?: BaseModule) => BaseSubscreen;
+import { BaseSettingsModel, PlayerStorage, SettingsModel, Subscreen, bcSdkMod } from '../deep_lib';
 
 export abstract class BaseModule {
   get settingsScreen(): Subscreen | null {
@@ -19,6 +17,16 @@ export abstract class BaseModule {
       this.registerDefaultSettings();
     } else if (!PlayerStorage()[this.settingsStorage]) this.registerDefaultSettings();
     return PlayerStorage()[this.settingsStorage];
+  }
+
+  set settings(value) {
+    const modName = bcSdkMod.ModInfo.name;
+    if (!this.settingsStorage) return;
+    if (!PlayerStorage()) {
+      Player[modName] = <SettingsModel>{};
+      this.registerDefaultSettings();
+    } else if (!PlayerStorage()[this.settingsStorage]) this.registerDefaultSettings();
+    PlayerStorage()[this.settingsStorage] = value;
   }
 
   init() {
