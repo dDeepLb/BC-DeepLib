@@ -13,25 +13,34 @@ export function getRelativeWidth(width: number) {
   return width * (MainCanvas.canvas.clientWidth / mainCanvasWidth);
 }
 
-export function getRelativeY(yPos: number) {
-  return MainCanvas.canvas.offsetTop + yPos * (MainCanvas.canvas.clientHeight / mainCanvasHeight);
+export function getRelativeY(yPos: number, anchorPosition: 'top' | 'bottom' = 'top') {
+  const scaleY = MainCanvas.canvas.clientHeight / mainCanvasHeight;
+  return anchorPosition === 'top'
+    ? MainCanvas.canvas.offsetTop + yPos * scaleY
+    : MainCanvas.canvas.offsetTop + MainCanvas.canvas.clientHeight - yPos * scaleY;
 }
 
-export function getRelativeX(xPos: number) {
-  return MainCanvas.canvas.offsetLeft + xPos * (MainCanvas.canvas.clientWidth / mainCanvasWidth);
+export function getRelativeX(xPos: number, anchorPosition: 'left' | 'right' = 'left') {
+  const scaleX = MainCanvas.canvas.clientWidth / mainCanvasWidth;
+  return anchorPosition === 'left'
+    ? MainCanvas.canvas.offsetLeft + xPos * scaleX
+    : MainCanvas.canvas.offsetLeft + MainCanvas.canvas.clientWidth - xPos * scaleX;
 }
 
-export function elementSetPosition(_: ElementOrId, xPos: number, yPos: number) {
+export function elementSetPosition(_: ElementOrId, xPos: number, yPos: number, anchorPosition: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' = 'top-left') {
   const element = elementGet(_, 'elementSetPosition');
   if (!element) return;
 
-  const Top = getRelativeY(yPos);
-  const Left = getRelativeX(xPos);
+  const yAnchor = anchorPosition === 'top-left' || anchorPosition === 'top-right' ? 'top' : 'bottom';
+  const xAnchor = anchorPosition === 'top-left' || anchorPosition === 'bottom-left' ? 'left' : 'right';
+
+  const y = getRelativeY(yPos, yAnchor);
+  const x = getRelativeX(xPos, xAnchor);
 
   Object.assign(element.style, {
     position: 'fixed',
-    left: Left + 'px',
-    top: Top + 'px'
+    [xAnchor]: x + 'px',
+    [yAnchor]: y + 'px',
   });
 }
 
