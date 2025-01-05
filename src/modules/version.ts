@@ -28,11 +28,14 @@ export class VersionModule extends BaseModule {
 
     if (VersionModule.isNewVersion(PreviousVersion, CurrentVersion)) {
       VersionModule.isItNewVersion = true;
+      VersionModule.checkVersionMigration();
       VersionModule.saveVersion();
     }
+
+    dataStore();
   }
 
-  static checkVersionMigration() {
+  private static checkVersionMigration() {
     const PreviousVersion = VersionModule.loadVersion();
 
     let saveRequired = false;
@@ -42,12 +45,8 @@ export class VersionModule extends BaseModule {
         deepLibLogger.info(`Migrating ${bcSdkMod.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
       }
     }
-
-    if (saveRequired) {
-      dataStore();
-    }
   }
-
+  
   static registerMigrator(migrator: BaseMigrator) {
     VersionModule.Migrators.push(migrator);
   }

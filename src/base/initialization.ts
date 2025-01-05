@@ -43,7 +43,6 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
   await initFunction();
 
   VersionModule.checkVersionUpdate();
-  VersionModule.checkVersionMigration();
 
   (window as any)[MOD_NAME + 'Loaded'] = true;
   deepLibLogger.log(`Loaded ${MOD_NAME}! Version: ${MOD_VERSION}`);
