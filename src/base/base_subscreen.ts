@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, GUI, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateCustom, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
 type SubscreenOptions = {
@@ -181,6 +181,9 @@ export abstract class BaseSubscreen {
             break;
           case 'label':
             element = elementCreateLabel(item);
+            break;
+          case 'custom':
+            element = elementCreateCustom(item);
             break;
         }
         elementAppendToSettingsDiv(element);

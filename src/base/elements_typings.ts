@@ -1,4 +1,4 @@
-export type SettingElement = Button | Checkbox | Input | Label;
+export type SettingElement = Button | Checkbox | Input | Label | Custom;
 
 export type BaseElementModel = {
   id: string;
@@ -35,4 +35,9 @@ export type Label = BaseElementModel & {
   type: 'label';
   label: string;
   description?: string;
+};
+
+export type Custom = BaseElementModel & {
+  type: 'custom';
+  options: HTMLOptions<keyof HTMLElementTagNameMap>;
 };

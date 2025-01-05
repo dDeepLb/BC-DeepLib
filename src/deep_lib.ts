@@ -20,6 +20,7 @@ export * from './utilities/elements/.advanced_elements';
 export * from './utilities/elements/.element_helpers';
 export * from './utilities/elements/button';
 export * from './utilities/elements/checkbox';
+export * from './utilities/elements/custom';
 export * from './utilities/elements/input';
 export * from './utilities/elements/label';
 export * from './utilities/elements/tooltip';
