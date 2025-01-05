@@ -29,8 +29,8 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
 
   dataTake();
 
-  Style.inject('gratitude-style', gratitude_style);
-  Style.inject('deeplib-style', deeplib_style);
+  Style.injectInline('gratitude-style', gratitude_style);
+  Style.injectInline('deeplib-style', deeplib_style);
 
   new Localization({ pathToTranslationsFolder: pathToTranslationsFolder });
   await Localization.init();
