@@ -1,4 +1,19 @@
-export function elementCreateSubscreenDiv() {
+export const layoutElement = {
+  createSubscreenDiv: elementCreateSubscreenDiv,
+  getSubscreenDiv: elementGetSubscreenDiv,
+  appendToSubscreenDiv: elementAppendToSubscreenDiv,
+  removeSubscreenDiv: elementRemoveSubscreenDiv,
+
+  createSettingsDiv: elementCreateSettingsDiv,
+  getSettingsDiv: elementGetSettingsDiv,
+  appendToSettingsDiv: elementAppendToSettingsDiv,
+
+  createMiscDiv: elementCreateMiscDiv,
+  getMiscDiv: elementGetMiscDiv,
+  appendToMiscDiv: elementAppendToMiscDiv,
+};
+
+function elementCreateSubscreenDiv() {
   const subscreenDiv = elementGetSubscreenDiv();
   if (subscreenDiv) {
     console.error('Subscreen already exists');
@@ -12,19 +27,17 @@ export function elementCreateSubscreenDiv() {
   return document.body.appendChild(div);
 }
 
-export function elementGetSubscreenDiv() {
+function elementGetSubscreenDiv() {
   return document.getElementById('deeplib-subscreen') ?? undefined;
 }
-
-export function elementRemoveSubscreenDiv() {
+function elementRemoveSubscreenDiv() {
   return elementGetSubscreenDiv()?.remove();
 }
-
-export function elementAppendToSubscreenDiv(element: HTMLElement) {
-  return elementGetSubscreenDiv()?.appendChild(element);
+function elementAppendToSubscreenDiv(...element: HTMLElement[]) {
+  return elementGetSubscreenDiv()?.append(...element);
 }
 
-export function elementCreateSettingsDiv() {
+function elementCreateSettingsDiv() {
   const settingsDiv = elementGetSettingsDiv();
   if (settingsDiv) {
     console.error('Settings screen already exists');
@@ -38,15 +51,15 @@ export function elementCreateSettingsDiv() {
   return div;
 }
 
-export function elementGetSettingsDiv() {
+function elementGetSettingsDiv() {
   return document.getElementById('deeplib-settings') ?? undefined;
 }
 
-export function elementAppendToSettingsDiv(element: HTMLElement) {
-  return elementGetSettingsDiv()?.appendChild(element);
+function elementAppendToSettingsDiv(...element: HTMLElement[]) {
+  return elementGetSettingsDiv()?.append(...element);
 }
 
-export function elementCreateMiscDiv() {
+function elementCreateMiscDiv() {
   const miscDiv = elementGetMiscDiv();
   if (miscDiv) {
     console.error('Settings screen already exists');
@@ -60,11 +73,11 @@ export function elementCreateMiscDiv() {
   return div;
 }
 
-export function elementGetMiscDiv() {
+function elementGetMiscDiv() {
   return document.getElementById('deeplib-misc');
 }
 
-export function elementAppendToMiscDiv(element: HTMLElement) {
-  return elementGetMiscDiv()?.appendChild(element);
+function elementAppendToMiscDiv(...element: HTMLElement[]) {
+  return elementGetMiscDiv()?.append(...element);
 }
 

@@ -1,8 +1,8 @@
-import { BaseModule, BaseSettingsModel, GUI, SupportHelper, bcSdkMod, dataStore, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateCheckbox, elementCreateCustom, elementCreateInput, elementCreateLabel, elementCreateSettingsDiv, elementCreateSubscreenDiv, elementCreateTooltip, elementGet, elementGetSettingsDiv, elementGetSubscreenDiv, elementGetTooltip, elementHide, elementRemoveSubscreenDiv, elementSetPosSizeFont, elementSetPosition, elementSetSize, elementUnhide, getText, modules } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, GUI, SupportHelper, advancedElement, bcSdkMod, dataStore, domUtil, getText, layoutElement, modules } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
 type SubscreenOptions = {
-  drawCharacter?: boolean
+  drawCharacter?: boolean;
 };
   
 export type Subscreen = new (subscreenOptions?: SubscreenOptions, module?: BaseModule) => BaseSubscreen;
@@ -72,7 +72,7 @@ export abstract class BaseSubscreen {
 
     this.managePageElementsVisibility();
 
-    const pageLabel = elementGet({ elementId: 'deeplib-page-label' }, 'changePage');
+    const pageLabel = domUtil.get({ elementId: 'deeplib-page-label' }, 'changePage');
     if (pageLabel) pageLabel.innerHTML = `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`;
   }
 
@@ -80,11 +80,11 @@ export abstract class BaseSubscreen {
     this.pageStructure.forEach((item, ix) => {
       if (ix != BaseSubscreen.currentPage - 1) {
         item.forEach((setting) => {
-          elementHide({ elementId: `${setting.id}-container` });
+          domUtil.hide({ elementId: `${setting.id}-container` });
         });
       } else {
         item.forEach((setting) => {
-          elementUnhide({ elementId: `${setting.id}-container` });
+          domUtil.unhide({ elementId: `${setting.id}-container` });
         });
       }
     });
@@ -98,12 +98,12 @@ export abstract class BaseSubscreen {
     
     BaseSubscreen.currentPage = 1;
 
-    elementCreateSubscreenDiv();
-    const settingsElement = elementCreateSettingsDiv();
-    elementAppendToSubscreenDiv(settingsElement);
+    layoutElement.createSubscreenDiv();
+    const settingsElement = layoutElement.createSettingsDiv();
+    layoutElement.appendToSubscreenDiv(settingsElement);
     
     if (this.pageStructure.length > 1) {
-      const prev = elementCreateButton({
+      const prev = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-prev-page',
         position: [1495, 75],
@@ -114,9 +114,9 @@ export abstract class BaseSubscreen {
         },
         tooltip: getText('settings.button.prev_button_hint')
       });
-      elementAppendToSubscreenDiv(prev);
+      layoutElement.appendToSubscreenDiv(prev);
 
-      const pageLabel = elementCreateLabel({
+      const pageLabel = advancedElement.createLabel({
         type: 'label',
         id: 'deeplib-page-label',
         position: [1585, 75],
@@ -124,9 +124,9 @@ export abstract class BaseSubscreen {
         label: `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`,
 
       });
-      elementAppendToSubscreenDiv(pageLabel);
+      layoutElement.appendToSubscreenDiv(pageLabel);
       
-      const next = elementCreateButton({
+      const next = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-next-page',
         position: [1695, 75],
@@ -137,18 +137,18 @@ export abstract class BaseSubscreen {
         },
         tooltip: getText('settings.button.next_button_hint')
       });
-      elementAppendToSubscreenDiv(next);
+      layoutElement.appendToSubscreenDiv(next);
     }
 
-    const subscreenTitle = elementCreateLabel({
+    const subscreenTitle = advancedElement.createLabel({
       type: 'label',
       id: 'deeplib-subscreen-title',
       label: getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter(),
     });
-    elementAppendToSubscreenDiv(subscreenTitle);
+    layoutElement.appendToSubscreenDiv(subscreenTitle);
 
     if (this.name !== 'mainmenu') {
-      const exitButton = elementCreateButton({
+      const exitButton = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-exit',
         position: [1815, 75],
@@ -159,11 +159,11 @@ export abstract class BaseSubscreen {
         },
         tooltip: getText('settings.button.back_button_hint')
       });
-      elementAppendToSubscreenDiv(exitButton);
+      layoutElement.appendToSubscreenDiv(exitButton);
     }
 
-    const tooltip = elementCreateTooltip();
-    elementAppendToSubscreenDiv(tooltip);
+    const tooltip = advancedElement.createTooltip();
+    layoutElement.appendToSubscreenDiv(tooltip);
 
     this.pageStructure.forEach((s) =>
       s.forEach((item) => {
@@ -171,22 +171,22 @@ export abstract class BaseSubscreen {
         switch (item.type) {
           case 'text':
           case 'number':
-            element = elementCreateInput(item);
+            element = advancedElement.createInput(item);
             break;
           case 'checkbox':
-            element = elementCreateCheckbox(item);
+            element = advancedElement.createCheckbox(item);
             break;
           case 'button':
-            element = elementCreateButton(item);
+            element = advancedElement.createButton(item);
             break;
           case 'label':
-            element = elementCreateLabel(item);
+            element = advancedElement.createLabel(item);
             break;
           case 'custom':
-            element = elementCreateCustom(item);
+            element = advancedElement.createCustom(item);
             break;
         }
-        elementAppendToSettingsDiv(element);
+        layoutElement.appendToSettingsDiv(element);
       })
     );
 
@@ -217,20 +217,23 @@ export abstract class BaseSubscreen {
   resize(onLoad: boolean = false) {
     const offset = this.options.drawCharacter ? 0 : 380;
 
-    elementSetPosSizeFont({ element: elementGetSubscreenDiv() }, 0, 0, 2000, 1000);
+    domUtil.setPosition({ element: layoutElement.getSubscreenDiv() }, 0, 0);
+    domUtil.setSize({ element: layoutElement.getSubscreenDiv() }, 2000, 1000);
+    domUtil.autosetFontSize({ element: layoutElement.getSubscreenDiv() });
+
     if (this.name === 'mainmenu') {
-      elementSetPosition({ element: elementGetSettingsDiv() }, 530 - offset, 170);
-      elementSetSize({ element: elementGetSettingsDiv() }, 800 + offset, 660);
+      domUtil.setPosition({ element: layoutElement.getSettingsDiv() }, 530 - offset, 170);
+      domUtil.setSize({ element: layoutElement.getSettingsDiv() }, 800 + offset, 660);
     } else {
-      elementSetPosition({ element: elementGetSettingsDiv() }, 530 - offset, 170);
-      elementSetSize({ element: elementGetSettingsDiv() }, 1000 + offset, 660);
+      domUtil.setPosition({ element: layoutElement.getSettingsDiv() }, 530 - offset, 170);
+      domUtil.setSize({ element: layoutElement.getSettingsDiv() }, 1000 + offset, 660);
     }
 
-    elementSetPosition({ elementId: 'deeplib-subscreen-title' }, 530 - offset, 75); 
-    elementSetSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
+    domUtil.setPosition({ elementId: 'deeplib-subscreen-title' }, 530 - offset, 75); 
+    domUtil.setSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
     
-    elementSetPosition({ element: elementGetTooltip() }, 250, 850);
-    elementSetSize({ element: elementGetTooltip() }, 1500, 70);
+    domUtil.setPosition({ element: advancedElement.getTooltip() }, 250, 850);
+    domUtil.setSize({ element: advancedElement.getTooltip() }, 1500, 70);
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
@@ -241,7 +244,7 @@ export abstract class BaseSubscreen {
         const xPos = options?.position?.[0] || parseInt(position?.[0] || 0);
         const yPos = options?.position?.[1] || parseInt(position?.[1] || 0);
 
-        elementSetPosition({ elementId: options.id }, xPos, yPos);
+        domUtil.setPosition({ elementId: options.id }, xPos, yPos);
       }
 
       if (options.size || elementDataAttrs.size) {
@@ -249,7 +252,7 @@ export abstract class BaseSubscreen {
         const width = options?.size?.[0] || (size?.[0] ? parseInt(size?.[0] || 0) : null);
         const height = options?.size?.[1] || (size?.[1] ? parseInt(size?.[1] || 0) : null);
 
-        elementSetSize({ elementId: options.id }, width, height);
+        domUtil.setSize({ elementId: options.id }, width, height);
       }
     });
   }
@@ -272,7 +275,7 @@ export abstract class BaseSubscreen {
     );
     BaseSubscreen.currentElements = [];
 
-    elementRemoveSubscreenDiv();
+    layoutElement.removeSubscreenDiv();
   }
 }
 

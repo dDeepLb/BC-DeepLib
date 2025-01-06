@@ -1,5 +1,6 @@
 
-import { BaseSubscreen, GUI, GuiDebug, GuiSupport, elementAppendToMiscDiv, elementAppendToSettingsDiv, elementAppendToSubscreenDiv, elementCreateButton, elementCreateMiscDiv, elementSetPosSizeFont, getText } from '../deep_lib';
+import { BaseSubscreen, domUtil, getText, GUI, GuiDebug, GuiSupport, layoutElement } from '../deep_lib';
+import { advancedElement } from '../utilities/elements/advanced_elements';
 
 export class MainMenu extends BaseSubscreen {
   subscreens: BaseSubscreen[] = [];
@@ -25,7 +26,7 @@ export class MainMenu extends BaseSubscreen {
 
     super.load();
 
-    const exitButton = elementCreateButton({
+    const exitButton = advancedElement.createButton({
       type: 'button',
       id: 'exit',
       position: [1815, 75],
@@ -36,13 +37,13 @@ export class MainMenu extends BaseSubscreen {
       },
       tooltip: getText('settings.button.back_button_hint')
     });
-    elementAppendToSubscreenDiv(exitButton);
+    layoutElement.appendToSubscreenDiv(exitButton);
 
     for (const screen of this.subscreens) {
 
       if (screen.name == 'mainmenu') continue;
 
-      const button = elementCreateButton({
+      const button = advancedElement.createButton({
         type: 'button',
         id: `${screen.name}-button`,
         image: screen.icon,
@@ -53,14 +54,14 @@ export class MainMenu extends BaseSubscreen {
         size: [450, 90],
       });
 
-      elementAppendToSettingsDiv(button);
+      layoutElement.appendToSettingsDiv(button);
     }
 
-    const miscDiv = elementCreateMiscDiv();
-    elementAppendToSubscreenDiv(miscDiv);
+    const miscDiv = layoutElement.createMiscDiv();
+    layoutElement.appendToSubscreenDiv(miscDiv);
 
     if (MainMenu.resetSubscreen) {
-      const resetButton = elementCreateButton({
+      const resetButton = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-reset-button',
         image: 'Icons/ServiceBell.png',
@@ -70,11 +71,11 @@ export class MainMenu extends BaseSubscreen {
         },
         size: [405, 80],
       });
-      elementAppendToMiscDiv(resetButton);
+      layoutElement.appendToMiscDiv(resetButton);
     }
 
     if (MainMenu.wikiLink) {
-      const wikiButton = elementCreateButton({
+      const wikiButton = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-wiki-button',
         image: 'Icons/Introduction.png',
@@ -84,10 +85,10 @@ export class MainMenu extends BaseSubscreen {
         },
         size: [405, 80],
       });
-      elementAppendToMiscDiv(wikiButton);
+      layoutElement.appendToMiscDiv(wikiButton);
     }
 
-    const supportButton = elementCreateButton({
+    const supportButton = advancedElement.createButton({
       type: 'button',
       id: 'deeplib-support-button',
       image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
@@ -97,10 +98,9 @@ export class MainMenu extends BaseSubscreen {
       },
       size: [405, 80],
     });
-    elementAppendToMiscDiv(supportButton);
-    elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
+    layoutElement.appendToMiscDiv(supportButton);
 
-    const debugButton = elementCreateButton({
+    const debugButton = advancedElement.createButton({
       type: 'button',
       id: 'deeplib-debug-button',
       image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
@@ -110,7 +110,7 @@ export class MainMenu extends BaseSubscreen {
       size: [90, 90],
       position: [75, 75],
     });
-    elementAppendToMiscDiv(debugButton);
+    layoutElement.appendToMiscDiv(debugButton);
   }
 
   run() {
@@ -128,7 +128,8 @@ export class MainMenu extends BaseSubscreen {
 
   resize(): void {
     super.resize();
-    elementSetPosSizeFont({ elementId: 'deeplib-misc' }, 1500, 670, 405, 260);
+    domUtil.setPosition({ elementId: 'deeplib-misc' }, 1500, 670);
+    domUtil.setSize({ elementId: 'deeplib-misc' }, 405, 260);
   }
 }
 
