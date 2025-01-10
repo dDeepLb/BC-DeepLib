@@ -2,9 +2,9 @@ export type SettingElement = Button | Checkbox | Input | Label | Custom;
 
 export type BaseElementModel = {
   id: string;
-  size?: [width: number | null, height: number | null];
-  position?: [x: number, y: number];
-  disabled?: boolean;
+  size?: [width: number | null, height: number | null] | (() => [width: number | null, height: number | null]);
+  position?: [x: number, y: number] | (() => [x: number, y: number]);
+  disabled?: boolean | (() => boolean);
 };
 
 type CustomButtonOptions = {

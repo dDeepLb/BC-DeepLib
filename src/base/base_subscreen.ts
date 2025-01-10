@@ -237,23 +237,9 @@ export abstract class BaseSubscreen {
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
-      const elementDataAttrs = item[0].dataset;
       
-      if (options.position || elementDataAttrs.position) {
-        const position = elementDataAttrs?.position?.split('x');
-        const xPos = options?.position?.[0] || parseInt(position?.[0] || 0);
-        const yPos = options?.position?.[1] || parseInt(position?.[1] || 0);
-
-        domUtil.setPosition({ elementId: options.id }, xPos, yPos);
-      }
-
-      if (options.size || elementDataAttrs.size) {
-        const size = elementDataAttrs?.size?.split('x');
-        const width = options?.size?.[0] || (size?.[0] ? parseInt(size?.[0] || 0) : null);
-        const height = options?.size?.[1] || (size?.[1] ? parseInt(size?.[1] || 0) : null);
-
-        domUtil.setSize({ elementId: options.id }, width, height);
-      }
+      domUtil.autoSetPosition({ elementId: options.id }, options.position);
+      domUtil.autoSetSize({ elementId: options.id }, options.size);
     });
   }
 

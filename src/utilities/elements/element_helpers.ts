@@ -1,3 +1,4 @@
+import { SettingElement } from '../../base/elements_typings';
 import { deepLibLogger } from '../../deep_lib';
 
 type ElementOrId = { elementId?: string; element?: HTMLElement; };
@@ -29,7 +30,9 @@ function getRelativeX(xPos: number, anchorPosition: 'left' | 'right' = 'left') {
 
 export const domUtil = {
   setPosition: setPosition,
+  autoSetPosition: autoSetPosition,
   setSize: setSize,
+  autoSetSize: autoSetSize,
   setFontSize: setFontSize,
   autosetFontSize: autosetFontSize,
   hide: hide,
@@ -56,6 +59,22 @@ function setPosition(_: ElementOrId, xPos: number, yPos: number, anchorPosition:
 
 };
 
+function autoSetPosition(_: ElementOrId, position: SettingElement['position']) {
+  let xPos = undefined;
+  let yPos = undefined;
+
+  if (Array.isArray(position)) {
+    xPos = position[0];
+    yPos = position[1];
+  } else if (typeof position === 'function') {
+    const result = position();
+    xPos = result[0];
+    yPos = result[1];
+  }
+
+  if (xPos !== undefined && yPos !== undefined) domUtil.setPosition(_, xPos, yPos);
+}
+
 function setSize(_: ElementOrId, width: number | null, height: number | null) {
   const element = get(_, setSize.name);
   if (!element) return;
@@ -74,6 +93,22 @@ function setSize(_: ElementOrId, width: number | null, height: number | null) {
     });
   }
 };
+
+function autoSetSize(_: ElementOrId, size: SettingElement['size']) {
+  let width = undefined;
+  let height = undefined;
+  
+  if (Array.isArray(size)) {
+    width = size[0];
+    height = size[1];
+  } else if (typeof size === 'function') {
+    const result = size();
+    width = result[0];
+    height = result[1];
+  }
+        
+  if (width !== undefined && height !== undefined) domUtil.setSize(_, width, height);
+}
 
 function setFontSize(_: ElementOrId, targetFontSize: number) {
   const element = get(_, setFontSize.name);
