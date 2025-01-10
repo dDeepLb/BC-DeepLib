@@ -7,10 +7,12 @@ export const layoutElement = {
   createSettingsDiv: elementCreateSettingsDiv,
   getSettingsDiv: elementGetSettingsDiv,
   appendToSettingsDiv: elementAppendToSettingsDiv,
+  removeSettingsDiv: elementRemoveSettingsDiv,
 
   createMiscDiv: elementCreateMiscDiv,
   getMiscDiv: elementGetMiscDiv,
   appendToMiscDiv: elementAppendToMiscDiv,
+  removeMiscDiv: elementRemoveMiscDiv
 };
 
 function elementCreateSubscreenDiv() {
@@ -30,9 +32,11 @@ function elementCreateSubscreenDiv() {
 function elementGetSubscreenDiv() {
   return document.getElementById('deeplib-subscreen') ?? undefined;
 }
+
 function elementRemoveSubscreenDiv() {
   return elementGetSubscreenDiv()?.remove();
 }
+
 function elementAppendToSubscreenDiv(...element: HTMLElement[]) {
   return elementGetSubscreenDiv()?.append(...element);
 }
@@ -59,6 +63,10 @@ function elementAppendToSettingsDiv(...element: HTMLElement[]) {
   return elementGetSettingsDiv()?.append(...element);
 }
 
+function elementRemoveSettingsDiv() {
+  return elementGetSettingsDiv()?.remove();
+}
+
 function elementCreateMiscDiv() {
   const miscDiv = elementGetMiscDiv();
   if (miscDiv) {
@@ -81,3 +89,6 @@ function elementAppendToMiscDiv(...element: HTMLElement[]) {
   return elementGetMiscDiv()?.append(...element);
 }
 
+function elementRemoveMiscDiv() {
+  return elementGetMiscDiv()?.remove();
+}

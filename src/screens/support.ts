@@ -1,5 +1,5 @@
 import { Button, SettingElement } from '../base/elements_typings';
-import { BaseSubscreen, elementSetPosSizeFont, getText } from '../deep_lib';
+import { BaseSubscreen, domUtil, getText, layoutElement } from '../deep_lib';
 
 export class SupportHelper {
   private static thankYouList: string[] = ['Ellena', 'weboos', 'Jamie'];
@@ -51,12 +51,16 @@ export class GuiSupport extends BaseSubscreen {
   load() {
     SupportHelper.doNextThankYou();
     super.load();
-    ElementRemove('deeplib-settngs');
+    layoutElement.removeSettingsDiv();
 
-    ElementCreateDiv('deeplib-gratitude');
-    const elm = document.getElementById('deeplib-gratitude') as HTMLElement;
-    ElementContent('deeplib-gratitude', gratitudeHtml);
-    elementSetPosSizeFont({ element: elm }, 1000, 250, 400, 400);
+    ElementCreate({
+      tag: 'div',
+      attributes: {
+        id: 'deeplib-gratitude',
+      },
+      innerHTML: gratitudeHtml,
+      parent: document.body
+    });
 
   }
 
@@ -75,7 +79,10 @@ export class GuiSupport extends BaseSubscreen {
 
   resize(): void {
     super.resize();
-    elementSetPosSizeFont({ elementId: 'deeplib-gratitude' }, 1000, 250, 400, 400);
+    const elm = document.getElementById('deeplib-gratitude') as HTMLElement;
+    domUtil.setPosition({ element: elm }, 1000, 250);
+    domUtil.setSize({ element: elm }, 400, 400);
+    domUtil.autosetFontSize({ element: elm });
   }
 }
 
