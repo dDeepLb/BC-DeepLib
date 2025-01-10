@@ -139,18 +139,14 @@ function elementCreateInput(options: Input) {
           placeholder: ' ',
         },
       }, options.htmlOptions),
-      {
+      options.label ? {
         tag: 'label',
         classList: ['deeplib-text'],
         attributes: {
           for: options.id,
         },
         children: [options.label]
-      },
-      {
-        tag: 'div',
-        classList: ['deeplib-underline'],
-      }
+      } : undefined,
     ],
   });
 
