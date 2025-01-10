@@ -1,5 +1,6 @@
 import { Button, Checkbox, Custom, Input, Label } from '../../base/elements_typings';
 import { BaseSubscreen } from '../../deep_lib';
+import { deepMerge } from '../common';
 
 export const advancedElement = {
   createButton: elementCreateButton,
@@ -15,20 +16,18 @@ export const advancedElement = {
 
 function elementCreateButton(options: Button) {
   const button = ElementButton.Create(
-    options.customOptions?.id ?? options.id,
-    options.customOptions?.onClick ?? options?.onClick ?? (() => { }),
-    {
-      ...options.customOptions?.options,
+    options.htmlOptions?.id ?? options.id,
+    options.htmlOptions?.onClick ?? options?.onClick ?? (() => { }),
+    deepMerge({
       tooltip: options.tooltip,
       label: options.label,
-      labelPosition: 'center',
-    },
-    {
-      ...options.customOptions?.htmlOptions,
+      labelPosition: 'center', 
+    }, options.htmlOptions?.options),
+    deepMerge({
       button: {
         classList: ['deeplib-button'],
         children: [
-          {
+          options.image ? {
             tag: 'img',
             attributes: {
               id: `${options.id}-image`,
@@ -38,18 +37,13 @@ function elementCreateButton(options: Button) {
               loading: 'lazy',
               src: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' // 1x1 transparent image to get rid of broken image
             },
-            dataAttributes: {
-              'size': options.size?.join('x'),
-              'position': options.position?.join('x'),
-            },
             style: {
               '--image': `url("${options.image}")`,
-            }
-          },
+            },
+          } : undefined,
         ],
       },
-    }
-  );
+    }, options.htmlOptions?.htmlOptions ?? {}));
 
   const buttonContainer = ElementCreate({
     tag: 'div',
@@ -76,12 +70,8 @@ function elementCreateCheckbox(options: Checkbox) {
     attributes: {
       id: `${options.id}-container`,
     },
-    dataAttributes: {
-      'size': options.size?.join('x'),
-      'position': options.position?.join('x'),
-    },
     children: [
-      {
+      deepMerge({
         tag: 'input',
         classList: ['deeplib-input'],
         attributes: {
@@ -89,7 +79,7 @@ function elementCreateCheckbox(options: Checkbox) {
           id: options.id,
           checked: options?.getSettingValue?.() || undefined,
         },
-      },
+      }, options.htmlOptions),
       {
         tag: 'label',
         classList: ['deeplib-text'],
@@ -99,7 +89,6 @@ function elementCreateCheckbox(options: Checkbox) {
         children: [options.label]
       },
     ],
-    ...options.customOptions
   });
 
   if (options.description) {
@@ -122,7 +111,7 @@ function elementCreateCustom(options: Custom) {
 
   if (elem) return elem;
 
-  const retElem = ElementCreate(options.options);
+  const retElem = ElementCreate(options.htmlOptions);
 
   BaseSubscreen.currentElements.push([retElem, options]);
 
@@ -140,12 +129,8 @@ function elementCreateInput(options: Input) {
     attributes: {
       id: `${options.id}-container`,
     },
-    dataAttributes: {
-      'size': options.size?.join('x'),
-      'position': options.position?.join('x'),
-    },
     children: [
-      {
+      deepMerge({
         tag: 'input',
         classList: ['deeplib-input'],
         attributes: {
@@ -153,7 +138,7 @@ function elementCreateInput(options: Input) {
           id: options.id,
           placeholder: ' ',
         },
-      },
+      }, options.htmlOptions),
       {
         tag: 'label',
         classList: ['deeplib-text'],
@@ -167,7 +152,6 @@ function elementCreateInput(options: Input) {
         classList: ['deeplib-underline'],
       }
     ],
-    ...options.customOptions
   });
 
   if (options.getElementValue?.()) {
@@ -202,22 +186,17 @@ function elementCreateLabel(options: Label) {
       id: `${options.id}-container`,
     },
     children: [
-      {
+      deepMerge({
         tag: 'span',
         classList: ['deeplib-label', 'deeplib-text'],
         attributes: {
           id: options.id
         },
-        dataAttributes: {
-          'size': options.size?.join('x'),
-          'position': options.position?.join('x'),
-        },
         children: [
           options.label,
         ],
-      }
+      }, options.htmlOptions),
     ],
-    ...options.customOptions
   });
 
   if (options.description) {

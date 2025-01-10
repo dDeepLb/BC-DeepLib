@@ -20,7 +20,7 @@ export type Button = BaseElementModel & {
   label?: string;
   tooltip?: string;
   onClick?: () => void;
-  customOptions?: CustomButtonOptions;
+  htmlOptions?: CustomButtonOptions;
 };
 
 export type Checkbox = BaseElementModel & {
@@ -29,7 +29,7 @@ export type Checkbox = BaseElementModel & {
   description?: string;
   getSettingValue?: () => boolean;
   setSettingValue?: (val: boolean) => void;
-  customOptions?: HTMLOptions<keyof HTMLElementTagNameMap>;
+  htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
 };
 
 export type Input = BaseElementModel & {
@@ -38,17 +38,17 @@ export type Input = BaseElementModel & {
   description?: string;
   getElementValue?: () => string;
   setSettingValue?: (val: string) => void;
-  customOptions?: HTMLOptions<keyof HTMLElementTagNameMap>;
+  htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
 };
 
 export type Label = BaseElementModel & {
   type: 'label';
   label?: string;
   description?: string;
-  customOptions?: HTMLOptions<keyof HTMLElementTagNameMap>;
+  htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
 };
 
 export type Custom = BaseElementModel & {
   type: 'custom';
-  options: HTMLOptions<keyof HTMLElementTagNameMap>;
+  htmlOptions: HTMLOptions<keyof HTMLElementTagNameMap>;
 };
