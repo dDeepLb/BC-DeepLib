@@ -5,20 +5,19 @@
   gap: 0.3em;
 }
 
-.deeplib-input {
-  border-radius: min(1.0dvh, 0.5dvw);
-}
-
 .deeplib-input-container {
   --label-background-color: var(--deeplib-background-color);
   --pad: .75rem;
 
   position: relative;
+}
+
+.deeplib-input-container:has(label.deeplib-text) {
   margin-top: min(1vh, 0.5vw);
 }
 
 .deeplib-input-container input.deeplib-input {
-  font-size: 20px;
+  font-size: 0.6em;
   width: 100%;
   padding: 5px 0;
   background-color: transparent;
@@ -26,6 +25,7 @@
   padding-left: min(1vh, 0.5vw);
   padding-right: min(1vh, 0.5vw);
   min-height: min(5dvh, 2.5dvw);
+  border-radius: min(1.0dvh, 0.5dvw);
 }
 
 .deeplib-input-container label.deeplib-text {
