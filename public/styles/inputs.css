@@ -5,6 +5,16 @@
   gap: 0.3em;
 }
 
+.deeplib-checkbox-container input.deeplib-input { 
+  width: min(5vh, 2.5vw);
+  height: min(5vh, 2.5vw);
+  border-radius: min(1.0dvh, 0.5dvw);
+}
+
+.deeplib-checkbox-container input.deeplib-input[type="checkbox"]:checked::before {
+  transform: scale(0.8);
+}
+
 .deeplib-input-container {
   --label-background-color: var(--deeplib-background-color);
   --pad: .75rem;
