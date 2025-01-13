@@ -137,6 +137,7 @@ function elementCreateInput(options: Input) {
           type: options.type,
           id: options.id,
           placeholder: ' ',
+          value: options?.getElementValue?.() || undefined,
         },
       }, options.htmlOptions),
       options.label ? {
@@ -149,11 +150,6 @@ function elementCreateInput(options: Input) {
       } : undefined,
     ],
   });
-
-  if (options.getElementValue?.()) {
-    const input = document.getElementById(options.id) as HTMLInputElement;
-    if (input) input.value = options.getElementValue();
-  }
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
