@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, domUtil, getText, GUI, GuiDebug, GuiSupport, layoutElement } from '../deep_lib';
+import { BaseSubscreen, domUtil, getText, GUI, GuiDebug, layoutElement } from '../deep_lib';
 import { advancedElement } from '../utilities/elements/advanced_elements';
 
 export class MainMenu extends BaseSubscreen {
@@ -87,18 +87,6 @@ export class MainMenu extends BaseSubscreen {
       });
       layoutElement.appendToMiscDiv(wikiButton);
     }
-
-    const supportButton = advancedElement.createButton({
-      type: 'button',
-      id: 'deeplib-support-button',
-      image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
-      label: 'Support',
-      onClick: () => {
-        this.setSubscreen(new GuiSupport());
-      },
-      size: [405, 80],
-    });
-    layoutElement.appendToMiscDiv(supportButton);
 
     const debugButton = advancedElement.createButton({
       type: 'button',

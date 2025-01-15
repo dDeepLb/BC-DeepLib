@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, SupportHelper, advancedElement, bcSdkMod, dataStore, domUtil, getText, layoutElement, modules } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, GUI, advancedElement, bcSdkMod, dataStore, domUtil, getText, layoutElement, modules } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
 type SubscreenOptions = {
@@ -143,7 +143,7 @@ export abstract class BaseSubscreen {
     const subscreenTitle = advancedElement.createLabel({
       type: 'label',
       id: 'deeplib-subscreen-title',
-      label: getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter(),
+      label: getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version),
     });
     layoutElement.appendToSubscreenDiv(subscreenTitle);
 
@@ -195,11 +195,6 @@ export abstract class BaseSubscreen {
   }
 
   run() {
-    const newTitle = getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version) + '  ' + SupportHelper.getSupporter();
-    const oldTitle = ElementContent('deeplib-subscreen-title');
-    if (newTitle !== oldTitle) {
-      ElementContent('deeplib-subscreen-title', newTitle);
-    }
     if (this.options.drawCharacter) DrawCharacter(Player, 50, 50, 0.9, false);
   }
 
