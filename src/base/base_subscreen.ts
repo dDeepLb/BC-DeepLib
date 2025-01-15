@@ -4,7 +4,7 @@ import { SettingElement } from './elements_typings';
 type SubscreenOptions = {
   drawCharacter?: boolean;
 };
-  
+
 export type Subscreen = new (subscreenOptions?: SubscreenOptions, module?: BaseModule) => BaseSubscreen;
 
 export function getCurrentSubscreen(): BaseSubscreen | null {
@@ -50,7 +50,7 @@ export abstract class BaseSubscreen {
   get settings(): BaseSettingsModel {
     return this.module.settings as BaseSettingsModel;
   }
-  
+
   set settings(value) {
     this.module.settings = value;
   }
@@ -95,13 +95,13 @@ export abstract class BaseSubscreen {
       if (!module.settingsScreen) continue;
       if (!module.settings || !Object.keys(module.settings).length) module.registerDefaultSettings();
     }
-    
+
     BaseSubscreen.currentPage = 1;
 
     layoutElement.createSubscreenDiv();
     const settingsElement = layoutElement.createSettingsDiv();
     layoutElement.appendToSubscreenDiv(settingsElement);
-    
+
     if (this.pageStructure.length > 1) {
       const prev = advancedElement.createButton({
         type: 'button',
@@ -125,7 +125,7 @@ export abstract class BaseSubscreen {
 
       });
       layoutElement.appendToSubscreenDiv(pageLabel);
-      
+
       const next = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-next-page',
@@ -224,15 +224,15 @@ export abstract class BaseSubscreen {
       domUtil.setSize({ element: layoutElement.getSettingsDiv() }, 1000 + offset, 660);
     }
 
-    domUtil.setPosition({ elementId: 'deeplib-subscreen-title' }, 530 - offset, 75); 
+    domUtil.setPosition({ elementId: 'deeplib-subscreen-title' }, 530 - offset, 75);
     domUtil.setSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
-    
+
     domUtil.setPosition({ element: advancedElement.getTooltip() }, 250, 850);
     domUtil.setSize({ element: advancedElement.getTooltip() }, 1500, 70);
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
-      
+
       domUtil.autoSetPosition({ elementId: options.id }, options.position);
       domUtil.autoSetSize({ elementId: options.id }, options.size);
     });
