@@ -1,7 +1,6 @@
 import buttons from '../../public/styles/deeplib-buttons.css';
 import deeplib_style from '../../public/styles/DeepLib.css';
 import elements from '../../public/styles/elements.css';
-import gratitude_style from '../../public/styles/Gratitude.css';
 import inputs from '../../public/styles/inputs.css';
 import messages from '../../public/styles/messages.css';
 import vars from '../../public/styles/vars.css';
@@ -34,7 +33,6 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
 
   dataTake();
 
-  Style.injectInline('gratitude-style', gratitude_style);
   Style.injectInline('deeplib-style', deeplib_style);
   Style.injectInline('deeplib-vars-style', vars);
   Style.injectInline('deeplib-buttons-style', buttons);
