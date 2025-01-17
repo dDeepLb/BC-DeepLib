@@ -19,6 +19,7 @@ export * from './utilities/elements/advanced_elements';
 export * from './utilities/elements/element_helpers';
 export * from './utilities/elements/layout_elements';
 
+export * from './utilities/common';
 export * from './utilities/logger';
 export * from './utilities/messages';
 export * from './utilities/sdk';
