@@ -20,3 +20,45 @@
 #deeplib-support-button {
   background-color: #5e4969;
 }
+
+
+.deeplib-text {
+  color: var(--deeplib-text-color);
+}
+
+.deeplib-subscreen {
+  padding: 0;
+  margin: 0;
+}
+
+.deeplib-subscreen * {
+  box-sizing: border-box;
+}
+
+.deeplib-settings {
+  display: flex;
+  flex-direction: column;
+  padding: min(1.0dvh, 0.5dvw);
+  gap: 0.3em;
+  overflow-y: visible;
+}
+
+.deeplib-misc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column-reverse;
+}
+
+.deeplib-tooltip {
+  background-color: var(--deeplib-element-color);
+  color: var(--deeplib-text-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: min(1.0dvh, 0.5dvw);
+  padding: min(1vh, 0.5vw);
+  font-size: 0.8em;
+  border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
+  z-index: 5;
+}

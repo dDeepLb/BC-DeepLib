@@ -1,9 +1,5 @@
-import buttons from '../../public/styles/deeplib-buttons.css';
-import deeplib_style from '../../public/styles/DeepLib.css';
-import elements from '../../public/styles/elements.css';
-import inputs from '../../public/styles/inputs.css';
-import messages from '../../public/styles/messages.css';
-import vars from '../../public/styles/vars.css';
+
+import deeplib_style from '../../public/styles/deeplib-style.css';
 import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
 
 export function initMod(initFunction: (() => void) | (() => Promise<void>), modules: BaseModule[], pathToTranslationsFolder: string) {
@@ -34,11 +30,6 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
   dataTake();
 
   Style.injectInline('deeplib-style', deeplib_style);
-  Style.injectInline('deeplib-vars-style', vars);
-  Style.injectInline('deeplib-buttons-style', buttons);
-  Style.injectInline('deeplib-elements-style', elements);
-  Style.injectInline('deeplib-messages-style', messages);
-  Style.injectInline('deeplib-inputs-style', inputs);
 
   new Localization({ pathToTranslationsFolder: pathToTranslationsFolder });
   await Localization.init();
