@@ -1,0 +1,52 @@
+.deeplib-modal {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  width: max(50dvw, 25dvh);
+  font-size: min(4dvh, 2dvw);
+  padding: min(2dvh, 1dvw);
+  background-color: var(--deeplib-element-color);
+  border-radius: min(1.0dvh, 0.5dvw);
+  border: min(0.2dvh, 0.1dvw) solid var(--deeplib-border-color);
+  color: var(--deeplib-text-color);
+}
+
+.deeplib-modal .deeplib-modal-input {
+  width: 100%;
+  font-size: min(2.6dvh, 1.8dvw);
+  border-radius: min(1.0dvh, 0.5dvw);
+  padding: min(1dvh, 0.5dvw);
+}
+
+.deeplib-modal input.deeplib-modal-input {
+  max-width: max(50dvh, 25dvw);
+}
+
+.deeplib-modal-button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.5em;
+  width: 100%;
+}
+
+.deeplib-modal-button-container .deeplib-button-container {
+  flex-grow: 1;
+}
+
+.deeplib-modal-blocker {
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100dvw;
+  height: 100dvh;
+  background-color: rgba(0, 0, 0, 0.5);
+}

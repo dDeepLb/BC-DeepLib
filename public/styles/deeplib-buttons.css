@@ -1,6 +1,8 @@
 .deeplib-button.button-styling {
   color: var(--deeplib-text-color);
   z-index: 1;
+  width: 100%;
+  height: 100%;
 }
 
 .deeplib-button.button-styling,

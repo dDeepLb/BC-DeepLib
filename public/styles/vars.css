@@ -1,4 +1,5 @@
-.deeplib-subscreen {
+.deeplib-subscreen,
+.deeplib-modal {
   --deeplib-background-color: var(--main, white);
   --deeplib-element-color: var(--element, white);
   --deeplib-element-hover-color: var(--accentHover, cyan);

@@ -12,6 +12,9 @@ export const advancedElement = {
   createTooltip: elementCreateTooltip,
   getTooltip: elementGetTooltip,
   setTooltip: elementSetTooltip,
+
+  openModal: openModal,
+  openAsyncModal: openAsyncModal,
 };
 
 function elementCreateButton(options: Button) {
@@ -239,3 +242,149 @@ function elementSetTooltip(text: string) {
   return true;
 }
 
+type ModalOptions = {
+  prompt: string | Node,
+  input?: { defaultValue?: string, readOnly?: boolean, placeholder?: string, type: 'input' | 'textarea' },
+  buttons?: { text: string, action: string }[],
+  submitText: string,
+  callback: (action: string, value: string) => void
+};
+
+function openModal(options: ModalOptions) {
+  const modal = ElementCreate({
+    tag: 'dialog',
+    classList: ['deeplib-modal'],
+    attributes: {
+      id: 'deeplib-modal',
+      open: true,
+    },
+    children: [
+      {
+        tag: 'div',
+        classList: ['deeplib-modal-prompt'],
+        children: [
+          options.prompt
+        ]
+      },
+    ],
+    style: {
+      fontFamily: CommonGetFontName()
+    },
+    eventListeners: {
+      click: (event: MouseEvent) => {
+        event.stopPropagation();
+      }
+    },
+  });
+
+  let inputValue = '';
+
+  if (options.input) {
+    const input = ElementCreate({
+      tag: options.input.type,
+      classList: ['deeplib-modal-input'],
+      attributes: {
+        id: 'deeplib-modal-input',
+        placeholder: options.input.placeholder,
+        readOnly: options.input.readOnly,
+        value: options.input.defaultValue,
+      },
+      eventListeners: {
+        change: function (this: HTMLInputElement | HTMLTextAreaElement) {
+          inputValue = input.value;
+        },
+        keydown: (event: KeyboardEvent) => {
+          event.stopPropagation();
+        }
+      },
+      parent: modal
+    });
+
+    switch (options.input.type) {
+      case 'input': {
+        const el = input as HTMLInputElement;
+        el.type = 'text';
+      }
+        break;
+      case 'textarea': {
+        const el = input as HTMLTextAreaElement;
+        el.rows = 5;
+        // for some reason setting the value on element creation doesn't 
+        // work specifically for textarea, so this is a workaround
+        el.value = options.input.defaultValue || '';
+      }
+        break;
+      default:
+        throw new Error(`invalid input type ${options.input.type}`);
+    }
+  }
+
+  const buttonContainer = ElementCreate({
+    tag: 'div',
+    classList: ['deeplib-modal-button-container'],
+  });
+  modal.append(buttonContainer);
+
+  const submit = advancedElement.createButton({
+    type: 'button',
+    id: 'deeplib-modal-submit',
+    label:  options.submitText || 'Submit',
+    onClick: () => {
+      close('submit');
+    }
+  });
+ 
+  const buttons = options.buttons?.map(button => {
+    return advancedElement.createButton({
+      type: 'button',
+      id: `deeplib-modal-${button.action}`,
+      label: button.text,
+      onClick: () => {
+        close(button.action);
+      }
+    });
+  }) as HTMLDivElement[];
+  buttons?.unshift(submit);
+
+  buttonContainer.append(...buttons);
+
+  const blocker = ElementCreate({ 
+    tag: 'div',
+    classList: ['deeplib-modal-blocker'],
+    attributes: {
+      id: 'deeplib-modal-blocker',
+      // FIXME: translate
+      title: 'Click to close the modal',
+    },
+    eventListeners: {
+      click: () => {
+        close();
+      }
+    },
+  });
+
+  document.body.append(blocker);
+  document.body.append(modal);
+
+  const disabledUntil = Date.now() + 1000;
+  function close(action: string = 'close') {
+    if (Date.now() < disabledUntil) {
+      return;
+    }
+    modal.close();
+    modal.remove();
+    blocker.remove();
+    options.callback(action, inputValue);
+  }
+}
+
+function openAsyncModal(options: Omit<ModalOptions, 'callback'>) {
+  return new Promise<[string, string]>(resolve => {
+    openModal({
+      ...options,
+      callback: (action, value) => {
+        resolve([action, value]);
+      }
+    });
+  });
+}
