@@ -1,4 +1,4 @@
-import bcModSdkRef, { ModSDKModAPI, ModSDKModInfo, ModSDKModOptions } from 'bondage-club-mod-sdk';
+import bcModSdkRef, { GetDotedPathType, ModSDKModAPI, ModSDKModInfo, ModSDKModOptions, PatchHook } from 'bondage-club-mod-sdk';
 
 export enum HookPriority {
   Observe = 0,
@@ -10,9 +10,6 @@ export enum HookPriority {
 
 export type ModuleCategory = number;
 
-export declare type AnyFunction = (...args: any) => any;
-type PatchHook<TFunction extends AnyFunction = AnyFunction> = (args: [...Parameters<TFunction>], next: (args: [...Parameters<TFunction>]) => ReturnType<TFunction>) => ReturnType<TFunction>;
-
 interface IPatchedFunctionData {
   name: string;
   hooks: {
@@ -22,8 +19,6 @@ interface IPatchedFunctionData {
     removeCallback: () => void;
   }[];
 }
-
-type GetDotedPathType<Base, DotedKey extends string> = DotedKey extends `${infer Key1}.${infer Key2}` ? GetDotedPathType<GetDotedPathType<Base, Key1>, Key2> : DotedKey extends keyof Base ? Base[DotedKey] : never;
 
 export class bcSdkMod {
   private static SDK: ModSDKModAPI;
