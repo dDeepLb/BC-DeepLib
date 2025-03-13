@@ -1,9 +1,9 @@
 .deeplib-subscreen,
 .deeplib-modal {
-  --deeplib-background-color: var(--main, white);
-  --deeplib-element-color: var(--element, white);
-  --deeplib-element-hover-color: var(--accentHover, cyan);
-  --deeplib-text-color: var(--text, black);
-  --deeplib-icon-color: var(--accent, white);
-  --deeplib-border-color: var(--accent, black);
+  --deeplib-background-color: var(--tmd-main, white);
+  --deeplib-element-color: var(--tmd-element, white);
+  --deeplib-element-hover-color: var(--tmd-accent-hover, cyan);
+  --deeplib-text-color: var(--tmd-text, black);
+  --deeplib-icon-color: var(--tmd-accent, white);
+  --deeplib-border-color: var(--tmd-accent, black);
 }
