@@ -23,7 +23,6 @@ export * from './utilities/common';
 export * from './utilities/logger';
 export * from './utilities/messages';
 export * from './utilities/sdk';
-export * from './utilities/string';
 export * from './utilities/style';
 export * from './utilities/translation';
 

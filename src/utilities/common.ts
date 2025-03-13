@@ -18,6 +18,19 @@ export function deepMerge(target: any, source: any): any {
   return target;
 }
 
+export function shuffleArray(array: string[]) {
+  const temp: string[] = JSON.parse(JSON.stringify(array));
+  const ret: string[] = [];
+
+  while (temp.length > 0) {
+    const d = Math.floor(Math.random() * temp.length);
+    ret.push(temp[d]);
+    temp.splice(d, 1);
+  }
+
+  return ret;
+}
+
 export function exportToGlobal(name: string, value: any): void {
   const keys = name.split('.');
   let current = globalThis as any;
