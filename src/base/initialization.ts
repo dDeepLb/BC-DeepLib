@@ -2,7 +2,13 @@
 import deeplib_style from '../../public/styles/deeplib-style.css';
 import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
 
-export function initMod(initFunction: (() => void) | (() => Promise<void>), modules: BaseModule[], pathToTranslationsFolder: string) {
+interface InitOptions {
+  initFunction: () => (void | Promise<void>);
+  modules: BaseModule[];
+  pathToTranslationsFolder?: string;
+}
+
+export function initMod(options: InitOptions) {
   const MOD_NAME = bcSdkMod.ModInfo.name;
   deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
@@ -12,16 +18,16 @@ export function initMod(initFunction: (() => void) | (() => Promise<void>), modu
       const response = args[0];
       if (response === 'InvalidNamePassword') return next(args);
       if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
-        init(initFunction, modules, pathToTranslationsFolder);
+        init(options);
       }
     });
   } else {
     deepLibLogger.debug(`Already logged in, initing ${MOD_NAME}`);
-    init(initFunction, modules, pathToTranslationsFolder);
+    init(options);
   }
 }
 
-export async function init(initFunction: (() => void) | (() => Promise<void>), modules: BaseModule[], pathToTranslationsFolder: string) {
+export async function init(options: InitOptions) {
   const MOD_NAME = bcSdkMod.ModInfo.name;
   const MOD_VERSION = bcSdkMod.ModInfo.version;
 
@@ -31,15 +37,17 @@ export async function init(initFunction: (() => void) | (() => Promise<void>), m
 
   Style.injectInline('deeplib-style', deeplib_style);
 
-  new Localization({ pathToTranslationsFolder: pathToTranslationsFolder });
-  await Localization.init();
+  if (options.pathToTranslationsFolder) {
+    new Localization({ pathToTranslationsFolder: options.pathToTranslationsFolder });
+    await Localization.init();
+  }
 
-  if (!initModules(modules)) {
+  if (!initModules(options.modules)) {
     unloadMod();
     return;
   }
 
-  await initFunction();
+  await options.initFunction();
 
   VersionModule.checkVersionUpdate();
 
