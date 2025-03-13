@@ -1,10 +1,6 @@
 import { SettingsModel, _String, bcSdkMod, modules } from '../deep_lib';
 
-export const PlayerStorage = (): SettingsModel => (
-  typeof Player?.[bcSdkMod.ModInfo.name] === 'object' ?
-    Player?.[bcSdkMod.ModInfo.name] :
-    undefined
-);
+export const PlayerStorage = (): SettingsModel => (Player[bcSdkMod.ModInfo.name]);
 export const ExtensionStorage = (): Readonly<string> => Player.ExtensionSettings[bcSdkMod.ModInfo.name];
 
 export function dataTake(modName: string = bcSdkMod.ModInfo.name) {
