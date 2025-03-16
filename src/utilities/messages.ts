@@ -1,25 +1,40 @@
-export function sendLocalMessage(id: string, message: string, timeoutInSeconds?: number) {
-  const div = document.createElement('div');
-  div.id = id;
-  const specialId = id + Date.now();
-  div.classList.add('ChatMessage', 'deeplib-message', specialId);
-  div.setAttribute('data-time', ChatRoomCurrentTime());
-  div.setAttribute('data-sender', Player?.MemberNumber + '');
-
-  const messageContent = message.replaceAll('\n\t', '') + '<br>';
-  const closeButton = document.createElement('a');
-  closeButton.classList.add('deeplib-text');
-  closeButton.addEventListener('click', () => {
-    div?.remove();
+export function sendLocalMessage(message: string, timeoutInSeconds?: number) {
+  const element = ElementCreate({
+    tag: 'div',
+    classList: ['ChatMessage', 'deeplib-message'],
+    attributes: {
+      id: `DEEPLIB_LOCAL_MESSAGE_${Date.now()}`,
+      'data-time': ChatRoomCurrentTime(),
+      'data-sender': Player.MemberNumber?.toString(),
+    },
+    children: [
+      {
+        tag: 'span',
+        classList: ['deeplib-text'],
+        innerHTML: message.replaceAll('\n\t', ''),
+      },
+      {
+        tag: 'br',
+      },
+      {
+        tag: 'a',
+        classList: ['deeplib-text'],
+        attributes: {
+          href: '#',
+        },
+        innerHTML: '<b>Close (Click)</b>',
+        eventListeners: {
+          click: () => {
+            element.remove();
+          },
+        },
+      }
+    ]
   });
-  closeButton.innerHTML = '<b>Close (Click)</b>';
 
-  div.innerHTML = messageContent;
-  div.append(closeButton);
-
-  ChatRoomAppendChat(div);
+  ChatRoomAppendChat(element);
   if (!timeoutInSeconds) return;
-  setTimeout(() => div?.remove(), timeoutInSeconds * 1000);
+  setTimeout(() => element.remove(), timeoutInSeconds * 1000);
 }
 
 export function sendActionMessage(msg: string, target: undefined | number = undefined, dictionary: ChatMessageDictionaryEntry[] = []) {
