@@ -1,5 +1,5 @@
 
-import deeplib_style from '../../public/styles/deeplib-style.css';
+import deeplib_style from '../styles/deeplib-style.scss';
 import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
 
 interface InitOptions {
