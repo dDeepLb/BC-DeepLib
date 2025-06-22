@@ -4,6 +4,7 @@ import esbuild from 'esbuild';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import npm_dts from 'npm-dts';
 const { Generator } = npm_dts;
+import fsExtra from 'fs-extra';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -36,17 +37,27 @@ async function build({ outfile, format }) {
       outfile,
       format,
     })
+    .then(() => {
+      console.log(`Built ${format}`);
+    })
     .catch((error) => {
       process.error('Build failed:', error);
       throw error;
     });
 }
 
-build({ outfile: path.join(DIST_DIR, 'deeplib.js'), format: 'esm' });
+await build({ outfile: path.join(DIST_DIR, 'deeplib.js'), format: 'esm' });
 
-build({ outfile: path.join(DIST_DIR, 'deeplib.cjs'), format: 'cjs' });
+await build({ outfile: path.join(DIST_DIR, 'deeplib.cjs'), format: 'cjs' });
 
-new Generator({
+await new Generator({
   entry: path.join(SRC_DIR, 'deep_lib.ts'),
   output: path.join(DIST_DIR, 'deeplib.d.ts'),
-}).generate();
+})
+.generate()
+.then(() => console.log('Generated types'))
+.catch(console.error);
+
+await fsExtra.copy(path.join(SRC_DIR, '3rd_party_types'), path.join(DIST_DIR, '3rd_party_types'))
+.then(() => console.log('Copied 3rd party types'))
+.catch(console.error);
