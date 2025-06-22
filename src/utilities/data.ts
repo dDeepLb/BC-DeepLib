@@ -1,9 +1,9 @@
-import { SettingsModel, bcSdkMod, deepLibLogger, modules } from '../deep_lib';
+import { SettingsModel, ModSdkManager, deepLibLogger, modules } from '../deep_lib';
 
-export const PlayerStorage = (): SettingsModel => (Player[bcSdkMod.ModInfo.name]);
-export const ExtensionStorage = (): Readonly<string> => Player.ExtensionSettings[bcSdkMod.ModInfo.name];
+export const PlayerStorage = (): SettingsModel => (Player[ModSdkManager.ModInfo.name]);
+export const ExtensionStorage = (): Readonly<string> => Player.ExtensionSettings[ModSdkManager.ModInfo.name];
 
-export function dataTake(modName: string = bcSdkMod.ModInfo.name) {
+export function dataTake(modName: string = ModSdkManager.ModInfo.name) {
   if (ExtensionStorage()) {
     const parsed = dataDecompress(ExtensionStorage() || '');
     Player[modName] = Object.hasOwn(parsed, 'Version') ? parsed : undefined;
@@ -13,8 +13,8 @@ export function dataTake(modName: string = bcSdkMod.ModInfo.name) {
 }
 
 export function dataStore() {
-  const modName = bcSdkMod.ModInfo.name;
-  const modVersion = bcSdkMod.ModInfo.version;
+  const modName = ModSdkManager.ModInfo.name;
+  const modVersion = ModSdkManager.ModInfo.version;
 
   if (!ExtensionStorage()) Player.ExtensionSettings[modName] = '';
   const Data: SettingsModel = {

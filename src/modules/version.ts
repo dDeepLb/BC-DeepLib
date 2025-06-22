@@ -1,4 +1,4 @@
-import { BaseMigrator, BaseModule, HookPriority, PlayerStorage, bcSdkMod, dataStore, deepLibLogger, sendLocalMessage } from '../deep_lib';
+import { BaseMigrator, BaseModule, HookPriority, PlayerStorage, ModSdkManager, dataStore, deepLibLogger, sendLocalMessage } from '../deep_lib';
 
 export class VersionModule extends BaseModule {
   private static isItNewVersion: boolean = false;
@@ -7,9 +7,9 @@ export class VersionModule extends BaseModule {
   private static Migrators: BaseMigrator[] = [];
 
   load(): void {
-    VersionModule.Version = bcSdkMod.ModInfo.version;
+    VersionModule.Version = ModSdkManager.ModInfo.version;
 
-    bcSdkMod.prototype.hookFunction(
+    ModSdkManager.prototype.hookFunction(
       'ChatRoomSync',
       HookPriority.Observe,
       (args, next) => {
@@ -42,7 +42,7 @@ export class VersionModule extends BaseModule {
     for (const migrator of VersionModule.Migrators) {
       if (VersionModule.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
         saveRequired = saveRequired || migrator.Migrate();
-        deepLibLogger.info(`Migrating ${bcSdkMod.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
+        deepLibLogger.info(`Migrating ${ModSdkManager.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
       }
     }
   }
@@ -78,7 +78,7 @@ export class VersionModule extends BaseModule {
 
   private static saveVersion() {
     if (PlayerStorage()) {
-      Player[bcSdkMod.ModInfo.name].Version = VersionModule.Version;
+      Player[ModSdkManager.ModInfo.name].Version = VersionModule.Version;
     }
   }
 

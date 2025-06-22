@@ -1,18 +1,24 @@
 
 import deeplib_style from '../styles/deeplib-style.scss';
-import { BaseModule, bcSdkMod, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
+import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
 
 interface InitOptions {
+  modInfo: {
+    info: ModSDKModInfo,
+    options?: ModSDKModOptions
+  };
   initFunction: () => (void | Promise<void>);
   modules: BaseModule[];
   pathToTranslationsFolder?: string;
 }
 
 export function initMod(options: InitOptions) {
-  const MOD_NAME = bcSdkMod.ModInfo.name;
+  const sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
+  const MOD_NAME = ModSdkManager.ModInfo.name;
+
   deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
-    bcSdkMod.prototype.hookFunction('LoginResponse', 0, (args, next) => {
+    sdk.hookFunction('LoginResponse', 0, (args, next) => {
       deepLibLogger.debug(`Init for ${MOD_NAME}! LoginResponse caught: `, args);
       next(args);
       const response = args[0];
@@ -25,11 +31,13 @@ export function initMod(options: InitOptions) {
     deepLibLogger.debug(`Already logged in, initing ${MOD_NAME}`);
     init(options);
   }
+
+  return { sdk };
 }
 
 export async function init(options: InitOptions) {
-  const MOD_NAME = bcSdkMod.ModInfo.name;
-  const MOD_VERSION = bcSdkMod.ModInfo.version;
+  const MOD_NAME = ModSdkManager.ModInfo.name;
+  const MOD_VERSION = ModSdkManager.ModInfo.version;
 
   if ((window as any)[MOD_NAME + 'Loaded']) return;
 
@@ -56,7 +64,7 @@ export async function init(options: InitOptions) {
 }
 
 function initModules(modulesToRegister: BaseModule[]): boolean {
-  const MOD_NAME = bcSdkMod.ModInfo.name;
+  const MOD_NAME = ModSdkManager.ModInfo.name;
 
   for (const module of modulesToRegister) {
     registerModule(module);
@@ -79,7 +87,7 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
 }
 
 export function unloadMod(): true {
-  const MOD_NAME = bcSdkMod.ModInfo.name;
+  const MOD_NAME = ModSdkManager.ModInfo.name;
   unloadModules();
 
   delete (window as any)[MOD_NAME + 'Loaded'];

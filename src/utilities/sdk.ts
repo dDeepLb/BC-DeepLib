@@ -20,25 +20,25 @@ interface IPatchedFunctionData {
   }[];
 }
 
-export class bcSdkMod {
+export class ModSdkManager {
   private static SDK: ModSDKModAPI;
   private static patchedFunctions: Map<string, IPatchedFunctionData> = new Map();
 
   public static ModInfo: ModSDKModInfo;
 
   constructor(info: ModSDKModInfo, options?: ModSDKModOptions) {
-    bcSdkMod.SDK = bcModSdkRef.registerMod(info, options);
-    bcSdkMod.ModInfo = info;
+    ModSdkManager.SDK = bcModSdkRef.registerMod(info, options);
+    ModSdkManager.ModInfo = info;
   }
 
   initPatchableFunction(target: string): IPatchedFunctionData {
-    let result = bcSdkMod.patchedFunctions.get(target);
+    let result = ModSdkManager.patchedFunctions.get(target);
     if (!result) {
       result = {
         name: target,
         hooks: []
       };
-      bcSdkMod.patchedFunctions.set(target, result);
+      ModSdkManager.patchedFunctions.set(target, result);
     }
     return result;
   }
@@ -55,7 +55,7 @@ export class bcSdkMod {
       return () => null;
     }
 
-    const removeCallback = bcSdkMod.SDK?.hookFunction(target, priority, hook);
+    const removeCallback = ModSdkManager.SDK?.hookFunction(target, priority, hook);
 
     data.hooks.push({
       hook,
@@ -64,11 +64,16 @@ export class bcSdkMod {
       removeCallback
     });
     data.hooks.sort((a, b) => b.priority - a.priority);
+
     return removeCallback;
   }
 
   patchFunction(target: string, patches: Record<string, string>): void {
-    this.patchFunction(target, patches);
+    ModSdkManager.SDK?.patchFunction(target, patches);
+  }
+
+  unpatchFunction(target: string): void {
+    ModSdkManager.SDK?.removePatches(target);
   }
 
   removeHookByModule(target: string, module: ModuleCategory): boolean {
@@ -85,7 +90,7 @@ export class bcSdkMod {
   }
 
   removeAllHooksByModule(module: ModuleCategory): boolean {
-    for (const data of bcSdkMod.patchedFunctions.values()) {
+    for (const data of ModSdkManager.patchedFunctions.values()) {
       for (let i = data.hooks.length - 1; i >= 0; i--) {
         if (data.hooks[i].module === module) {
           data.hooks[i].removeCallback();

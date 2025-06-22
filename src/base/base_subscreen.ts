@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, advancedElement, bcSdkMod, dataStore, domUtil, getText, layoutElement, modules } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, GUI, advancedElement, ModSdkManager, dataStore, domUtil, getText, layoutElement, modules } from '../deep_lib';
 import { SettingElement } from './elements_typings';
 
 type SubscreenOptions = {
@@ -143,7 +143,7 @@ export abstract class BaseSubscreen {
     const subscreenTitle = advancedElement.createLabel({
       type: 'label',
       id: 'deeplib-subscreen-title',
-      label: getText('mainmenu.title').replace('$ModVersion', bcSdkMod.ModInfo.version),
+      label: getText('mainmenu.title').replace('$ModVersion', ModSdkManager.ModInfo.version),
     });
     layoutElement.appendToSubscreenDiv(subscreenTitle);
 
