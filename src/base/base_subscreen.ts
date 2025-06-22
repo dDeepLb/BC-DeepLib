@@ -72,7 +72,7 @@ export abstract class BaseSubscreen {
 
     this.managePageElementsVisibility();
 
-    const pageLabel = domUtil.get({ elementId: 'deeplib-page-label' }, 'changePage');
+    const pageLabel = ElementWrap('deeplib-page-label');
     if (pageLabel) pageLabel.innerHTML = `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`;
   }
 
@@ -80,11 +80,11 @@ export abstract class BaseSubscreen {
     this.pageStructure.forEach((item, ix) => {
       if (ix != BaseSubscreen.currentPage - 1) {
         item.forEach((setting) => {
-          domUtil.hide({ elementId: `${setting.id}-container` });
+          domUtil.hide(`${setting.id}-container`);
         });
       } else {
         item.forEach((setting) => {
-          domUtil.unhide({ elementId: `${setting.id}-container` });
+          domUtil.unhide(`${setting.id}-container`);
         });
       }
     });
@@ -212,29 +212,29 @@ export abstract class BaseSubscreen {
   resize(onLoad: boolean = false) {
     const offset = this.options.drawCharacter ? 0 : 380;
 
-    domUtil.setPosition({ element: layoutElement.getSubscreenDiv() }, 0, 0);
-    domUtil.setSize({ element: layoutElement.getSubscreenDiv() }, 2000, 1000);
-    domUtil.autosetFontSize({ element: layoutElement.getSubscreenDiv() });
+    ElementSetPosition(layoutElement.getSubscreenDiv() || '', 0, 0);
+    ElementSetSize(layoutElement.getSubscreenDiv() || '', 2000, 1000);
+    ElementSetFontSize(layoutElement.getSubscreenDiv() || '', 'auto');
 
     if (this.name === 'mainmenu') {
-      domUtil.setPosition({ element: layoutElement.getSettingsDiv() }, 530 - offset, 170);
-      domUtil.setSize({ element: layoutElement.getSettingsDiv() }, 800 + offset, 660);
+      ElementSetPosition(layoutElement.getSettingsDiv() || '', 530 - offset, 170);
+      ElementSetSize(layoutElement.getSettingsDiv() || '', 800 + offset, 660);
     } else {
-      domUtil.setPosition({ element: layoutElement.getSettingsDiv() }, 530 - offset, 170);
-      domUtil.setSize({ element: layoutElement.getSettingsDiv() }, 1000 + offset, 660);
+      ElementSetPosition(layoutElement.getSettingsDiv() || '', 530 - offset, 170);
+      ElementSetSize(layoutElement.getSettingsDiv() || '', 1000 + offset, 660);
     }
 
-    domUtil.setPosition({ elementId: 'deeplib-subscreen-title' }, 530 - offset, 75);
-    domUtil.setSize({ elementId: 'deeplib-subscreen-title' }, 800, 60);
+    ElementSetPosition('deeplib-subscreen-title', 530 - offset, 75);
+    ElementSetSize('deeplib-subscreen-title', 800, 60);
 
-    domUtil.setPosition({ element: advancedElement.getTooltip() }, 250, 850);
-    domUtil.setSize({ element: advancedElement.getTooltip() }, 1500, 70);
+    ElementSetPosition(advancedElement.getTooltip() || '', 250, 850);
+    ElementSetSize(advancedElement.getTooltip() || '', 1500, 70);
 
     BaseSubscreen.currentElements.forEach((item) => {
       const options = item[1];
 
-      domUtil.autoSetPosition({ elementId: options.id }, options.position);
-      domUtil.autoSetSize({ elementId: options.id }, options.size);
+      domUtil.autoSetPosition(options.id, options.position);
+      domUtil.autoSetSize(options.id, options.size);
     });
   }
 

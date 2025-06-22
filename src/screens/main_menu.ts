@@ -116,8 +116,8 @@ export class MainMenu extends BaseSubscreen {
 
   resize(): void {
     super.resize();
-    domUtil.setPosition({ elementId: 'deeplib-misc' }, 1500, 670);
-    domUtil.setSize({ elementId: 'deeplib-misc' }, 405, 260);
+    ElementSetPosition('deeplib-misc', 1500, 670);
+    ElementSetSize('deeplib-misc', 405, 260);
   }
 }
 
