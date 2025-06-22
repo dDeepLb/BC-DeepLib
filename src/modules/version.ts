@@ -49,6 +49,8 @@ export class VersionModule extends BaseModule {
   
   static registerMigrator(migrator: BaseMigrator) {
     VersionModule.Migrators.push(migrator);
+
+    VersionModule.Migrators.sort((a, b) => a.MigrationVersion.localeCompare(b.MigrationVersion));
   }
 
   static setNewVersionMessage(newVersionMessage: string) {
