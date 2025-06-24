@@ -6,15 +6,16 @@
   "license": "MIT",
   "type": "module",
   "files": [
-    ".types",
-    "dist"
+    "/dist"
   ],
   "module": "./dist/deeplib.js",
   "main": "./dist/deeplib.cjs",
   "types": "./dist/deeplib.d.ts",
   "exports": {
-    "import": "./dist/deeplib.js",
-    "require": "./dist/deeplib.cjs"
+    "./deeplib": {
+      "import": "./dist/deeplib.js",
+      "require": "./dist/deeplib.cjs"
+    }
   },
   "scripts": {
     "lint": "eslint src/",

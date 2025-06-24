@@ -1,4 +1,4 @@
-import { BaseSettingsModel, PlayerStorage, SettingsModel, Subscreen, ModSdkManager } from '../deep_lib';
+import { BaseSettingsModel, PlayerStorage, SettingsModel, Subscreen, ModSdkManager } from '../deeplib';
 
 export abstract class BaseModule {
   get settingsScreen(): Subscreen | null {

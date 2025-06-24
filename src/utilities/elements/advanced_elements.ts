@@ -1,5 +1,5 @@
 import { Button, Checkbox, Custom, Input, Label } from '../../base/elements_typings';
-import { BaseSubscreen } from '../../deep_lib';
+import { BaseSubscreen } from '../../deeplib';
 import { deepMerge } from '../common';
 
 export const advancedElement = {

@@ -1,4 +1,4 @@
-import { BaseModule, BaseSubscreen, MainMenu, modules, setSubscreen } from '../deep_lib';
+import { BaseModule, BaseSubscreen, MainMenu, modules, setSubscreen } from '../deeplib';
 
 type ModButtonOptions = {
   Identifier: string;

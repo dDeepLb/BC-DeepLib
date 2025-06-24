@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, domUtil, getText, GUI, GuiDebug, layoutElement } from '../deep_lib';
+import { BaseSubscreen, domUtil, getText, GUI, GuiDebug, layoutElement } from '../deeplib';
 import { advancedElement } from '../utilities/elements/advanced_elements';
 
 export class MainMenu extends BaseSubscreen {

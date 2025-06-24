@@ -1,6 +1,6 @@
 
 import deeplib_style from '../styles/deeplib-style.scss';
-import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deep_lib';
+import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deeplib';
 
 interface InitOptions {
   modInfo: {

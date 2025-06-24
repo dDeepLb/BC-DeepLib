@@ -1,4 +1,4 @@
-import { BaseMigrator, BaseModule, HookPriority, PlayerStorage, ModSdkManager, dataStore, deepLibLogger, sendLocalMessage } from '../deep_lib';
+import { BaseMigrator, BaseModule, HookPriority, PlayerStorage, ModSdkManager, dataStore, deepLibLogger, sendLocalMessage } from '../deeplib';
 
 export class VersionModule extends BaseModule {
   private static isItNewVersion: boolean = false;

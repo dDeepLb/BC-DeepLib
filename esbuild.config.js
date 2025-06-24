@@ -15,12 +15,13 @@ const __dirname = path.dirname(__filename);
 const SRC_DIR = path.join(__dirname, 'src');
 const DIST_DIR = path.join(__dirname, 'dist');
 
-/** @type {esbuild.BuildOptions} */
-const sharedConfig = {
-  entryPoints: [path.join(SRC_DIR, 'deep_lib.ts')],
+esbuild.build({
+  entryPoints: [path.join(SRC_DIR, 'deeplib.ts')],
+  outfile: path.join(DIST_DIR, 'deeplib.js'),
+  format: 'esm',
   bundle: true,
   sourcemap: true,
-  minify: false,
+  keepNames: true,
   target: 'es6',
   platform: 'browser',
   plugins: [
@@ -28,36 +29,22 @@ const sharedConfig = {
       type: 'css-text',
     })
   ]
-};
+}).then(() => {
+  console.log(`Successfully bundled deeplib.js`);
+}).catch((error) => {
+  console.error('Build failed:', error);
+  throw error;
+});
 
-async function build({ outfile, format }) {
-  return esbuild
-    .build({
-      ...sharedConfig,
-      outfile,
-      format,
-    })
-    .then(() => {
-      console.log(`Built ${format}`);
-    })
-    .catch((error) => {
-      process.error('Build failed:', error);
-      throw error;
-    });
-}
-
-await build({ outfile: path.join(DIST_DIR, 'deeplib.js'), format: 'esm' });
-
-await build({ outfile: path.join(DIST_DIR, 'deeplib.cjs'), format: 'cjs' });
-
-await new Generator({
-  entry: path.join(SRC_DIR, 'deep_lib.ts'),
+new Generator({
+  entry: path.join(SRC_DIR, 'deeplib.ts'),
   output: path.join(DIST_DIR, 'deeplib.d.ts'),
+  tsc: `--project ${path.join(__dirname, 'tsconfig.json')}`
 })
 .generate()
 .then(() => console.log('Generated types'))
 .catch(console.error);
 
-await fsExtra.copy(path.join(SRC_DIR, '3rd_party_types'), path.join(DIST_DIR, '3rd_party_types'))
+fsExtra.copy(path.join(SRC_DIR, '3rd_party_types'), path.join(DIST_DIR, '3rd_party_types'))
 .then(() => console.log('Copied 3rd party types'))
 .catch(console.error);

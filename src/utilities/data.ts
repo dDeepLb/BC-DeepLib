@@ -1,4 +1,4 @@
-import { SettingsModel, ModSdkManager, deepLibLogger, modules } from '../deep_lib';
+import { SettingsModel, ModSdkManager, deepLibLogger, modules } from '../deeplib';
 
 export const PlayerStorage = (): SettingsModel => (Player[ModSdkManager.ModInfo.name]);
 export const ExtensionStorage = (): Readonly<string> => Player.ExtensionSettings[ModSdkManager.ModInfo.name];

@@ -7,8 +7,8 @@
   "compilerOptions": {
     "target": "ESNext",
     "module": "ESNext",
-    "moduleResolution": "Bundler",
-		"esModuleInterop": true,
+    "moduleResolution": "bundler",
+		"esModuleInterop": false,
     
     "allowJs": false,
     "removeComments": true,

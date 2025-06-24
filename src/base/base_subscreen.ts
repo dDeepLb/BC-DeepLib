@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, advancedElement, ModSdkManager, dataStore, domUtil, getText, layoutElement, modules } from '../deep_lib';
+import { BaseModule, BaseSettingsModel, GUI, advancedElement, ModSdkManager, dataStore, domUtil, getText, layoutElement, modules } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
 type SubscreenOptions = {
