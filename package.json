@@ -2,7 +2,7 @@
   "name": "bc-deeplib",
   "version": "1.0.6",
   "author": "dDeepLb",
-  "description": "Package for easier development of BC mods without need to repeat myself in every mod",
+  "description": "Library for easier development of BC mods, which strives to be a framework :D",
   "license": "MIT",
   "type": "module",
   "files": [
