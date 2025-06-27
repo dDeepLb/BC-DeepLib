@@ -75,7 +75,7 @@ function elementCreateCheckbox(options: Checkbox) {
     children: [
       deepMerge({
         tag: 'input',
-        classList: ['deeplib-input'],
+        classList: ['checkbox', 'deeplib-input'],
         attributes: {
           type: 'checkbox',
           id: options.id,
