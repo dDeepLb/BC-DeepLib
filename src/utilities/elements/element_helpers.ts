@@ -5,6 +5,7 @@ export const domUtil = {
   autoSetSize: autoSetSize,
   hide: hide,
   unhide: unhide,
+  hasOverflow: hasOverflow
 };
 
 function autoSetPosition(_: ElementHelp.ElementOrId, position: SettingElement['position']) {
@@ -53,3 +54,16 @@ function unhide(_: ElementHelp.ElementOrId) {
   element.style.display = '';
 };
 
+function hasOverflow(el: ElementHelp.ElementOrId): { any: boolean, vertical: boolean, horizontal: boolean } | null {
+  const element = ElementWrap(el);
+  if (!element) return null;
+
+  const vertical = element.scrollHeight > element.clientHeight;
+  const horizontal = element.scrollWidth > element.clientWidth;
+
+  return {
+    any: vertical || horizontal,
+    vertical,
+    horizontal,
+  };
+}
