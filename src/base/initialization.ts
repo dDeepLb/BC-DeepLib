@@ -19,13 +19,14 @@ export function initMod(options: InitOptions) {
   deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
     options.beforeLogin?.();
-    sdk.hookFunction('LoginResponse', 0, (args, next) => {
+    const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
       deepLibLogger.debug(`Init for ${MOD_NAME}! LoginResponse caught: `, args);
       next(args);
       const response = args[0];
       if (response === 'InvalidNamePassword') return next(args);
       if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
         init(options);
+        removeHook();
       }
     });
   } else {
