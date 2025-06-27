@@ -27,6 +27,7 @@
 
   background-image: var(--image);
   mask-image: var(--image);
+  pointer-events: none;
 }
 
 .deeplib-button:hover img {
