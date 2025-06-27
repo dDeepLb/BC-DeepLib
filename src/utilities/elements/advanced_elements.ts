@@ -30,7 +30,7 @@ function elementCreateButton(options: Button): HTMLButtonElement {
     deepMerge({
       tooltip: options.tooltip,
       label: options.label,
-      labelPosition: 'center', 
+      labelPosition: 'center',
     }, options.htmlOptions?.options),
     deepMerge({
       button: {
@@ -337,7 +337,7 @@ function openModal(options: ModalOptions) {
       close('submit');
     }
   });
- 
+
   const buttons = options.buttons?.map(button => {
     return advancedElement.createButton({
       type: 'button',
@@ -352,7 +352,7 @@ function openModal(options: ModalOptions) {
 
   buttonContainer.append(...buttons);
 
-  const blocker = ElementCreate({ 
+  const blocker = ElementCreate({
     tag: 'div',
     classList: ['deeplib-modal-blocker'],
     attributes: {
