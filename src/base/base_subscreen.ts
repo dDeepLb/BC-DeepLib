@@ -192,6 +192,7 @@ export abstract class BaseSubscreen {
     );
 
     this.managePageElementsVisibility();
+
     CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
   }
 

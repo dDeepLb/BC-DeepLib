@@ -228,11 +228,9 @@ function elementCreateTooltip() {
   return element;
 }
 
-
 function elementGetTooltip() {
   return document.getElementById('deeplib-tooltip') ?? undefined;
 }
-
 
 function elementSetTooltip(text: string) {
   const element = document.getElementById('deeplib-tooltip');
@@ -332,7 +330,7 @@ function openModal(options: ModalOptions) {
   const submit = advancedElement.createButton({
     type: 'button',
     id: 'deeplib-modal-submit',
-    label:  options.submitText || 'Submit',
+    label: options.submitText || 'Submit',
     onClick: () => {
       close('submit');
     }
