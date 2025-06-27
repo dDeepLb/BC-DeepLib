@@ -238,6 +238,14 @@ export abstract class BaseSubscreen {
       domUtil.autoSetPosition(options.id, options.position);
       domUtil.autoSetSize(options.id, options.size);
     });
+
+    if (settingsDiv) {
+      if (domUtil.hasOverflow(settingsDiv)?.vertical) {
+        settingsDiv.classList.add('deeplib-overflow-box')
+      } else {
+        settingsDiv.classList.remove('deeplib-overflow-box')
+      }
+    }
   }
 
   unload() {

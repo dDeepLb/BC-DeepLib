@@ -29,7 +29,7 @@
   flex-direction: column;
   padding: min(1.0dvh, 0.5dvw);
   gap: 0.3em;
-  overflow-y: visible;
+  overflow-y: scroll;
 }
 
 .deeplib-misc {
@@ -49,4 +49,8 @@
   padding: min(1vh, 0.5vw);
   font-size: 0.8em;
   border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
+}
+
+.deeplib-overflow-box {
+  border: var(--deeplib-border-color) solid var(--deeplib-border-width);
 }
