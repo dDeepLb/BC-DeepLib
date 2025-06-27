@@ -171,6 +171,7 @@ export abstract class BaseSubscreen {
         switch (item.type) {
           case 'text':
           case 'number':
+          case 'color':
             element = advancedElement.createInput(item);
             break;
           case 'checkbox':

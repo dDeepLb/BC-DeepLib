@@ -52,6 +52,17 @@
   background-color: var(--label-background-color);
 }
 
+.deeplib-input-container input.deeplib-input[type="color"] {
+  padding: 0px;
+  width: min(5vh, 2.5vw);
+  height: min(5vh, 2.5vw);
+}
+
+.deeplib-input-container input.deeplib-input[type="color"]:disabled {
+  border: var(--deeplib-blocked-color) solid var(--deeplib-border-width);
+  cursor: not-allowed;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

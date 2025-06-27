@@ -33,7 +33,7 @@ export type Checkbox = BaseElementModel & {
 };
 
 export type Input = BaseElementModel & {
-  type: 'text' | 'number';
+  type: 'text' | 'number' | 'color';
   label?: string;
   description?: string;
   getElementValue?: () => string;
