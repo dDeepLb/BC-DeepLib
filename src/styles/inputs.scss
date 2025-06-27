@@ -12,7 +12,8 @@
 }
 
 .deeplib-checkbox-container input.deeplib-input[type="checkbox"]:checked::before {
-  transform: scale(0.8);
+  width: 80%;
+  height: 80%;
 }
 
 .deeplib-input-container {
