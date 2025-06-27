@@ -1,9 +1,9 @@
-export function sendLocalMessage(message: string, timeoutInSeconds?: number) {
+export function sendLocalMessage(id: string | null, message: string, timeoutInSeconds?: number) {
   const element = ElementCreate({
     tag: 'div',
-    classList: ['ChatMessage', 'deeplib-message'],
+    classList: ['ChatMessage', 'deeplib-message', 'ChatMessageNonDialogue'],
     attributes: {
-      id: `DEEPLIB_LOCAL_MESSAGE_${Date.now()}`,
+      id: id ?? `DEEPLIB_LOCAL_MESSAGE_${Date.now()}`,
       'data-time': ChatRoomCurrentTime(),
       'data-sender': Player.MemberNumber?.toString(),
     },
