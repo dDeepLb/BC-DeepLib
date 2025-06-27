@@ -18,7 +18,7 @@ export class VersionModule extends BaseModule {
           VersionModule.sendNewVersionMessage();
         }
       },
-      999
+      'VersionModule'
     );
   }
 

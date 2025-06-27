@@ -13,7 +13,7 @@ export const HookPriority = {
   Top: 100
 }
 
-export type ModuleCategory = number;
+export type ModuleCategory = number | string;
 
 interface IPatchedFunctionData {
   name: string;
