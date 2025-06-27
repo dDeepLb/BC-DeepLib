@@ -66,6 +66,8 @@ function elementCreateCheckbox(options: Checkbox) {
 
   if (elem) return elem;
 
+  const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
+
   const retElem = ElementCreate({
     tag: 'div',
     classList: ['deeplib-checkbox-container'],
@@ -79,6 +81,7 @@ function elementCreateCheckbox(options: Checkbox) {
         attributes: {
           type: 'checkbox',
           id: options.id,
+          disabled: disabled,
           checked: options?.getSettingValue?.() || undefined,
         },
       }, options.htmlOptions),
@@ -125,6 +128,8 @@ function elementCreateInput(options: Input) {
 
   if (elem) return elem;
 
+  const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
+
   const retElem = ElementCreate({
     tag: 'div',
     classList: ['deeplib-input-container'],
@@ -139,7 +144,7 @@ function elementCreateInput(options: Input) {
           type: options.type,
           id: options.id,
           placeholder: ' ',
-          value: options?.getElementValue?.() || undefined,
+          disabled: disabled,
         },
       }, options.htmlOptions),
       options.label ? {
