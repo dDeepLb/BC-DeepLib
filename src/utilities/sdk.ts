@@ -1,4 +1,9 @@
-import bcModSdkRef, { GetDotedPathType, ModSDKModAPI, ModSDKModInfo, ModSDKModOptions, PatchHook } from 'bondage-club-mod-sdk';
+import rawSdkImport from 'bondage-club-mod-sdk';
+
+// What the fuck is this?? 
+// It seems that ESBuild breaks things, either when building this package or a final mod
+const rawSdk = rawSdkImport as any;
+const bcModSdkRef = (rawSdk.default ?? rawSdk) as ModSDKGlobalAPI;
 
 export const HookPriority = {
   Observe: 0,
