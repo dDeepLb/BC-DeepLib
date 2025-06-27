@@ -82,7 +82,7 @@ function elementCreateCheckbox(options: Checkbox) {
           type: 'checkbox',
           id: options.id,
           disabled: disabled,
-          checked: options?.getSettingValue?.() || undefined,
+          checked: options?.setElementValue?.() || undefined,
         },
       }, options.htmlOptions),
       {
@@ -145,6 +145,7 @@ function elementCreateInput(options: Input) {
           id: options.id,
           placeholder: ' ',
           disabled: disabled,
+          value: options?.setElementValue?.() || undefined,
         },
       }, options.htmlOptions),
       options.label ? {

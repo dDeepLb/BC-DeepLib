@@ -38,7 +38,7 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-checkbox',
         label: 'Checkbox',
         description: 'This is a checkbox',
-        getSettingValue() {
+        setElementValue() {
           return true;
         },
         setSettingValue(val: boolean) {
@@ -50,7 +50,7 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-text-input',
         label: 'Input',
         description: 'This is a text input',
-        getElementValue() {
+        setElementValue() {
           return 'Input Value';
         },
         setSettingValue(val: string) {
@@ -62,7 +62,7 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-number-input',
         label: 'Input',
         description: 'This is a number input',
-        getElementValue() {
+        setElementValue() {
           return '123';
         },
         setSettingValue(val: string) {
@@ -105,7 +105,7 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-checkbox2',
         label: 'Checkbox',
         description: 'This is a checkbox',
-        getSettingValue() {
+        setElementValue() {
           return true;
         },
         setSettingValue(val: boolean) {
@@ -117,7 +117,7 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-text-input2',
         label: 'Input',
         description: 'This is a text input',
-        getElementValue() {
+        setElementValue() {
           return 'Input Value';
         },
         setSettingValue(val: string) {
@@ -129,7 +129,7 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-number-input2',
         label: 'Input',
         description: 'This is a number input',
-        getElementValue() {
+        setElementValue() {
           return '123';
         },
         setSettingValue(val: string) {

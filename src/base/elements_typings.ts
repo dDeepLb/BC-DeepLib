@@ -27,7 +27,7 @@ export type Checkbox = BaseElementModel & {
   type: 'checkbox';
   label?: string;
   description?: string;
-  getSettingValue?: () => boolean;
+  setElementValue?: () => boolean;
   setSettingValue?: (val: boolean) => void;
   htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
 };
@@ -36,7 +36,7 @@ export type Input = BaseElementModel & {
   type: 'text' | 'number' | 'color';
   label?: string;
   description?: string;
-  getElementValue?: () => string;
+  setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
   htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
 };
