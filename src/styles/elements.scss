@@ -29,10 +29,12 @@
 .deeplib-subscreen {
   padding: 0;
   margin: 0;
+  pointer-events: none;
 }
 
 .deeplib-subscreen * {
   box-sizing: border-box;
+  pointer-events: all;
 }
 
 .deeplib-settings {
