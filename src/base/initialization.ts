@@ -55,7 +55,7 @@ export async function init(options: InitOptions) {
     return;
   }
 
-  await options.initFunction();
+  await options.initFunction?.();
 
   VersionModule.checkVersionUpdate();
 
