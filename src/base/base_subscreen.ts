@@ -249,21 +249,6 @@ export abstract class BaseSubscreen {
   }
 
   unload() {
-    this.pageStructure.forEach((s) =>
-      s.forEach((item) => {
-        switch (item.type) {
-          case 'text':
-            item?.setSettingValue?.(ElementValue(item.id));
-            break;
-          case 'checkbox': {
-            const elem = document.getElementById(item.id) as HTMLInputElement;
-            const checked = elem.checked;
-            item?.setSettingValue?.(checked);
-            break;
-          }
-        }
-      })
-    );
     BaseSubscreen.currentElements = [];
 
     layoutElement.removeSubscreenDiv();

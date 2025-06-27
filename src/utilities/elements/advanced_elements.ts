@@ -94,6 +94,11 @@ function elementCreateCheckbox(options: Checkbox) {
         children: [options.label]
       },
     ],
+    eventListeners: {
+      change: () => {
+        options?.setSettingValue?.((document.getElementById(options.id) as HTMLInputElement)?.checked);
+      }
+    }
   });
 
   if (options.description) {
@@ -157,6 +162,11 @@ function elementCreateInput(options: Input) {
         children: [options.label]
       } : undefined,
     ],
+    eventListeners: {
+      input: () => {
+        options?.setSettingValue?.((document.getElementById(options.id) as HTMLInputElement)?.value);
+      }
+    }
   });
 
   if (options.description) {
