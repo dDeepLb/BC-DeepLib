@@ -143,7 +143,7 @@ export abstract class BaseSubscreen {
     const subscreenTitle = advancedElement.createLabel({
       type: 'label',
       id: 'deeplib-subscreen-title',
-      label: getText('mainmenu.title').replace('$ModVersion', ModSdkManager.ModInfo.version),
+      label: getText(`${this.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
     });
     layoutElement.appendToSubscreenDiv(subscreenTitle);
 
