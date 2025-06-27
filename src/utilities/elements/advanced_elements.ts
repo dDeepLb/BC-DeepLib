@@ -178,25 +178,16 @@ function elementCreateLabel(options: Label) {
 
   if (elem) return elem;
 
-  const retElem = ElementCreate({
-    tag: 'div',
-    classList: ['deeplib-label-container'],
+  const retElem = ElementCreate(deepMerge({
+    tag: 'span',
+    classList: ['deeplib-label', 'deeplib-text'],
     attributes: {
-      id: `${options.id}-container`,
+      id: options.id
     },
     children: [
-      deepMerge({
-        tag: 'span',
-        classList: ['deeplib-label', 'deeplib-text'],
-        attributes: {
-          id: options.id
-        },
-        children: [
-          options.label,
-        ],
-      }, options.htmlOptions),
+      options.label,
     ],
-  });
+  }, options.htmlOptions));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
