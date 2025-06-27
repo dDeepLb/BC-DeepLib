@@ -29,6 +29,10 @@
   mask-image: var(--image);
 }
 
+.deeplib-button:hover img {
+  background-color: var(--deeplib-icon-hover-color);
+}
+
 .deeplib-button .button-label {
   background-color: transparent !important;
   color: var(--deeplib-text-color);
