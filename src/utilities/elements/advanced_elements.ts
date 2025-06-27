@@ -17,7 +17,13 @@ export const advancedElement = {
   openAsyncModal: openAsyncModal,
 };
 
-function elementCreateButton(options: Button) {
+function elementCreateButton(options: Button): HTMLButtonElement {
+  const elem = document.getElementById(options.id) as HTMLButtonElement;
+
+  if (elem) return elem;
+
+  const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
+
   const button = ElementButton.Create(
     options.htmlOptions?.id ?? options.id,
     options.htmlOptions?.onClick ?? options?.onClick ?? (() => { }),
@@ -29,13 +35,15 @@ function elementCreateButton(options: Button) {
     deepMerge({
       button: {
         classList: ['deeplib-button'],
+        attributes: {
+          disabled: disabled,
+        },
         children: [
           options.image ? {
             tag: 'img',
             attributes: {
               id: `${options.id}-image`,
               alt: '',
-              disabled: options.disabled,
               decoding: 'async',
               loading: 'lazy',
               src: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' // 1x1 transparent image to get rid of broken image
@@ -48,18 +56,9 @@ function elementCreateButton(options: Button) {
       },
     }, options.htmlOptions?.htmlOptions ?? {}));
 
-  const buttonContainer = ElementCreate({
-    tag: 'div',
-    classList: ['deeplib-button-container'],
-    attributes: {
-      id: `${options.id}-container`,
-    },
-    children: [button],
-  });
+  BaseSubscreen.currentElements.push([button, options]);
 
-  BaseSubscreen.currentElements.push([buttonContainer, options]);
-
-  return buttonContainer;
+  return button;
 };
 
 function elementCreateCheckbox(options: Checkbox) {
@@ -343,7 +342,7 @@ function openModal(options: ModalOptions) {
         close(button.action);
       }
     });
-  }) as HTMLDivElement[];
+  }) as HTMLButtonElement[];
   buttons?.unshift(submit);
 
   buttonContainer.append(...buttons);
