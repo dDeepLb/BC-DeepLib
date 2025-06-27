@@ -1,4 +1,3 @@
-
 import deeplib_style from '../styles/deeplib-style.scss';
 import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deeplib';
 
@@ -7,8 +6,9 @@ interface InitOptions {
     info: ModSDKModInfo,
     options?: ModSDKModOptions
   };
-  initFunction: () => (void | Promise<void>);
   modules: BaseModule[];
+  beforeLogin?: () => (void);
+  initFunction?: () => (void | Promise<void>);
   pathToTranslationsFolder?: string;
 }
 
@@ -18,6 +18,7 @@ export function initMod(options: InitOptions) {
 
   deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
+    options.beforeLogin?.();
     sdk.hookFunction('LoginResponse', 0, (args, next) => {
       deepLibLogger.debug(`Init for ${MOD_NAME}! LoginResponse caught: `, args);
       next(args);
