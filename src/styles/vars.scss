@@ -3,7 +3,12 @@
   --deeplib-background-color: var(--tmd-main, white);
   --deeplib-element-color: var(--tmd-element, white);
   --deeplib-element-hover-color: var(--tmd-accent-hover, cyan);
+  --deeplib-blocked-color: var(--tmd-blocked, red);
   --deeplib-text-color: var(--tmd-text, black);
   --deeplib-icon-color: var(--tmd-accent, white);
   --deeplib-border-color: var(--tmd-accent, black);
+  --deeplib-border-width: min(0.2vh, 0.1vw);
+  --deeplib-border-width: min(0.2dvh, 0.1dvw);
+  --deeplib-border-radius: min(1vh, 0.5vw);
+  --deeplib-border-radius: min(1dvh, 0.5dvw);
 }
