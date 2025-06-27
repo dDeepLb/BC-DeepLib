@@ -5,7 +5,7 @@
   gap: 0.3em;
 }
 
-.deeplib-checkbox-container input.deeplib-input { 
+.deeplib-checkbox-container input.deeplib-input {
   width: min(5vh, 2.5vw);
   height: min(5vh, 2.5vw);
   border-radius: min(1.0dvh, 0.5dvw);
@@ -17,10 +17,10 @@
 }
 
 .deeplib-input-container {
-  --label-background-color: var(--deeplib-background-color);
-  --pad: .75rem;
-
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.3em;
 }
 
 .deeplib-input-container:has(label.deeplib-text) {
@@ -29,7 +29,6 @@
 
 .deeplib-input-container input.deeplib-input {
   font-size: 0.6em;
-  width: 100%;
   padding: 5px 0;
   background-color: transparent;
   outline: none;
@@ -39,19 +38,6 @@
   border-radius: min(1.0dvh, 0.5dvw);
 }
 
-.deeplib-input-container label.deeplib-text {
-  position: absolute;
-  left: var(--pad);
-  top: var(--pad);
-  transition: all 0.3s ease;
-  pointer-events: none;
-}
-
-.deeplib-input-container input.deeplib-input:focus~label,
-.deeplib-input-container input.deeplib-input:not(:placeholder-shown)~label {
-  transform: translateY(calc(-50% - var(--pad))) scale(.8);
-  background-color: var(--label-background-color);
-}
 
 .deeplib-input-container input.deeplib-input[type="color"] {
   padding: 0px;
