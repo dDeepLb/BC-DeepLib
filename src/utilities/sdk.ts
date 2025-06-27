@@ -1,11 +1,11 @@
 import bcModSdkRef, { GetDotedPathType, ModSDKModAPI, ModSDKModInfo, ModSDKModOptions, PatchHook } from 'bondage-club-mod-sdk';
 
-export enum HookPriority {
-  Observe = 0,
-  AddBehavior = 1,
-  ModifyBehavior = 5,
-  OverrideBehavior = 10,
-  Top = 100
+export const HookPriority = {
+  Observe: 0,
+  AddBehavior: 1,
+  ModifyBehavior: 5,
+  OverrideBehavior: 10,
+  Top: 100
 }
 
 export type ModuleCategory = number;
