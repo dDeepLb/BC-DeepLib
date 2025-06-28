@@ -13,6 +13,8 @@ export const advancedElement = {
   getTooltip: elementGetTooltip,
   setTooltip: elementSetTooltip,
 
+  createBackNext: elementPrevNext,
+
   openModal: openModal,
   openAsyncModal: openAsyncModal,
 };
@@ -244,6 +246,100 @@ function elementSetTooltip(text: string) {
   else element.style.display = '';
 
   return true;
+}
+
+interface PrevNext {
+  id: string,
+  initialLabel?: string
+  back: (arg0: PrevNextCallbacks) => void,
+  initialPrevTooltip?: string,
+  next: (arg0: PrevNextCallbacks) => void,
+  initialNextTooltip?: string
+};
+
+interface PrevNextCallbacks {
+  setLabel: (label: string) => void,
+  setBackTooltip: (tooltip: string) => void,
+  setNextTooltip: (tooltip: string) => void
+}
+
+function elementPrevNext(options: PrevNext) {
+  const elem = document.getElementById(options.id);
+
+  if (elem) return elem;
+
+  const setLabel = (label: string) => {
+    const elem = document.getElementById(`${options.id}-label`);
+    if (!elem) return false;
+    elem.textContent = label;
+  }
+
+  const setPrevTooltip = (tooltip: string) => {
+    const elem = document.getElementById(`deeplib-prev-next-${options.id}-prev-button-tooltip`);
+    if (!elem) return false;
+    elem.textContent = tooltip;
+  }
+
+  const setNextTooltip = (tooltip: string) => {
+    const elem = document.getElementById(`deeplib-prev-next-${options.id}-next-button-tooltip`);
+    if (!elem) return false;
+    elem.textContent = tooltip;
+  }
+
+  const retElem = ElementCreate({
+    tag: 'div',
+    classList: ['deeplib-prev-next'],
+    attributes: {
+      id: options.id
+    },
+    children: [
+      advancedElement.createButton({
+        type: 'button',
+        id: `deeplib-prev-next-${options.id}-prev-button`,
+        size: [90, 90],
+        image: 'Icons/Prev.png',
+        onClick: () => {
+          options.back({
+            setLabel: setLabel,
+            setBackTooltip: setPrevTooltip,
+            setNextTooltip: setNextTooltip,
+          });
+        },
+        tooltip: options.initialPrevTooltip,
+        htmlOptions: {
+          options: {
+            noStyling: true
+          }
+        }
+      }),
+      advancedElement.createLabel({
+        id: `${options.id}-label`,
+        type: 'label',
+        label: options.initialLabel
+      }),
+      advancedElement.createButton({
+        type: 'button',
+        id: `deeplib-prev-next-${options.id}-next-button`,
+        size: [90, 90],
+        image: 'Icons/Next.png',
+        onClick: () => {
+          options.next({
+            setLabel: setLabel, 
+            setBackTooltip: setPrevTooltip,
+            setNextTooltip: setNextTooltip,
+          });
+        },
+        tooltip: options.initialNextTooltip,
+        htmlOptions: {
+          options: {
+            noStyling: true
+          }
+        }
+      }),
+    ]
+  });
+
+  return retElem;
 }
 
 type ModalOptions = {

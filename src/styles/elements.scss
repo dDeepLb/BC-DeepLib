@@ -54,3 +54,15 @@
 .deeplib-overflow-box {
   border: var(--deeplib-border-color) solid var(--deeplib-border-width);
 }
+
+.deeplib-prev-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+  gap: min(2dvh, 1dvw);
+  background-color: var(--deeplib-element-color);
+  color: var(--deeplib-text-color);
+  border-radius: min(1.0dvh, 0.5dvw);
+  border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
+}
