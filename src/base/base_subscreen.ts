@@ -63,7 +63,7 @@ export abstract class BaseSubscreen {
     return this.pageStructure[Math.min(BaseSubscreen.currentPage - 1, this.pageStructure.length - 1)];
   }
 
-  changePage(page: number) {
+  changePage(page: number, setLabel: (label: string) => void) {
     const totalPages = this.pageStructure.length;
 
     if (page > totalPages) page = 1;
@@ -72,8 +72,7 @@ export abstract class BaseSubscreen {
 
     this.managePageElementsVisibility();
 
-    const pageLabel = ElementWrap('deeplib-page-label');
-    if (pageLabel) pageLabel.innerHTML = `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`;
+    setLabel(`${BaseSubscreen.currentPage} of ${this.pageStructure.length}`);
   }
 
   managePageElementsVisibility() {
@@ -102,42 +101,20 @@ export abstract class BaseSubscreen {
     const settingsElement = layoutElement.createSettingsDiv();
     layoutElement.appendToSubscreenDiv(settingsElement);
 
+    const menu = ElementMenu.Create('deeplib-nav-menu', []);
+    layoutElement.appendToSubscreenDiv(menu);
+
     if (this.pageStructure.length > 1) {
-      const prev = advancedElement.createButton({
-        type: 'button',
-        id: 'deeplib-prev-page',
-        position: [1495, 75],
-        size: [90, 90],
-        image: 'Icons/Prev.png',
-        onClick: () => {
-          this.changePage(BaseSubscreen.currentPage - 1);
-        },
-        tooltip: getText('settings.button.prev_button_hint')
-      });
-      layoutElement.appendToSubscreenDiv(prev);
+      const backNext = advancedElement.createBackNext({
+        id: 'deeplib-page-back-next',
+        next: ({ setLabel }) => this.changePage(BaseSubscreen.currentPage + 1, setLabel),
+        initialNextTooltip: getText('settings.button.next_button_hint'),
+        back: ({ setLabel }) => this.changePage(BaseSubscreen.currentPage - 1, setLabel),
+        initialPrevTooltip: getText('settings.button.prev_button_hint'),
+        initialLabel: `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`,
+      })
 
-      const pageLabel = advancedElement.createLabel({
-        type: 'label',
-        id: 'deeplib-page-label',
-        position: [1585, 75],
-        size: [110, 90],
-        label: `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`,
-
-      });
-      layoutElement.appendToSubscreenDiv(pageLabel);
-
-      const next = advancedElement.createButton({
-        type: 'button',
-        id: 'deeplib-next-page',
-        position: [1695, 75],
-        size: [90, 90],
-        image: 'Icons/Next.png',
-        onClick: () => {
-          this.changePage(BaseSubscreen.currentPage + 1);
-        },
-        tooltip: getText('settings.button.next_button_hint')
-      });
-      layoutElement.appendToSubscreenDiv(next);
+      ElementMenu.PrependItem(menu, backNext);
     }
 
     const subscreenTitle = advancedElement.createLabel({
@@ -151,7 +128,6 @@ export abstract class BaseSubscreen {
       const exitButton = advancedElement.createButton({
         type: 'button',
         id: 'deeplib-exit',
-        position: [1815, 75],
         size: [90, 90],
         image: 'Icons/Exit.png',
         onClick: () => {
@@ -159,7 +135,7 @@ export abstract class BaseSubscreen {
         },
         tooltip: getText('settings.button.back_button_hint')
       });
-      layoutElement.appendToSubscreenDiv(exitButton);
+      ElementMenu.AppendButton(menu, exitButton);
     }
 
     const tooltip = advancedElement.createTooltip();
@@ -213,21 +189,26 @@ export abstract class BaseSubscreen {
 
   resize(onLoad: boolean = false) {
     const offset = this.options.drawCharacter ? 0 : 380;
+    const subscreen = layoutElement.getSubscreenDiv();
+    const settingsDiv = layoutElement.getSettingsDiv();
 
-    ElementSetPosition(layoutElement.getSubscreenDiv() || '', 0, 0);
-    ElementSetSize(layoutElement.getSubscreenDiv() || '', 2000, 1000);
-    ElementSetFontSize(layoutElement.getSubscreenDiv() || '', 'auto');
+    ElementSetPosition(subscreen || '', 0, 0);
+    ElementSetSize(subscreen || '', 2000, 1000);
+    ElementSetFontSize(subscreen || '', 'auto');
 
     if (this.name === 'mainmenu') {
-      ElementSetPosition(layoutElement.getSettingsDiv() || '', 530 - offset, 170);
-      ElementSetSize(layoutElement.getSettingsDiv() || '', 800 + offset, 660);
+      ElementSetPosition(settingsDiv || '', 530 - offset, 170);
+      ElementSetSize(settingsDiv || '', 800 + offset, 660);
     } else {
-      ElementSetPosition(layoutElement.getSettingsDiv() || '', 530 - offset, 170);
-      ElementSetSize(layoutElement.getSettingsDiv() || '', 1000 + offset, 660);
+      ElementSetPosition(settingsDiv || '', 530 - offset, 170);
+      ElementSetSize(settingsDiv || '', 1000 + offset, 660);
     }
 
     ElementSetPosition('deeplib-subscreen-title', 530 - offset, 75);
     ElementSetSize('deeplib-subscreen-title', 800, 60);
+
+    ElementSetPosition('deeplib-nav-menu', 1905, 75, 'top-right');
+    ElementSetSize('deeplib-nav-menu', null, 90);
 
     ElementSetPosition(advancedElement.getTooltip() || '', 250, 850);
     ElementSetSize(advancedElement.getTooltip() || '', 1500, 70);

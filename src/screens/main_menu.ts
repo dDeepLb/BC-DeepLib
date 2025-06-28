@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, domUtil, getText, GUI, GuiDebug, layoutElement } from '../deeplib';
+import { BaseSubscreen, getText, GUI, GuiDebug, layoutElement } from '../deeplib';
 import { advancedElement } from '../utilities/elements/advanced_elements';
 
 export class MainMenu extends BaseSubscreen {
@@ -29,7 +29,6 @@ export class MainMenu extends BaseSubscreen {
     const exitButton = advancedElement.createButton({
       type: 'button',
       id: 'exit',
-      position: [1815, 75],
       size: [90, 90],
       image: 'Icons/Exit.png',
       onClick: () => {
@@ -37,7 +36,11 @@ export class MainMenu extends BaseSubscreen {
       },
       tooltip: getText('settings.button.back_button_hint')
     });
-    layoutElement.appendToSubscreenDiv(exitButton);
+
+    const menu = document.getElementById('deeplib-nav-menu');
+    if (menu) {
+      ElementMenu.AppendButton(menu, exitButton);
+    }
 
     for (const screen of this.subscreens) {
 

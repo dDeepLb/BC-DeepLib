@@ -66,3 +66,9 @@
   border-radius: min(1.0dvh, 0.5dvw);
   border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
 }
+
+#deeplib-nav-menu {
+  display: flex;
+  flex-direction: row;
+  gap: min(2dvh, 1dvw);
+}
