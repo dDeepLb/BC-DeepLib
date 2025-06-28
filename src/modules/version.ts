@@ -38,10 +38,9 @@ export class VersionModule extends BaseModule {
   private static checkVersionMigration() {
     const PreviousVersion = VersionModule.loadVersion();
 
-    let saveRequired = false;
     for (const migrator of VersionModule.Migrators) {
       if (VersionModule.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
-        saveRequired = saveRequired || migrator.Migrate();
+        migrator.Migrate();
         deepLibLogger.info(`Migrating ${ModSdkManager.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
       }
     }
