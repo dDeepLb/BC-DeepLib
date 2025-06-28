@@ -6,7 +6,7 @@ interface InitOptions {
     info: ModSDKModInfo,
     options?: ModSDKModOptions
   };
-  modules: BaseModule[];
+  modules?: BaseModule[];
   beforeLogin?: () => (void);
   initFunction?: () => (void | Promise<void>);
   pathToTranslationsFolder?: string;
@@ -52,7 +52,7 @@ export async function init(options: InitOptions) {
     await Localization.init();
   }
 
-  if (!initModules(options.modules)) {
+  if (options.modules && !initModules(options.modules)) {
     unloadMod();
     return;
   }
