@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/deeplib-style.scss';
-import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule } from '../deeplib';
+import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter } from '../deeplib';
 
 interface InitOptions {
   modInfo: {
@@ -60,6 +60,11 @@ export async function init(options: InitOptions) {
   await options.initFunction?.();
 
   VersionModule.checkVersionUpdate();
+  
+  for (const m of modules()) {
+    if (m.defaultSettings && hasGetter(m, 'defaultSettings') && m.settings && hasSetter(m, 'settings'))
+      m.settings = deepMergeMatchingProperties(m.defaultSettings, m.settings);
+  }
 
   (window as any)[MOD_NAME + 'Loaded'] = true;
   deepLibLogger.log(`Loaded ${MOD_NAME}! Version: ${MOD_VERSION}`);

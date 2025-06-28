@@ -44,3 +44,36 @@ export function exportToGlobal(name: string, value: any): void {
 
   current[keys[keys.length - 1]] = value;
 }
+
+/** Merges matching properties from `mergeFrom` into `mergeTo`. */
+export function deepMergeMatchingProperties<T extends object>(mergeTo: T, mergeFrom: T): T  {
+  const mergedObject = { ...mergeTo };
+
+  for (const key in mergeFrom) {
+    if (mergeFrom[key] !== null && typeof mergeFrom[key] === 'object') {
+      (mergedObject as any)[key] = deepMergeMatchingProperties(mergedObject[key] || {}, mergeFrom[key]);
+    } else if (key in mergedObject) {
+      (mergedObject as any)[key] = mergeFrom[key];
+    }
+  }
+
+  return mergedObject;
+}
+
+export function hasGetter<T extends object>(obj: T, prop: keyof T | string): boolean {
+  while (obj && obj !== Object.prototype) {
+    const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+    if (descriptor?.get) return true;
+    obj = Object.getPrototypeOf(obj);
+  }
+  return false;
+}
+
+export function hasSetter<T extends object>(obj: T, prop: keyof T | string): boolean {
+  while (obj && obj !== Object.prototype) {
+    const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
+    if (descriptor?.set) return true;
+    obj = Object.getPrototypeOf(obj);
+  }
+  return false;
+}
