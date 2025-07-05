@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, advancedElement, ModSdkManager, dataStore, domUtil, getText, layoutElement, modules } from '../deeplib';
+import { BaseModule, BaseSettingsModel, GUI, advancedElement, ModSdkManager, domUtil, getText, layoutElement, modules, modStorage } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
 type SubscreenOptions = {
@@ -184,7 +184,7 @@ export abstract class BaseSubscreen {
     CharacterLoadCanvas(Player);
 
     setSubscreen('mainmenu');
-    dataStore();
+    modStorage.save();
   }
 
   resize(onLoad: boolean = false) {

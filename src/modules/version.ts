@@ -1,4 +1,4 @@
-import { BaseMigrator, BaseModule, HookPriority, PlayerStorage, ModSdkManager, dataStore, deepLibLogger, sendLocalMessage } from '../deeplib';
+import { BaseMigrator, BaseModule, HookPriority, ModSdkManager, deepLibLogger, modStorage, sendLocalMessage } from '../deeplib';
 
 export class VersionModule extends BaseModule {
   private static isItNewVersion: boolean = false;
@@ -14,7 +14,7 @@ export class VersionModule extends BaseModule {
       HookPriority.Observe,
       (args, next) => {
         next(args);
-        if (PlayerStorage().GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
+        if (modStorage.playerStorage.GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
           VersionModule.sendNewVersionMessage();
         }
       },
@@ -32,7 +32,7 @@ export class VersionModule extends BaseModule {
       VersionModule.saveVersion();
     }
 
-    dataStore();
+    modStorage.save();
   }
 
   private static checkVersionMigration() {
@@ -78,12 +78,12 @@ export class VersionModule extends BaseModule {
   }
 
   private static saveVersion() {
-    if (PlayerStorage()) {
+    if (modStorage.playerStorage) {
       Player[ModSdkManager.ModInfo.name].Version = VersionModule.Version;
     }
   }
 
   private static loadVersion() {
-    return PlayerStorage()?.Version;
+    return modStorage.playerStorage?.Version;
   }
 }

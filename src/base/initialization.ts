@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/deeplib-style.scss';
-import { BaseModule, ModSdkManager, dataTake, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator } from '../deeplib';
+import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, SettingsModel } from '../deeplib';
 
 interface InitOptions {
   modInfo: {
@@ -13,9 +13,13 @@ interface InitOptions {
   pathToTranslationsFolder?: string;
 }
 
+export let modStorage: ModStorage;
+
 export function initMod(options: InitOptions) {
   const sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
   const MOD_NAME = ModSdkManager.ModInfo.name;
+
+  modStorage = new ModStorage(ModSdkManager.ModInfo.name);
 
   deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
@@ -44,7 +48,7 @@ export async function init(options: InitOptions) {
 
   if ((window as any)[MOD_NAME + 'Loaded']) return;
 
-  dataTake();
+  modStorage.load();
 
   Style.injectInline('deeplib-style', deeplib_style);
 

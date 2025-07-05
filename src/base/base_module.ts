@@ -1,4 +1,4 @@
-import { BaseSettingsModel, PlayerStorage, SettingsModel, Subscreen, ModSdkManager } from '../deeplib';
+import { BaseSettingsModel, SettingsModel, Subscreen, ModSdkManager, ModStorage, modStorage } from '../deeplib';
 
 export abstract class BaseModule {
   get settingsScreen(): Subscreen | null {
@@ -12,21 +12,22 @@ export abstract class BaseModule {
   get settings(): BaseSettingsModel {
     const modName = ModSdkManager.ModInfo.name;
     if (!this.settingsStorage) return {} as BaseSettingsModel;
-    if (!PlayerStorage()) {
+    if (!modStorage.playerStorage) {
       Player[modName] = <SettingsModel>{};
       this.registerDefaultSettings();
-    } else if (!PlayerStorage()[this.settingsStorage]) this.registerDefaultSettings();
-    return PlayerStorage()[this.settingsStorage];
+    } else if (!modStorage.playerStorage[this.settingsStorage]) this.registerDefaultSettings();
+    return modStorage.playerStorage[this.settingsStorage];
   }
 
   set settings(value) {
     const modName = ModSdkManager.ModInfo.name;
+    const storage = new ModStorage<SettingsModel>(modName);
     if (!this.settingsStorage) return;
-    if (!PlayerStorage()) {
+    if (!storage.playerStorage) {
       Player[modName] = <SettingsModel>{};
       this.registerDefaultSettings();
-    } else if (!PlayerStorage()[this.settingsStorage]) this.registerDefaultSettings();
-    PlayerStorage()[this.settingsStorage] = value;
+    } else if (!storage.playerStorage[this.settingsStorage]) this.registerDefaultSettings();
+    storage.playerStorage[this.settingsStorage] = value;
   }
 
   init() {
