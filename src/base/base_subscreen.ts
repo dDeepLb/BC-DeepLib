@@ -118,7 +118,6 @@ export abstract class BaseSubscreen {
     }
 
     const subscreenTitle = advancedElement.createLabel({
-      type: 'label',
       id: 'deeplib-subscreen-title',
       label: getText(`${this.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
     });
@@ -126,7 +125,6 @@ export abstract class BaseSubscreen {
 
     if (this.name !== 'mainmenu') {
       const exitButton = advancedElement.createButton({
-        type: 'button',
         id: 'deeplib-exit',
         size: [90, 90],
         image: 'Icons/Exit.png',

@@ -19,10 +19,12 @@ export const advancedElement = {
   openAsyncModal: openAsyncModal,
 };
 
-function elementCreateButton(options: Button): HTMLButtonElement {
+function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
   const elem = document.getElementById(options.id) as HTMLButtonElement;
 
   if (elem) return elem;
+
+  (options as Button).type = 'button';
 
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
@@ -58,15 +60,17 @@ function elementCreateButton(options: Button): HTMLButtonElement {
       },
     }, options.htmlOptions?.htmlOptions ?? {}));
 
-  BaseSubscreen.currentElements.push([button, options]);
+  BaseSubscreen.currentElements.push([button, options as Button]);
 
   return button;
 };
 
-function elementCreateCheckbox(options: Checkbox) {
+function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
   const elem = document.getElementById(options.id);
 
   if (elem) return elem;
+
+  (options as Checkbox).type = 'checkbox';
 
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
@@ -113,19 +117,21 @@ function elementCreateCheckbox(options: Checkbox) {
     });
   }
 
-  BaseSubscreen.currentElements.push([retElem, options]);
+  BaseSubscreen.currentElements.push([retElem, options as Checkbox]);
 
   return retElem;
 }
 
-function elementCreateCustom(options: Custom) {
+function elementCreateCustom(options: Omit<Custom, 'type'>) {
   const elem = document.getElementById(options.id);
 
   if (elem) return elem;
 
+  (options as Custom).type = 'custom';
+
   const retElem = ElementCreate(options.htmlOptions);
 
-  BaseSubscreen.currentElements.push([retElem, options]);
+  BaseSubscreen.currentElements.push([retElem, options as Custom]);
 
   return retElem;
 }
@@ -186,10 +192,12 @@ function elementCreateInput(options: Input) {
   return retElem;
 }
 
-function elementCreateLabel(options: Label) {
+function elementCreateLabel(options: Omit<Label, 'type'>) {
   const elem = document.getElementById(options.id);
 
   if (elem) return elem;
+
+  (options as Label).type = 'label';
 
   const retElem = ElementCreate(deepMerge({
     tag: 'span',
@@ -212,7 +220,7 @@ function elementCreateLabel(options: Label) {
     });
   }
 
-  BaseSubscreen.currentElements.push([retElem, options]);
+  BaseSubscreen.currentElements.push([retElem, options as Label]);
 
   return retElem;
 }
@@ -294,7 +302,6 @@ function elementPrevNext(options: PrevNext) {
     },
     children: [
       advancedElement.createButton({
-        type: 'button',
         id: `deeplib-prev-next-${options.id}-prev-button`,
         size: [90, 90],
         image: 'Icons/Prev.png',
@@ -314,11 +321,9 @@ function elementPrevNext(options: PrevNext) {
       }),
       advancedElement.createLabel({
         id: `${options.id}-label`,
-        type: 'label',
         label: options.initialLabel
       }),
       advancedElement.createButton({
-        type: 'button',
         id: `deeplib-prev-next-${options.id}-next-button`,
         size: [90, 90],
         image: 'Icons/Next.png',

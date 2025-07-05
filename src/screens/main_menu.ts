@@ -27,7 +27,6 @@ export class MainMenu extends BaseSubscreen {
     super.load();
 
     const exitButton = advancedElement.createButton({
-      type: 'button',
       id: 'exit',
       size: [90, 90],
       image: 'Icons/Exit.png',
@@ -47,7 +46,6 @@ export class MainMenu extends BaseSubscreen {
       if (screen.name == 'mainmenu') continue;
 
       const button = advancedElement.createButton({
-        type: 'button',
         id: `${screen.name}-button`,
         image: screen.icon,
         label: getText(`mainmenu.button.${screen.name}`),
@@ -65,7 +63,6 @@ export class MainMenu extends BaseSubscreen {
 
     if (MainMenu.resetSubscreen) {
       const resetButton = advancedElement.createButton({
-        type: 'button',
         id: 'deeplib-reset-button',
         image: 'Icons/ServiceBell.png',
         label: 'Reset',
@@ -79,7 +76,6 @@ export class MainMenu extends BaseSubscreen {
 
     if (MainMenu.wikiLink) {
       const wikiButton = advancedElement.createButton({
-        type: 'button',
         id: 'deeplib-wiki-button',
         image: 'Icons/Introduction.png',
         label: 'Wiki',
@@ -92,7 +88,6 @@ export class MainMenu extends BaseSubscreen {
     }
 
     const debugButton = advancedElement.createButton({
-      type: 'button',
       id: 'deeplib-debug-button',
       image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
       onClick: () => {
