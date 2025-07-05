@@ -7,9 +7,9 @@ export class ModStorage<T extends SettingsModel = SettingsModel> {
   constructor(modName: string) {
     if (!ModStorage._instance) {
       ModStorage._instance = this;
-    this.modName = modName;
+      this.modName = modName;
     }
-    this.modName ??= modName
+    this.modName ??= modName;
 
     return ModStorage._instance as ModStorage<T>;
   }

@@ -112,7 +112,7 @@ export abstract class BaseSubscreen {
         back: ({ setLabel }) => this.changePage(BaseSubscreen.currentPage - 1, setLabel),
         initialPrevTooltip: getText('settings.button.prev_button_hint'),
         initialLabel: `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`,
-      })
+      });
 
       ElementMenu.PrependItem(menu, backNext);
     }
@@ -222,9 +222,9 @@ export abstract class BaseSubscreen {
 
     if (settingsDiv) {
       if (domUtil.hasOverflow(settingsDiv)?.vertical) {
-        settingsDiv.classList.add('deeplib-overflow-box')
+        settingsDiv.classList.add('deeplib-overflow-box');
       } else {
-        settingsDiv.classList.remove('deeplib-overflow-box')
+        settingsDiv.classList.remove('deeplib-overflow-box');
       }
     }
   }

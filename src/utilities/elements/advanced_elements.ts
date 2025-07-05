@@ -272,19 +272,19 @@ function elementPrevNext(options: PrevNext) {
     const elem = document.getElementById(`${options.id}-label`);
     if (!elem) return false;
     elem.textContent = label;
-  }
+  };
 
   const setPrevTooltip = (tooltip: string) => {
     const elem = document.getElementById(`deeplib-prev-next-${options.id}-prev-button-tooltip`);
     if (!elem) return false;
     elem.textContent = tooltip;
-  }
+  };
 
   const setNextTooltip = (tooltip: string) => {
     const elem = document.getElementById(`deeplib-prev-next-${options.id}-next-button-tooltip`);
     if (!elem) return false;
     elem.textContent = tooltip;
-  }
+  };
 
   const retElem = ElementCreate({
     tag: 'div',
@@ -324,7 +324,7 @@ function elementPrevNext(options: PrevNext) {
         image: 'Icons/Next.png',
         onClick: () => {
           options.next({
-            setLabel: setLabel, 
+            setLabel: setLabel,
             setBackTooltip: setPrevTooltip,
             setNextTooltip: setNextTooltip,
           });

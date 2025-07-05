@@ -11,7 +11,7 @@ export const HookPriority = {
   ModifyBehavior: 5,
   OverrideBehavior: 10,
   Top: 100
-}
+};
 
 export type ModuleCategory = number | string;
 

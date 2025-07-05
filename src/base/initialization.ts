@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/deeplib-style.scss';
-import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, SettingsModel } from '../deeplib';
+import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage } from '../deeplib';
 
 interface InitOptions {
   modInfo: {
