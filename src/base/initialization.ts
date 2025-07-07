@@ -20,6 +20,7 @@ export function initMod(options: InitOptions) {
   const MOD_NAME = ModSdkManager.ModInfo.name;
 
   modStorage = new ModStorage(ModSdkManager.ModInfo.name);
+  Style.injectInline('deeplib-style', deeplib_style);
 
   deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
   if (CurrentScreen == null || CurrentScreen === 'Login') {
@@ -49,8 +50,6 @@ export async function init(options: InitOptions) {
   if ((window as any)[MOD_NAME + 'Loaded']) return;
 
   modStorage.load();
-
-  Style.injectInline('deeplib-style', deeplib_style);
 
   if (options.pathToTranslationsFolder) {
     new Localization({ pathToTranslationsFolder: options.pathToTranslationsFolder });
