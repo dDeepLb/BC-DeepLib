@@ -196,7 +196,7 @@ export abstract class BaseSubscreen {
 
     if (this.name === 'mainmenu') {
       ElementSetPosition(settingsDiv || '', 530 - offset, 170);
-      ElementSetSize(settingsDiv || '', 800 + offset, 660);
+      ElementSetSize(settingsDiv || '', 600 + offset, 660);
     } else {
       ElementSetPosition(settingsDiv || '', 530 - offset, 170);
       ElementSetSize(settingsDiv || '', 1000 + offset, 660);
