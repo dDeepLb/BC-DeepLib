@@ -2,11 +2,16 @@
 import { BaseSubscreen, getText, GUI, GuiDebug, layoutElement } from '../deeplib';
 import { advancedElement } from '../utilities/elements/advanced_elements';
 
+export type MainMenuOptions = {
+  repoLink?: string;
+  wikiLink?: string;
+  resetSubscreen?: BaseSubscreen;
+};
+
 export class MainMenu extends BaseSubscreen {
   subscreens: BaseSubscreen[] = [];
 
-  static wikiLink: string = '';
-  static resetSubscreen: BaseSubscreen | null = null;
+  private static options: MainMenuOptions = {};
 
   get name(): string {
     return 'mainmenu';
@@ -61,26 +66,40 @@ export class MainMenu extends BaseSubscreen {
     const miscDiv = layoutElement.createMiscDiv();
     layoutElement.appendToSubscreenDiv(miscDiv);
 
-    if (MainMenu.resetSubscreen) {
+    if (MainMenu.options.resetSubscreen) {
       const resetButton = advancedElement.createButton({
         id: 'deeplib-reset-button',
         image: 'Icons/ServiceBell.png',
         label: 'Reset',
         onClick: () => {
-          this.setSubscreen(MainMenu.resetSubscreen);
+          this.setSubscreen(MainMenu.options.resetSubscreen!);
         },
         size: [405, 80],
       });
       layoutElement.appendToMiscDiv(resetButton);
     }
 
-    if (MainMenu.wikiLink) {
+    if (MainMenu.options.repoLink) {
+      const repoButton = advancedElement.createButton({
+        id: 'deeplib-repo-button',
+        //TODO - Replace with repo icon
+        image: 'Icons/Introduction.png',
+        label: 'Repository',
+        onClick: () => {
+          window.open(MainMenu.options.repoLink, '_blank');
+        },
+        size: [405, 80],
+      });
+      layoutElement.appendToMiscDiv(repoButton);
+    }
+
+    if (MainMenu.options.wikiLink) {
       const wikiButton = advancedElement.createButton({
         id: 'deeplib-wiki-button',
         image: 'Icons/Introduction.png',
         label: 'Wiki',
         onClick: () => {
-          window.open(MainMenu.wikiLink, '_blank');
+          window.open(MainMenu.options.wikiLink, '_blank');
         },
         size: [405, 80],
       });
@@ -117,9 +136,8 @@ export class MainMenu extends BaseSubscreen {
     ElementSetPosition('deeplib-misc', 1500, 670);
     ElementSetSize('deeplib-misc', 405, 260);
   }
-}
 
-export function setMainMenuOptions(wikiLink: string, resetSubscreen: BaseSubscreen | null) {
-  MainMenu.wikiLink = wikiLink;
-  MainMenu.resetSubscreen = resetSubscreen;
+  static setOptions(mainMenuOptions: MainMenuOptions) {
+    MainMenu.options = mainMenuOptions;
+  }
 }

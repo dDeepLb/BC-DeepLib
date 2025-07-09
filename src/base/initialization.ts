@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/deeplib-style.scss';
-import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage } from '../deeplib';
+import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, MainMenuOptions, MainMenu } from '../deeplib';
 
 interface InitOptions {
   modInfo: {
@@ -8,6 +8,7 @@ interface InitOptions {
   };
   modules?: BaseModule[];
   migrators?: BaseMigrator[];
+  mainMenuOptions?: MainMenuOptions;
   beforeLogin?: () => (void);
   initFunction?: () => (void | Promise<void>);
   pathToTranslationsFolder?: string;
@@ -68,6 +69,9 @@ export async function init(options: InitOptions) {
   }
 
   await options.initFunction?.();
+
+  if (options.mainMenuOptions)
+    MainMenu.setOptions(options.mainMenuOptions);
 
   VersionModule.checkVersionUpdate();
 
