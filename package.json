@@ -18,8 +18,11 @@
     }
   },
   "scripts": {
+    "all": "pnpm build && pnpm type-gen && pnpm asset-copy",
     "lint": "eslint src/",
-    "build": "node esbuild.config.js"
+    "build": "node scripts/build.js",
+    "type-gen": "node scripts/type_gen.js",
+    "asset-copy": "node scripts/asset_copy.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
