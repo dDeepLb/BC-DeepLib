@@ -7,7 +7,7 @@ export default tseslint.config(
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   {
-    files: ['src/**/*', '.types/**/*'],
+    files: ['src/**/*', '.types/**/*', 'lib/**/*', 'scripts/**/*'],
     plugins: { 'style': stylistic },
     rules: {
       'style/indent': ['warn', 2],
