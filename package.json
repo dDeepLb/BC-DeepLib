@@ -8,13 +8,13 @@
   "files": [
     "/dist"
   ],
-  "module": "./dist/deeplib.js",
-  "main": "./dist/deeplib.cjs",
   "types": "./dist/deeplib.d.ts",
   "exports": {
     "./deeplib": {
-      "import": "./dist/deeplib.js",
-      "require": "./dist/deeplib.cjs"
+      "import": "./dist/deeplib.js"
+    },
+    "./build": {
+      "import": "./lib/build.js"
     }
   },
   "scripts": {
