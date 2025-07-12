@@ -303,8 +303,7 @@ function elementPrevNext(options: PrevNext) {
     children: [
       advancedElement.createButton({
         id: `deeplib-prev-next-${options.id}-prev-button`,
-        size: [90, 90],
-        image: 'Icons/Prev.png',
+        image: `${PUBLIC_URL}/dl_images/arrow_left.svg`,
         onClick: () => {
           options.back({
             setLabel: setLabel,
@@ -314,6 +313,11 @@ function elementPrevNext(options: PrevNext) {
         },
         tooltip: options.initialPrevTooltip,
         htmlOptions: {
+          htmlOptions: {
+            button: {
+              classList: ['deeplib-prev-next-button']
+            }
+          },
           options: {
             noStyling: true
           }
@@ -321,12 +325,14 @@ function elementPrevNext(options: PrevNext) {
       }),
       advancedElement.createLabel({
         id: `${options.id}-label`,
-        label: options.initialLabel
+        label: options.initialLabel,
+        htmlOptions: {
+          classList: ['deeplib-prev-next-label']
+        }
       }),
       advancedElement.createButton({
         id: `deeplib-prev-next-${options.id}-next-button`,
-        size: [90, 90],
-        image: 'Icons/Next.png',
+        image: `${PUBLIC_URL}/dl_images/arrow_right.svg`,
         onClick: () => {
           options.next({
             setLabel: setLabel,
@@ -336,6 +342,11 @@ function elementPrevNext(options: PrevNext) {
         },
         tooltip: options.initialNextTooltip,
         htmlOptions: {
+          htmlOptions: {
+            button: {
+              classList: ['deeplib-prev-next-button']
+            }
+          },
           options: {
             noStyling: true
           }

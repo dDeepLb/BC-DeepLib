@@ -65,6 +65,20 @@
   color: var(--deeplib-text-color);
   border-radius: min(1.0dvh, 0.5dvw);
   border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
+
+  .deeplib-prev-next-button {
+    &:hover {
+      background-color: var(--deeplib-element-hover-color);
+      border-radius: var(--deeplib-border-radius);
+    }
+    
+    height: 100%;
+    aspect-ratio: 1;
+  }
+
+  .deeplib-prev-next-label {
+    white-space: nowrap;
+  }
 }
 
 #deeplib-nav-menu {
