@@ -57,7 +57,7 @@ export class MainMenu extends BaseSubscreen {
         onClick: () => {
           this.setSubscreen(screen);
         },
-        size: [450, 90],
+        size: [null, 90],
       });
 
       layoutElement.appendToSettingsDiv(button);
@@ -74,7 +74,7 @@ export class MainMenu extends BaseSubscreen {
         onClick: () => {
           this.setSubscreen(MainMenu.options.resetSubscreen!);
         },
-        size: [405, 80],
+        size: [null, 80],
       });
       layoutElement.appendToMiscDiv(resetButton);
     }
@@ -88,7 +88,7 @@ export class MainMenu extends BaseSubscreen {
         onClick: () => {
           window.open(MainMenu.options.repoLink, '_blank');
         },
-        size: [405, 80],
+        size: [null, 80],
       });
       layoutElement.appendToMiscDiv(repoButton);
     }
@@ -101,7 +101,7 @@ export class MainMenu extends BaseSubscreen {
         onClick: () => {
           window.open(MainMenu.options.wikiLink, '_blank');
         },
-        size: [405, 80],
+        size: [null, 80],
       });
       layoutElement.appendToMiscDiv(wikiButton);
     }
