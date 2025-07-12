@@ -35,8 +35,8 @@
 .deeplib-misc {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   flex-direction: column-reverse;
+  gap: min(1vh, 0.5vw);
 }
 
 .deeplib-tooltip {
