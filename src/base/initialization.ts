@@ -53,8 +53,9 @@ export async function init(options: InitOptions) {
   modStorage.load();
 
   if (options.pathToTranslationsFolder) {
-    new Localization({ pathToTranslationsFolder: options.pathToTranslationsFolder });
-    await Localization.init();
+    await Localization.init({
+      pathToTranslationsFolder: options.pathToTranslationsFolder
+    });
   }
 
   if (options.modules && !initModules(options.modules)) {

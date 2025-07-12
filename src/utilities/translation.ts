@@ -2,37 +2,55 @@ type TranslationDict = {
   [key: string]: string;
 };
 
+interface InitOptions {
+  pathToTranslationsFolder: string;
+}
+
 export class Localization {
-  private Translation: TranslationDict = {};
-  private static PathToTranslation: string;
+  private static LibTranslation: TranslationDict = {};
+  private static ModTranslation: TranslationDict = {};
+  private static PathToModTranslation: string;
+  private static PathToLibTranslation: string = `${PUBLIC_URL}/dl_translations/`;
+  private static initialized = false;
 
-  constructor(options: {
-    pathToTranslationsFolder: string;
-  }) {
-    Localization.PathToTranslation = options.pathToTranslationsFolder.endsWith('/') ? options.pathToTranslationsFolder : options.pathToTranslationsFolder + '/';
-  }
+  static async init(initOptions: InitOptions) {
+    if (Localization.initialized) return;
+    Localization.initialized = true;
 
-  static async init() {
+    Localization.PathToModTranslation = initOptions.pathToTranslationsFolder.endsWith('/') ? initOptions.pathToTranslationsFolder : initOptions.pathToTranslationsFolder + '/';
+
     const lang = TranslationLanguage.toLowerCase();
-    const translation = await Localization.fetchLanguageFile(lang);
 
+    const libTranslation = await Localization.fetchLanguageFile(Localization.PathToLibTranslation, lang);
     if (lang === 'en') {
-      Localization.prototype.Translation = translation;
+      Localization.LibTranslation = libTranslation;
     } else {
-      const fallbackTranslation = await Localization.fetchLanguageFile('en');
-      Localization.prototype.Translation = { ...fallbackTranslation, ...translation };
+      const fallbackTranslation = await Localization.fetchLanguageFile(Localization.PathToLibTranslation, 'en');
+      Localization.LibTranslation = { ...fallbackTranslation, ...libTranslation };
+    }
+
+    const modTranslation = await Localization.fetchLanguageFile(Localization.PathToModTranslation, lang);
+    if (lang === 'en') {
+      Localization.ModTranslation = modTranslation;
+    } else {
+      const fallbackTranslation = await Localization.fetchLanguageFile(Localization.PathToModTranslation, 'en');
+      Localization.ModTranslation = { ...fallbackTranslation, ...modTranslation };
     }
   }
 
-  static getText(srcTag: string) {
-    return Localization.prototype.Translation?.[srcTag] || srcTag || '';
+  static getTextMod(srcTag: string): string | undefined {
+    return Localization.ModTranslation?.[srcTag] || undefined;
   }
 
-  private static async fetchLanguageFile(lang: string): Promise<TranslationDict> {
-    const response = await fetch(`${Localization.PathToTranslation}${lang}.lang`);
+  static getTextLib(srcTag: string): string | undefined {
+    return Localization.LibTranslation?.[srcTag] || undefined;
+  }
+
+  private static async fetchLanguageFile(baseUrl: string, lang: string): Promise<TranslationDict> {
+    const response = await fetch(`${baseUrl}${lang}.lang`);
 
     if (lang !== 'en' && !response.ok) {
-      return this.fetchLanguageFile('en');
+      return this.fetchLanguageFile(baseUrl, 'en');
     }
     const langFileContent = await response.text();
 
@@ -44,16 +62,17 @@ export class Localization {
     const lines = content.split('\n');
 
     for (const line of lines) {
-      if (line.trim() === '' || line.trim().startsWith('#')) {
-        continue;
-      }
+      const trimmed = line.trim();
+      if (!trimmed || trimmed.startsWith('#')) continue;
 
-      const [key, value] = line.split('=');
-      translations[key.trim()] = value.trim();
+      const [key, ...rest] = trimmed.split('=');
+      translations[key.trim()] = rest.join('=').trim();
     }
 
     return translations;
   }
 }
 
-export const getText = (string: string): string => Localization.getText(string);
+export const getText = (srcTag: string): string => {
+  return Localization.getTextMod(srcTag) || Localization.getTextLib(srcTag) || srcTag;
+};
