@@ -6,7 +6,10 @@
   "license": "MIT",
   "type": "module",
   "files": [
-    "/dist"
+    "/dist",
+    "lib",
+    "CREDITS.md",
+    "README.md"
   ],
   "types": "./dist/deeplib.d.ts",
   "exports": {
