@@ -34,7 +34,7 @@ export class MainMenu extends BaseSubscreen {
     const exitButton = advancedElement.createButton({
       id: 'exit',
       size: [90, 90],
-      image: 'Icons/Exit.png',
+      image: `${PUBLIC_URL}/dl_images/exit.svg`,
       onClick: () => {
         this.exit();
       },
@@ -66,24 +66,23 @@ export class MainMenu extends BaseSubscreen {
     const miscDiv = layoutElement.createMiscDiv();
     layoutElement.appendToSubscreenDiv(miscDiv);
 
-    if (MainMenu.options.resetSubscreen) {
-      const resetButton = advancedElement.createButton({
-        id: 'deeplib-reset-button',
-        image: 'Icons/ServiceBell.png',
-        label: 'Reset',
+    if (MainMenu.options.wikiLink) {
+      const wikiButton = advancedElement.createButton({
+        id: 'deeplib-wiki-button',
+        image: `${PUBLIC_URL}/dl_images/notebook.svg`,
+        label: 'Wiki',
         onClick: () => {
-          this.setSubscreen(MainMenu.options.resetSubscreen!);
+          window.open(MainMenu.options.wikiLink, '_blank');
         },
         size: [null, 80],
       });
-      layoutElement.appendToMiscDiv(resetButton);
+      layoutElement.appendToMiscDiv(wikiButton);
     }
 
     if (MainMenu.options.repoLink) {
       const repoButton = advancedElement.createButton({
         id: 'deeplib-repo-button',
-        //TODO - Replace with repo icon
-        image: 'Icons/Introduction.png',
+        image: `${PUBLIC_URL}/dl_images/git.svg`,
         label: 'Repository',
         onClick: () => {
           window.open(MainMenu.options.repoLink, '_blank');
@@ -93,17 +92,17 @@ export class MainMenu extends BaseSubscreen {
       layoutElement.appendToMiscDiv(repoButton);
     }
 
-    if (MainMenu.options.wikiLink) {
-      const wikiButton = advancedElement.createButton({
-        id: 'deeplib-wiki-button',
-        image: 'Icons/Introduction.png',
-        label: 'Wiki',
+    if (MainMenu.options.resetSubscreen) {
+      const resetButton = advancedElement.createButton({
+        id: 'deeplib-reset-button',
+        image: `${PUBLIC_URL}/dl_images/trash_bin.svg`,
+        label: 'Reset',
         onClick: () => {
-          window.open(MainMenu.options.wikiLink, '_blank');
+          this.setSubscreen(MainMenu.options.resetSubscreen!);
         },
         size: [null, 80],
       });
-      layoutElement.appendToMiscDiv(wikiButton);
+      layoutElement.appendToMiscDiv(resetButton);
     }
 
     if (IS_DEVEL) {

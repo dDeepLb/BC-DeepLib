@@ -127,7 +127,7 @@ export abstract class BaseSubscreen {
       const exitButton = advancedElement.createButton({
         id: 'deeplib-exit',
         size: [90, 90],
-        image: 'Icons/Exit.png',
+        image: `${PUBLIC_URL}/dl_images/exit.svg`,
         onClick: () => {
           this.exit();
         },
