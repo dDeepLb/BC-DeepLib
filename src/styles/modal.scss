@@ -13,32 +13,39 @@
   font-size: min(4dvh, 2dvw);
   padding: min(2dvh, 1dvw);
   background-color: var(--deeplib-element-color);
-  border-radius: min(1.0dvh, 0.5dvw);
+  border-radius: min(1.2dvh, 0.6dvw);
   border: min(0.2dvh, 0.1dvw) solid var(--deeplib-border-color);
   color: var(--deeplib-text-color);
-}
 
-.deeplib-modal .deeplib-modal-input {
-  width: 100%;
-  font-size: min(2.6dvh, 1.8dvw);
-  border-radius: min(1.0dvh, 0.5dvw);
-  padding: min(1dvh, 0.5dvw);
-}
+  .deeplib-modal-input {
+    width: 100%;
+    font-size: min(2.6dvh, 1.8dvw);
+    border-radius: min(1.0dvh, 0.5dvw);
+    padding: min(1dvh, 0.5dvw);
+  }
 
-.deeplib-modal input.deeplib-modal-input {
-  max-width: max(50dvh, 25dvw);
-}
+  input.deeplib-modal-input {
+    max-width: max(50dvh, 25dvw);
+  }
 
-.deeplib-modal-button-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  gap: 0.5em;
-  width: 100%;
-}
+  .deeplib-modal-button-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 0.5em;
+    width: 100%;
 
-.deeplib-modal-button-container .deeplib-button-container {
-  flex-grow: 1;
+    .deeplib-button {
+      font-size: 0.8em;
+      display: flex;
+      width: auto;
+      padding: min(0.4vh, 0.2vw) min(2vh, 1vw);
+
+      .button-label {
+        display: contents;
+      }
+    }
+  }
 }
 
 .deeplib-modal-blocker {

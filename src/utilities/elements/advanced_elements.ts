@@ -14,9 +14,6 @@ export const advancedElement = {
   setTooltip: elementSetTooltip,
 
   createBackNext: elementPrevNext,
-
-  openModal: openModal,
-  openAsyncModal: openAsyncModal,
 };
 
 function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
@@ -358,149 +355,208 @@ function elementPrevNext(options: PrevNext) {
   return retElem;
 }
 
-type ModalOptions = {
-  prompt: string | Node,
-  input?: { defaultValue?: string, readOnly?: boolean, placeholder?: string, type: 'input' | 'textarea' },
-  buttons?: { text: string, action: string }[],
-  submitText: string,
-  callback: (action: string, value: string) => void
+export type ModalButton<T extends string = string> = {
+  text: string
+  action: T
+  disabled?: boolean
 };
 
-function openModal(options: ModalOptions) {
-  const modal = ElementCreate({
-    tag: 'dialog',
-    classList: ['deeplib-modal'],
-    attributes: {
-      id: 'deeplib-modal',
-      open: true,
-    },
-    children: [
-      {
-        tag: 'div',
-        classList: ['deeplib-modal-prompt'],
-        children: [
-          options.prompt
-        ]
-      },
-    ],
-    style: {
-      fontFamily: CommonGetFontName()
-    },
-    eventListeners: {
-      click: (event: MouseEvent) => {
-        event.stopPropagation();
-      }
-    },
-  });
+export type ModalInputOptions = {
+  defaultValue?: string
+  readOnly?: boolean
+  placeholder?: string
+  type: 'input' | 'textarea'
+  validate?: (value: string) => string | null
+};
 
-  let inputValue = '';
+export type ModalOptions<T extends string = string> = {
+  prompt: string | Node
+  input?: ModalInputOptions
+  buttons?: ModalButton<T>[]
+  closeOnBackdrop?: boolean
+  timeoutMs?: number
+};
 
-  if (options.input) {
-    const input = ElementCreate({
-      tag: options.input.type,
-      classList: ['deeplib-modal-input'],
+export class Modal<T extends string = string> {
+  private dialog: HTMLDialogElement;
+  private blocker: HTMLDivElement;
+  private inputEl?: HTMLInputElement | HTMLTextAreaElement;
+  private timeoutId?: number;
+
+  private static queue: Modal<any>[] = [];
+  private static processing = false;
+
+  constructor(private opts: ModalOptions<T>) {
+    opts ??= {} as ModalOptions<T>;
+    opts.closeOnBackdrop ??= true;
+
+    const promptId = `modal-prompt-${Date.now()}`;
+
+    this.dialog = ElementCreate({
+      tag: 'dialog',
+      classList: ['deeplib-modal'],
       attributes: {
-        id: 'deeplib-modal-input',
-        placeholder: options.input.placeholder,
-        readOnly: options.input.readOnly,
-        value: options.input.defaultValue,
+        role: 'dialog',
+        'aria-modal': 'true',
+        'aria-labelledby': promptId
       },
-      eventListeners: {
-        change: function (this: HTMLInputElement | HTMLTextAreaElement) {
-          inputValue = input.value;
+      style: {
+        fontFamily: CommonGetFontName()
+      },
+      children: [
+        opts.prompt,
+        {
+          tag: 'div',
+          classList: ['deeplib-modal-prompt'],
+          attributes: {
+            id: promptId
+          },
+          children: [
+            opts.input ? this.renderInput(opts.input) : undefined,
+          ]
         },
-        keydown: (event: KeyboardEvent) => {
-          event.stopPropagation();
+        this.renderButtons()
+      ]
+    });
+
+    this.blocker = this.createBlocker();
+
+    this.renderButtons();
+    document.body.append(this.createBlocker(), this.dialog);
+    this.setupFocusTrap();
+    if (opts.timeoutMs) {
+      this.timeoutId = window.setTimeout(() => this.close('timeout' as T), opts.timeoutMs);
+    }
+  }
+
+  show(): Promise<[T, string | null]> {
+    return Modal.enqueue(this);
+  }
+
+  static async alert(msg: string, timeoutMs?: number) {
+    await new Modal({ prompt: msg, buttons: [{ action: 'close', text: 'OK' }], timeoutMs }).show();
+  }
+
+  static async confirm(msg: string) {
+    const [action] = await new Modal({ prompt: msg, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'OK', action: 'ok' }] }).show();
+    return action === 'ok';
+  }
+
+  static async prompt(msg: string, defaultValue = ''): Promise<string | null> {
+    const [action, value] = await new Modal({ prompt: msg, timeoutMs: 0, input: { type: 'input', defaultValue }, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'Submit', action: 'submit' }] }).show();
+    return action === 'submit' ? value : null;
+  }
+
+  private renderInput(cfg: ModalInputOptions) {
+    const el = document.createElement(cfg.type);
+    el.classList.add('deeplib-modal-input');
+    if (cfg.placeholder) el.placeholder = cfg.placeholder;
+    if (cfg.readOnly) el.readOnly = true;
+    if (cfg.defaultValue) el.value = cfg.defaultValue;
+    if (cfg.type === 'textarea') (el as HTMLTextAreaElement).rows = 5;
+    el.addEventListener('input', () => {
+      const err = cfg.validate?.(el.value);
+      el.setCustomValidity(err || '');
+    });
+    this.inputEl = el;
+
+    return el;
+  }
+
+  private renderButtons() {
+    const container = document.createElement('div');
+    container.classList.add('deeplib-modal-button-container');
+
+    const btns = this.opts.buttons ? [...this.opts.buttons] : [];
+
+    btns.forEach(b => {
+      const btn = advancedElement.createButton({
+        label: b.text,
+        id: `deeplib-modal-${b.action}`,
+        disabled: b.disabled,
+        onClick: () => this.close(b.action)
+      });
+      container.append(btn);
+    });
+
+    return container;
+  }
+
+  private createBlocker() {
+    const blocker = document.createElement('div');
+    blocker.classList.add('deeplib-modal-blocker');
+    blocker.title = 'Click to close';
+    if (this.opts.closeOnBackdrop !== false)
+      blocker.addEventListener('click', () => this.close('close' as T));
+
+    return blocker;
+  }
+
+  private setupFocusTrap() {
+    const focusable = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
+    const elements = Array.from(this.dialog.querySelectorAll<HTMLElement>(focusable));
+    const first = elements[0];
+    const last = elements[elements.length - 1];
+    this.dialog.addEventListener('keydown', e => {
+      if (e.key === 'Tab') {
+        if (elements.length === 0) {
+          e.preventDefault();
+          return;
         }
-      },
-      parent: modal
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            last.focus();
+            e.preventDefault();
+          }
+        } else {
+          if (document.activeElement === last) {
+            first.focus();
+            e.preventDefault();
+          }
+        }
+      } else if (e.key === 'Escape') {
+        e.stopPropagation();
+        this.close('close' as T);
+      }
     });
-
-    switch (options.input.type) {
-      case 'input': {
-        const el = input as HTMLInputElement;
-        el.type = 'text';
-      }
-        break;
-      case 'textarea': {
-        const el = input as HTMLTextAreaElement;
-        el.rows = 5;
-        // for some reason setting the value on element creation doesn't 
-        // work specifically for textarea, so this is a workaround
-        el.value = options.input.defaultValue || '';
-      }
-        break;
-      default:
-        throw new Error(`invalid input type ${options.input.type}`);
-    }
+    window.requestAnimationFrame(() => {
+      (this.inputEl || first)?.focus();
+    });
   }
 
-  const buttonContainer = ElementCreate({
-    tag: 'div',
-    classList: ['deeplib-modal-button-container'],
-  });
-  modal.append(buttonContainer);
+  private close(action: T) {
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+    this.dialog.close();
+    this.dialog.remove();
+    this.blocker.remove();
+    document.body.querySelector('.deeplib-modal-blocker')?.remove();
+    const value = this.inputEl?.value ?? '';
+    this.resolve([action, value]);
+    Modal.dequeue();
+  }
 
-  const submit = advancedElement.createButton({
-    type: 'button',
-    id: 'deeplib-modal-submit',
-    label: options.submitText || 'Submit',
-    onClick: () => {
-      close('submit');
+  /**
+   * An internal function where we will save promise function.
+   */
+  private resolve: (result: [T, string]) => void = () => { };
+
+  /** A function that adds a modal to the queue and returns a promise */
+  private static enqueue(modal: Modal<any>): Promise<[any, string]> {
+    Modal.queue.push(modal);
+    if (!Modal.processing) Modal.dequeue();
+    return new Promise(resolve => (modal.resolve = resolve));
+  }
+
+  /** A function that processes the queue, removing the first modal */
+  private static dequeue() {
+    const modal = Modal.queue.shift();
+    if (modal) {
+      Modal.processing = true;
+      modal.dialog.show();
+    } else {
+      Modal.processing = false;
     }
-  });
-
-  const buttons = options.buttons?.map(button => {
-    return advancedElement.createButton({
-      type: 'button',
-      id: `deeplib-modal-${button.action}`,
-      label: button.text,
-      onClick: () => {
-        close(button.action);
-      }
-    });
-  }) as HTMLButtonElement[];
-  buttons?.unshift(submit);
-
-  buttonContainer.append(...buttons);
-
-  const blocker = ElementCreate({
-    tag: 'div',
-    classList: ['deeplib-modal-blocker'],
-    attributes: {
-      id: 'deeplib-modal-blocker',
-      // FIXME: translate
-      title: 'Click to close the modal',
-    },
-    eventListeners: {
-      click: () => {
-        close();
-      }
-    },
-  });
-
-  document.body.append(blocker);
-  document.body.append(modal);
-
-  const disabledUntil = Date.now() + 1000;
-  function close(action: string = 'close') {
-    if (Date.now() < disabledUntil) {
-      return;
-    }
-    modal.close();
-    modal.remove();
-    blocker.remove();
-    options.callback(action, inputValue);
   }
 }
 
-function openAsyncModal(options: Omit<ModalOptions, 'callback'>) {
-  return new Promise<[string, string]>(resolve => {
-    openModal({
-      ...options,
-      callback: (action, value) => {
-        resolve([action, value]);
-      }
-    });
-  });
-}
+(window as any).Modal = Modal;
