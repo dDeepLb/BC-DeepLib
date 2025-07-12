@@ -106,16 +106,19 @@ export class MainMenu extends BaseSubscreen {
       layoutElement.appendToMiscDiv(wikiButton);
     }
 
-    const debugButton = advancedElement.createButton({
-      id: 'deeplib-debug-button',
-      image: 'Assets/Female3DCG/Emoticon/Coffee/Icon.png',
-      onClick: () => {
-        this.setSubscreen(new GuiDebug());
-      },
-      size: [90, 90],
-      position: [75, 75],
-    });
-    layoutElement.appendToMiscDiv(debugButton);
+    if (IS_DEVEL) {
+      const debugButton = advancedElement.createButton({
+        id: 'deeplib-debug-button',
+        image: `${PUBLIC_URL}/dl_images/bug.svg`,
+        onClick: () => {
+          this.setSubscreen(new GuiDebug());
+        },
+        size: [90, 90],
+      });
+      if (menu) {
+        ElementMenu.PrependItem(menu, debugButton);
+      }
+    }
   }
 
   run() {
