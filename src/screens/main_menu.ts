@@ -1,11 +1,13 @@
 
 import { BaseSubscreen, getText, GUI, GuiDebug, layoutElement } from '../deeplib';
 import { advancedElement } from '../utilities/elements/advanced_elements';
+import { GuiImportExport } from './import_export';
 
 export type MainMenuOptions = {
   repoLink?: string;
   wikiLink?: string;
   resetSubscreen?: BaseSubscreen;
+  importExportSubscreen?: GuiImportExport;
 };
 
 export class MainMenu extends BaseSubscreen {
@@ -103,6 +105,19 @@ export class MainMenu extends BaseSubscreen {
         size: [null, 80],
       });
       layoutElement.appendToMiscDiv(resetButton);
+    }
+
+    if (MainMenu.options.importExportSubscreen) {
+      const importExportButton = advancedElement.createButton({
+        id: 'deeplib-import-export-button',
+        image: `${PUBLIC_URL}/dl_images/transfer.svg`,
+        label: getText('mainmenu.button.import_export'),
+        onClick: () => {
+          this.setSubscreen(MainMenu.options.importExportSubscreen!);
+        },
+        size: [null, 80],
+      });
+      layoutElement.appendToMiscDiv(importExportButton);
     }
 
     if (IS_DEVEL) {
