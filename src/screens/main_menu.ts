@@ -70,7 +70,7 @@ export class MainMenu extends BaseSubscreen {
       const wikiButton = advancedElement.createButton({
         id: 'deeplib-wiki-button',
         image: `${PUBLIC_URL}/dl_images/notebook.svg`,
-        label: 'Wiki',
+        label: getText('mainmenu.button.wiki'),
         onClick: () => {
           window.open(MainMenu.options.wikiLink, '_blank');
         },
@@ -83,7 +83,7 @@ export class MainMenu extends BaseSubscreen {
       const repoButton = advancedElement.createButton({
         id: 'deeplib-repo-button',
         image: `${PUBLIC_URL}/dl_images/git.svg`,
-        label: 'Repository',
+        label: getText('mainmenu.button.repo'),
         onClick: () => {
           window.open(MainMenu.options.repoLink, '_blank');
         },
@@ -96,7 +96,7 @@ export class MainMenu extends BaseSubscreen {
       const resetButton = advancedElement.createButton({
         id: 'deeplib-reset-button',
         image: `${PUBLIC_URL}/dl_images/trash_bin.svg`,
-        label: 'Reset',
+        label: getText('mainmenu.button.reset'),
         onClick: () => {
           this.setSubscreen(MainMenu.options.resetSubscreen!);
         },

@@ -2,3 +2,8 @@
 settings.button.back_button_hint = Back
 settings.button.prev_button_hint = Previous page
 settings.button.next_button_hint = Next page
+
+# Main Menu
+mainmenu.button.wiki = Wiki
+mainmenu.button.repo = Repository
+mainmenu.button.reset = Reset
