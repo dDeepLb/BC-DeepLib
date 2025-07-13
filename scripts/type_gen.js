@@ -20,6 +20,6 @@ new Generator({
   .then(() => console.log('Generated types'))
   .catch(console.error);
 
-fsExtra.copy(path.join(SRC_DIR, '3rd_party_types'), path.join(DIST_DIR, '3rd_party_types'))
+fsExtra.copy(path.join(SRC_DIR, 'vendored_types'), path.join(DIST_DIR, 'vendored_types'))
   .then(() => console.log('Copied 3rd party types'))
   .catch(console.error);
