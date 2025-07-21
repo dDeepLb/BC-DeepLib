@@ -12,7 +12,6 @@ export class GuiDebug extends BaseSubscreen {
     return [[
       <Button>{
         type: 'button',
-        roundness: 50,
         id: 'test-deeplib-big-button',
         size: [405, 80],
         label: 'Big Button',
@@ -24,7 +23,6 @@ export class GuiDebug extends BaseSubscreen {
       },
       <Button>{
         type: 'button',
-        roundness: 5,
         id: 'test-deeplib-small-button',
         size: [90, 90],
         tooltip: 'This is a small button',
@@ -79,7 +77,6 @@ export class GuiDebug extends BaseSubscreen {
     [
       <Button>{
         type: 'button',
-        roundness: 50,
         id: 'test-deeplib-big-button2',
         size: [405, 80],
         label: 'Big Button',
@@ -91,7 +88,6 @@ export class GuiDebug extends BaseSubscreen {
       },
       <Button>{
         type: 'button',
-        roundness: 5,
         id: 'test-deeplib-small-button2',
         size: [90, 90],
         tooltip: 'This is a small button',
@@ -143,23 +139,5 @@ export class GuiDebug extends BaseSubscreen {
         description: 'This is a label',
       }
     ]];
-  }
-
-  load(): void {
-    super.load();
-  }
-
-  run() {
-    super.run();
-  }
-
-  click() { }
-
-  exit(): void {
-    super.exit();
-  }
-
-  resize(): void {
-    super.resize();
   }
 }
