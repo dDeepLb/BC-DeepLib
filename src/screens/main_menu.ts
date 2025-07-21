@@ -120,7 +120,7 @@ export class MainMenu extends BaseSubscreen {
       layoutElement.appendToMiscDiv(importExportButton);
     }
 
-    if (IS_DEVEL) {
+    if (IS_DEBUG) {
       const debugButton = advancedElement.createButton({
         id: 'deeplib-debug-button',
         image: `${PUBLIC_URL}/dl_images/bug.svg`,
