@@ -1,6 +1,6 @@
 
-import { BaseSubscreen, getText, GUI, GuiDebug, layoutElement } from '../deeplib';
-import { advancedElement } from '../utilities/elements/advanced_elements';
+import { BaseSubscreen, getText, GUI, GuiDebug, layout } from '../deeplib';
+import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
 export type MainMenuOptions = {
@@ -33,7 +33,7 @@ export class MainMenu extends BaseSubscreen {
 
     super.load();
 
-    const exitButton = advancedElement.createButton({
+    const exitButton = advElement.createButton({
       id: 'exit',
       size: [90, 90],
       image: `${PUBLIC_URL}/dl_images/exit.svg`,
@@ -52,7 +52,7 @@ export class MainMenu extends BaseSubscreen {
 
       if (screen.name == 'mainmenu') continue;
 
-      const button = advancedElement.createButton({
+      const button = advElement.createButton({
         id: `${screen.name}-button`,
         image: screen.icon,
         label: getText(`mainmenu.button.${screen.name}`),
@@ -62,14 +62,14 @@ export class MainMenu extends BaseSubscreen {
         size: [null, 90],
       });
 
-      layoutElement.appendToSettingsDiv(button);
+      layout.appendToSettingsDiv(button);
     }
 
-    const miscDiv = layoutElement.createMiscDiv();
-    layoutElement.appendToSubscreenDiv(miscDiv);
+    const miscDiv = layout.createMiscDiv();
+    layout.appendToSubscreen(miscDiv);
 
     if (MainMenu.options.wikiLink) {
-      const wikiButton = advancedElement.createButton({
+      const wikiButton = advElement.createButton({
         id: 'deeplib-wiki-button',
         image: `${PUBLIC_URL}/dl_images/notebook.svg`,
         label: getText('mainmenu.button.wiki'),
@@ -78,11 +78,11 @@ export class MainMenu extends BaseSubscreen {
         },
         size: [null, 80],
       });
-      layoutElement.appendToMiscDiv(wikiButton);
+      layout.appendToMiscDiv(wikiButton);
     }
 
     if (MainMenu.options.repoLink) {
-      const repoButton = advancedElement.createButton({
+      const repoButton = advElement.createButton({
         id: 'deeplib-repo-button',
         image: `${PUBLIC_URL}/dl_images/git.svg`,
         label: getText('mainmenu.button.repo'),
@@ -91,11 +91,11 @@ export class MainMenu extends BaseSubscreen {
         },
         size: [null, 80],
       });
-      layoutElement.appendToMiscDiv(repoButton);
+      layout.appendToMiscDiv(repoButton);
     }
 
     if (MainMenu.options.resetSubscreen) {
-      const resetButton = advancedElement.createButton({
+      const resetButton = advElement.createButton({
         id: 'deeplib-reset-button',
         image: `${PUBLIC_URL}/dl_images/trash_bin.svg`,
         label: getText('mainmenu.button.reset'),
@@ -104,11 +104,11 @@ export class MainMenu extends BaseSubscreen {
         },
         size: [null, 80],
       });
-      layoutElement.appendToMiscDiv(resetButton);
+      layout.appendToMiscDiv(resetButton);
     }
 
     if (MainMenu.options.importExportSubscreen) {
-      const importExportButton = advancedElement.createButton({
+      const importExportButton = advElement.createButton({
         id: 'deeplib-import-export-button',
         image: `${PUBLIC_URL}/dl_images/transfer.svg`,
         label: getText('mainmenu.button.import_export'),
@@ -117,11 +117,11 @@ export class MainMenu extends BaseSubscreen {
         },
         size: [null, 80],
       });
-      layoutElement.appendToMiscDiv(importExportButton);
+      layout.appendToMiscDiv(importExportButton);
     }
 
     if (IS_DEBUG) {
-      const debugButton = advancedElement.createButton({
+      const debugButton = advElement.createButton({
         id: 'deeplib-debug-button',
         image: `${PUBLIC_URL}/dl_images/bug.svg`,
         onClick: () => {

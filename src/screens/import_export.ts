@@ -1,6 +1,6 @@
 
-import { BaseSubscreen, ModSdkManager, getText, layoutElement, SettingsModel, modStorage, deepLibLogger } from '../deeplib';
-import { advancedElement, Modal } from '../utilities/elements/advanced_elements';
+import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger } from '../deeplib';
+import { advElement, Modal } from '../utilities/elements/elements';
 
 export type ImportExportOptions = {
   /** A custom save file extension. */
@@ -29,7 +29,7 @@ export class GuiImportExport extends BaseSubscreen {
 
     super.load();
 
-    const importFromFileButton = advancedElement.createButton({
+    const importFromFileButton = advElement.createButton({
       id: 'deeplib-import-file-button',
       size: [600, 90],
       image: `${PUBLIC_URL}/dl_images/file_import.svg`,
@@ -38,9 +38,9 @@ export class GuiImportExport extends BaseSubscreen {
       },
       label: getText('import-export.button.import_file')
     });
-    layoutElement.appendToSettingsDiv(importFromFileButton);
+    layout.appendToSettingsDiv(importFromFileButton);
 
-    const exportToFileButton = advancedElement.createButton({
+    const exportToFileButton = advElement.createButton({
       id: 'deeplib-export-file-button',
       size: [600, 90],
       image: `${PUBLIC_URL}/dl_images/file_export.svg`,
@@ -49,9 +49,9 @@ export class GuiImportExport extends BaseSubscreen {
       },
       label: getText('import-export.button.export_file')
     });
-    layoutElement.appendToSettingsDiv(exportToFileButton);
+    layout.appendToSettingsDiv(exportToFileButton);
 
-    const importFromClipboardButton = advancedElement.createButton({
+    const importFromClipboardButton = advElement.createButton({
       id: 'deeplib-import-clipboard-button',
       size: [600, 90],
       image: `${PUBLIC_URL}/dl_images/clipboard_import.svg`,
@@ -60,9 +60,9 @@ export class GuiImportExport extends BaseSubscreen {
       },
       label: getText('import-export.button.import_clipboard')
     });
-    layoutElement.appendToSettingsDiv(importFromClipboardButton);
+    layout.appendToSettingsDiv(importFromClipboardButton);
 
-    const exportToClipboardButton = advancedElement.createButton({
+    const exportToClipboardButton = advElement.createButton({
       id: 'deeplib-export-clipboard-button',
       size: [600, 90],
       image: `${PUBLIC_URL}/dl_images/clipboard_export.svg`,
@@ -71,7 +71,7 @@ export class GuiImportExport extends BaseSubscreen {
       },
       label: getText('import-export.button.export_clipboard')
     });
-    layoutElement.appendToSettingsDiv(exportToClipboardButton);
+    layout.appendToSettingsDiv(exportToClipboardButton);
   }
 
   resize(): void {

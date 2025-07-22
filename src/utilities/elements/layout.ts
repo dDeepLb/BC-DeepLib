@@ -1,8 +1,8 @@
-export const layoutElement = {
-  createSubscreenDiv: elementCreateSubscreenDiv,
-  getSubscreenDiv: elementGetSubscreenDiv,
-  appendToSubscreenDiv: elementAppendToSubscreenDiv,
-  removeSubscreenDiv: elementRemoveSubscreenDiv,
+export const layout = {
+  createSubscreen: elementCreateSubscreenDiv,
+  getSubscreen: elementGetSubscreenDiv,
+  appendToSubscreen: elementAppendToSubscreenDiv,
+  removeSubscreen: elementRemoveSubscreenDiv,
 
   createSettingsDiv: elementCreateSettingsDiv,
   getSettingsDiv: elementGetSettingsDiv,

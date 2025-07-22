@@ -16,9 +16,9 @@ export * from './screens/main_menu';
 export * from './screens/import_export';
 
 export * from './utilities/data';
-export * from './utilities/elements/advanced_elements';
-export * from './utilities/elements/element_helpers';
-export * from './utilities/elements/layout_elements';
+export * from './utilities/elements/elements';
+export * from './utilities/elements/helpers';
+export * from './utilities/elements/layout';
 
 export * from './utilities/common';
 export * from './utilities/logger';

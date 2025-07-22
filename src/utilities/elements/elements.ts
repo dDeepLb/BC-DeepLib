@@ -2,7 +2,7 @@ import { Button, Checkbox, Custom, Input, Label } from '../../base/elements_typi
 import { BaseSubscreen } from '../../deeplib';
 import { deepMerge } from '../common';
 
-export const advancedElement = {
+export const advElement = {
   createButton: elementCreateButton,
   createCheckbox: elementCreateCheckbox,
   createInput: elementCreateInput,
@@ -298,7 +298,7 @@ function elementPrevNext(options: PrevNext) {
       id: options.id
     },
     children: [
-      advancedElement.createButton({
+      advElement.createButton({
         id: `deeplib-prev-next-${options.id}-prev-button`,
         image: `${PUBLIC_URL}/dl_images/arrow_left.svg`,
         onClick: () => {
@@ -320,14 +320,14 @@ function elementPrevNext(options: PrevNext) {
           }
         }
       }),
-      advancedElement.createLabel({
+      advElement.createLabel({
         id: `${options.id}-label`,
         label: options.initialLabel,
         htmlOptions: {
           classList: ['deeplib-prev-next-label']
         }
       }),
-      advancedElement.createButton({
+      advElement.createButton({
         id: `deeplib-prev-next-${options.id}-next-button`,
         image: `${PUBLIC_URL}/dl_images/arrow_right.svg`,
         onClick: () => {
@@ -470,7 +470,7 @@ export class Modal<T extends string = string> {
     const btns = this.opts.buttons ? [...this.opts.buttons] : [];
 
     btns.forEach(b => {
-      const btn = advancedElement.createButton({
+      const btn = advElement.createButton({
         label: b.text,
         id: `deeplib-modal-${b.action}`,
         disabled: b.disabled,
