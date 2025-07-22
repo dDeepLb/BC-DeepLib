@@ -25,8 +25,8 @@
 }
 
 .deeplib-settings {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-auto-rows: min-content;
   padding: min(1.0dvh, 0.5dvw);
   gap: 0.3em;
   overflow-y: scroll;
