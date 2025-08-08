@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, MainMenuOptions, MainMenu } from '../deeplib';
+import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, MainMenuOptions, MainMenu, TranslationOptions } from '../deeplib';
 
 interface InitOptions {
   modInfo: {
@@ -11,7 +11,7 @@ interface InitOptions {
   mainMenuOptions?: MainMenuOptions;
   beforeLogin?: () => (void);
   initFunction?: () => (void | Promise<void>);
-  pathToTranslationsFolder?: string;
+  translationOptions?: TranslationOptions;
 }
 
 export let modStorage: ModStorage;
@@ -52,11 +52,8 @@ export async function init(options: InitOptions) {
 
   modStorage.load();
 
-  if (options.pathToTranslationsFolder) {
-    await Localization.init({
-      pathToTranslationsFolder: options.pathToTranslationsFolder
-    });
-  }
+
+  await Localization.init(options.translationOptions);
 
   if (options.modules && !initModules(options.modules)) {
     unloadMod();

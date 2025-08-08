@@ -2,38 +2,53 @@ type TranslationDict = {
   [key: string]: string;
 };
 
-interface InitOptions {
-  pathToTranslationsFolder: string;
+export interface TranslationOptions {
+  /** The path to the folder where the translations are stored. */
+  pathToTranslationsFolder?: string;
+  /** The default language to use. */
+  defaultLanguage?: string;
+  /** If true, the localization will be fixed to the default language. */
+  fixedLanguage?: boolean;
 }
 
 export class Localization {
   private static LibTranslation: TranslationDict = {};
   private static ModTranslation: TranslationDict = {};
-  private static PathToModTranslation: string;
+  private static PathToModTranslation: string | undefined;
   private static PathToLibTranslation: string = `${PUBLIC_URL}/dl_translations/`;
+  private static DefaultLanguage: string = 'en';
   private static initialized = false;
 
-  static async init(initOptions: InitOptions) {
+  static async init(initOptions?: TranslationOptions) {
     if (Localization.initialized) return;
     Localization.initialized = true;
 
-    Localization.PathToModTranslation = initOptions.pathToTranslationsFolder.endsWith('/') ? initOptions.pathToTranslationsFolder : initOptions.pathToTranslationsFolder + '/';
+    Localization.PathToModTranslation = (() => {
+      if (!initOptions?.pathToTranslationsFolder) return undefined;
 
-    const lang = TranslationLanguage.toLowerCase();
+      return initOptions.pathToTranslationsFolder.endsWith('/') ?
+        initOptions.pathToTranslationsFolder :
+        `${initOptions.pathToTranslationsFolder}/`;
+    })();
+
+    Localization.DefaultLanguage = initOptions?.defaultLanguage || Localization.DefaultLanguage;
+
+    const lang = initOptions?.fixedLanguage ? Localization.DefaultLanguage : TranslationLanguage.toLowerCase();
 
     const libTranslation = await Localization.fetchLanguageFile(Localization.PathToLibTranslation, lang);
-    if (lang === 'en') {
+    if (lang === Localization.DefaultLanguage) {
       Localization.LibTranslation = libTranslation;
     } else {
-      const fallbackTranslation = await Localization.fetchLanguageFile(Localization.PathToLibTranslation, 'en');
+      const fallbackTranslation = await Localization.fetchLanguageFile(Localization.PathToLibTranslation, Localization.DefaultLanguage);
       Localization.LibTranslation = { ...fallbackTranslation, ...libTranslation };
     }
 
+    if (!Localization.PathToModTranslation) return;
     const modTranslation = await Localization.fetchLanguageFile(Localization.PathToModTranslation, lang);
-    if (lang === 'en') {
+    if (lang === Localization.DefaultLanguage) {
       Localization.ModTranslation = modTranslation;
     } else {
-      const fallbackTranslation = await Localization.fetchLanguageFile(Localization.PathToModTranslation, 'en');
+      const fallbackTranslation = await Localization.fetchLanguageFile(Localization.PathToModTranslation, Localization.DefaultLanguage);
       Localization.ModTranslation = { ...fallbackTranslation, ...modTranslation };
     }
   }
@@ -49,9 +64,14 @@ export class Localization {
   private static async fetchLanguageFile(baseUrl: string, lang: string): Promise<TranslationDict> {
     const response = await fetch(`${baseUrl}${lang}.lang`);
 
-    if (lang !== 'en' && !response.ok) {
-      return this.fetchLanguageFile(baseUrl, 'en');
+    if (lang !== Localization.DefaultLanguage && !response.ok) {
+      return this.fetchLanguageFile(baseUrl, Localization.DefaultLanguage);
     }
+
+    if (!response.ok) {
+      return {};
+    }
+
     const langFileContent = await response.text();
 
     return this.parseLanguageFile(langFileContent);
