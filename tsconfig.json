@@ -11,7 +11,7 @@
 		"esModuleInterop": false,
     
     "allowJs": false,
-    "removeComments": true,
+    "removeComments": false,
     "strict": true,
     "skipLibCheck": true,
 
