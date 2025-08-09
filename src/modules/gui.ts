@@ -2,14 +2,8 @@ import { BaseModule, BaseSubscreen, MainMenu, modules, setSubscreen } from '../d
 
 type ModButtonOptions = {
   Identifier: string;
-  ButtonText: string | (()=>string);
-  Image: string | (()=>string);
-
-  load?: () => void;
-  click?: () => void;
-  run?: () => void;
-  unload?: () => void;
-  exit?: () => boolean | void;
+  ButtonText: string | (() => string);
+  Image: string | (() => string);
 };
 
 export class GUI extends BaseModule {
@@ -44,9 +38,6 @@ export class GUI extends BaseModule {
     } else {
       this._currentSubscreen = subscreen;
     }
-
-    PreferenceMessage = '';
-    PreferencePageCurrent = 1;
 
     if (this._currentSubscreen) {
       this._currentSubscreen.load();
@@ -87,14 +78,12 @@ export class GUI extends BaseModule {
       Identifier: this._modButtonOptions.Identifier,
       ButtonText: this._modButtonOptions.ButtonText,
       Image: this._modButtonOptions.Image,
-      load: this._modButtonOptions.load || (() => {
+      load: (() => {
         setSubscreen(new MainMenu(this));
       }),
-      run: this._modButtonOptions.run || (() => {
+      run: (() => {
         if (this._currentSubscreen) {
-          MainCanvas.textAlign = 'left';
           this._currentSubscreen.run();
-          MainCanvas.textAlign = 'center';
           
           const newCanvasPosition: RectTuple = [MainCanvas.canvas.offsetLeft, MainCanvas.canvas.offsetTop, MainCanvas.canvas.clientWidth, MainCanvas.canvas.clientHeight];
           if (!CommonArraysEqual(newCanvasPosition, DrawCanvasPosition)) {
@@ -103,17 +92,17 @@ export class GUI extends BaseModule {
           }
         }
       }),
-      click: this._modButtonOptions.click || (() => {
+      click: (() => {
         if (this._currentSubscreen) {
           this._currentSubscreen.click();
         }
       }),
-      exit: this._modButtonOptions.exit || (() => {
+      exit: (() => {
         if (this._currentSubscreen) {
           this._currentSubscreen.exit();
         }
       }),
-      unload: this._modButtonOptions.unload || (() => {
+      unload: (() => {
         if (this._currentSubscreen) {
           this._currentSubscreen.unload();
         }

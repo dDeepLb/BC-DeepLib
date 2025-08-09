@@ -7,10 +7,6 @@ type SubscreenOptions = {
 
 export type Subscreen = new (subscreenOptions?: SubscreenOptions, module?: BaseModule) => BaseSubscreen;
 
-export function getCurrentSubscreen(): BaseSubscreen | null {
-  return GUI.instance && GUI.instance.currentSubscreen;
-}
-
 export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubscreen | null {
   if (!GUI.instance) {
     throw new Error('Attempt to set subscreen before init');
@@ -37,10 +33,6 @@ export abstract class BaseSubscreen {
 
   get icon(): string {
     return '';
-  }
-
-  get subscreenName(): string {
-    return this.constructor.name;
   }
 
   setSubscreen(screen: BaseSubscreen | string | null) {

@@ -558,5 +558,3 @@ export class Modal<T extends string = string> {
     }
   }
 }
-
-(window as any).Modal = Modal;
