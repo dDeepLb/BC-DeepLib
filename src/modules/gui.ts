@@ -1,31 +1,69 @@
 import { BaseModule, BaseSubscreen, MainMenu, modules, setSubscreen } from '../deeplib';
 
+/** Options for configuring a mod's main button in the extensions menu. */
 type ModButtonOptions = {
+
+  /**
+   * Unique identifier for the mod's settings button.
+   * Used internally by the preference system to track the button.
+   */
   Identifier: string;
+
+  /**
+   * The label displayed on the settings button.
+   * Can be a string or a function that returns a string dynamically.
+   */
   ButtonText: string | (() => string);
+
+  /** 
+   * The path to or Base64 data of the icon for the settings button.
+   * Can be a string or a function that returns a string dynamically.
+   */
   Image: string | (() => string);
 };
 
+/**
+ * Central mod GUI controller that manages all subscreens.
+ *
+ * This module is responsible for:
+ * - Registering the mod's settings button in the game's preferences.
+ * - Managing subscreens (including settings screens for all registered modules).
+ * - Routing lifecycle events (load, run, click, exit, unload) to the active subscreen.
+ */
 export class GUI extends BaseModule {
+  /** The singleton instance of the GUI controller. */
   static instance: GUI | null = null;
 
+  /** All subscreens managed by this GUI, including the main menu and module settings screens. */
   private _subscreens: BaseSubscreen[];
+  /** The mod's main menu screen. */
   private _mainMenu: MainMenu;
+  /** The currently active subscreen, or `null` if none is active. */
   private _currentSubscreen: BaseSubscreen | null = null;
+  /** Options defining how the mod's settings button is displayed and behaves. */
   private _modButtonOptions: ModButtonOptions;
 
+  /** Returns all registered subscreens. */
   get subscreens(): BaseSubscreen[] {
     return this._subscreens;
   }
 
+  /** Returns the main menu subscreen instance. */
   get mainMenu(): MainMenu {
     return this._mainMenu;
   }
 
+  /** Returns the currently active subscreen. */
   get currentSubscreen(): BaseSubscreen | null {
     return this._currentSubscreen;
   }
 
+  /**
+   * Sets the current subscreen.
+   * Accepts either a `BaseSubscreen` instance or the `name` of a subscreen.
+   *
+   * @throws If a string is provided but no subscreen with that name exists.
+   */
   set currentSubscreen(subscreen: BaseSubscreen | string | null) {
     if (this._currentSubscreen) {
       this._currentSubscreen.unload();
@@ -45,6 +83,11 @@ export class GUI extends BaseModule {
     }
   }
 
+  /** 
+   * Creates the GUI instance and initializes the main menu. 
+   * 
+   * @throws If another `GUI` instance already exists.
+   */
   constructor(modButtonOptions: ModButtonOptions) {
     super();
     if (GUI.instance) {
@@ -62,10 +105,13 @@ export class GUI extends BaseModule {
     GUI.instance = this;
   }
 
-  get defaultSettings(): null {
-    return null;
-  }
-
+  /**
+   * Loads the GUI and registers the mod's settings button in the extensions menu.
+   *
+   * - Creates subscreens for each module's settings screen.
+   * - Registers lifecycle callbacks for subscreens events.
+   * - Sets up the main menu and its subscreens.
+   */
   load(): void {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
@@ -84,7 +130,7 @@ export class GUI extends BaseModule {
       run: (() => {
         if (this._currentSubscreen) {
           this._currentSubscreen.run();
-          
+
           const newCanvasPosition: RectTuple = [MainCanvas.canvas.offsetLeft, MainCanvas.canvas.offsetTop, MainCanvas.canvas.clientWidth, MainCanvas.canvas.clientHeight];
           if (!CommonArraysEqual(newCanvasPosition, DrawCanvasPosition)) {
             DrawCanvasPosition = newCanvasPosition;

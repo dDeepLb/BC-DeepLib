@@ -1,21 +1,62 @@
 import deeplib_style from '../styles/index.scss';
 import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, MainMenuOptions, MainMenu, TranslationOptions } from '../deeplib';
 
+/** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
+  /**
+   * Information about the mod being initialized.
+   * - `info`    — Required metadata describing the mod.
+   * - `options` — Optional runtime configuration for the Mod SDK.
+   */
   modInfo: {
     info: ModSDKModInfo,
     options?: ModSDKModOptions
   };
+
+  /**
+   * List of modules (`BaseModule` subclasses) to register with the mod system.
+   * Modules are initialized, loaded, and run in order.
+   */
   modules?: BaseModule[];
+
+  /**
+   * List of data migration handlers to register with the `VersionModule`.
+   * Each `BaseMigrator` handles upgrading data from one version to another.
+   */
   migrators?: BaseMigrator[];
+
+  /** Configuration for customizing the main menu when the mod is active. */
   mainMenuOptions?: MainMenuOptions;
+
+  /**
+   * Optional hook executed *before* login when the player is not yet authenticated.
+   * Useful for pre-login setup or display changes.
+   */
   beforeLogin?: () => (void);
+
+  /**
+   * Optional async/sync function run after modules and translations are initialized.
+   * Can be used to perform additional setup tasks.
+   */
   initFunction?: () => (void | Promise<void>);
+
+  /** Options for initializing the localization/translation system. */
   translationOptions?: TranslationOptions;
 }
 
+/**
+ * Global storage handler for mod.
+ * Initialized by `initMod()` and mod data loaded by `init()`.
+ */
 export let modStorage: ModStorage;
 
+/**
+ * Entry point for initializing a mod. Handles:
+ *  - Setting up the Mod SDK
+ *  - Preparing persistent storage
+ *  - Injecting required styles
+ *  - Delaying initialization until login (if necessary)
+ */
 export function initMod(options: InitOptions) {
   const sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
   const MOD_NAME = ModSdkManager.ModInfo.name;
@@ -44,6 +85,20 @@ export function initMod(options: InitOptions) {
   return { sdk };
 }
 
+
+/**
+ * Fully initializes the mod after login.
+ * Handles:
+ *  - Preventing double-load
+ *  - Loading mod data
+ *  - Initializing localization
+ *  - Registering modules and migrators
+ *  - Running optional init functions
+ *  - Applying main menu changes
+ *  - Merging default settings into module settings
+ *
+ * @param options {InitOptions} Configuration for mod initialization.
+ */
 export async function init(options: InitOptions) {
   const MOD_NAME = ModSdkManager.ModInfo.name;
   const MOD_VERSION = ModSdkManager.ModInfo.version;
@@ -51,7 +106,6 @@ export async function init(options: InitOptions) {
   if ((window as any)[MOD_NAME + 'Loaded']) return;
 
   modStorage.load();
-
 
   await Localization.init(options.translationOptions);
 
@@ -84,6 +138,11 @@ export async function init(options: InitOptions) {
   deepLibLogger.log(`Loaded ${MOD_NAME}! Version: ${MOD_VERSION}`);
 }
 
+
+/**
+ * Registers and starts all modules.
+ * Runs `init()`, `load()`, and `run()` for each module in order.
+ */
 function initModules(modulesToRegister: BaseModule[]): boolean {
   const MOD_NAME = ModSdkManager.ModInfo.name;
 
@@ -107,6 +166,10 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
   return true;
 }
 
+/** 
+ * Cleans up and removes the mod from memory.
+ * Calls `unload()` on all modules and removes the global loaded flag.
+ */
 export function unloadMod(): true {
   const MOD_NAME = ModSdkManager.ModInfo.name;
   unloadModules();
@@ -116,6 +179,7 @@ export function unloadMod(): true {
   return true;
 }
 
+/** Calls the `unload()` lifecycle method on all registered modules. */
 function unloadModules() {
   for (const module of modules()) {
     module.unload();

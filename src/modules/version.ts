@@ -1,11 +1,34 @@
 import { BaseMigrator, BaseModule, HookPriority, ModSdkManager, deepLibLogger, modStorage, sendLocalMessage } from '../deeplib';
 
+/**
+ * Handles version tracking, new version detection, and version-based migrations
+ * for the mod. Also manages displaying a "new version" message to players and
+ * executing registered migration routines when an update occurs.
+ * 
+ * **Key Responsibilities:**
+ * - Track and store the current mod version in persistent player storage.
+ * - Detect if the mod has been updated since the last session.
+ * - Run version-specific migrations via registered `BaseMigrator` instances.
+ * - Optionally display a message to the user upon detecting a new version.
+ */
 export class VersionModule extends BaseModule {
+  /** Whether the current session is running a new version compared to stored data */
   private static isItNewVersion: boolean = false;
+
+  /** The current mod version (retrieved from `ModSdkManager.ModInfo.version`) */
   static Version: string;
+
+  /** Message to display when a new version is detected */
   static NewVersionMessage: string = '';
+
+  /** List of registered migration handlers, sorted by version */
   private static Migrators: BaseMigrator[] = [];
 
+  /**
+   * Initializes the module on load:
+   * - Stores the current mod version.
+   * - Hooks into `ChatRoomSync` to show a "new version" message when applicable.
+   */
   load(): void {
     VersionModule.Version = ModSdkManager.ModInfo.version;
 
@@ -22,6 +45,14 @@ export class VersionModule extends BaseModule {
     );
   }
 
+  /**
+   * Checks if the stored version differs from the current version.
+   * If a new version is detected:
+   * - Flags the session as updated.
+   * - Runs applicable migrations.
+   * - Updates stored version in player data.
+   * - Saves `modStorage`.
+   */
   static checkVersionUpdate() {
     const PreviousVersion = VersionModule.loadVersion();
     const CurrentVersion = VersionModule.Version;
@@ -35,6 +66,10 @@ export class VersionModule extends BaseModule {
     modStorage.save();
   }
 
+  /**
+   * Executes migrations for all registered migrators whose `MigrationVersion`
+   * is newer than the previously stored version.
+   */
   private static checkVersionMigration() {
     const PreviousVersion = VersionModule.loadVersion();
 
@@ -46,20 +81,32 @@ export class VersionModule extends BaseModule {
     }
   }
   
+  /**
+   * Registers a new migrator for handling version-specific changes.
+   * Migrators are sorted by their `MigrationVersion` in ascending order.
+   */
   static registerMigrator(migrator: BaseMigrator) {
     VersionModule.Migrators.push(migrator);
 
     VersionModule.Migrators.sort((a, b) => a.MigrationVersion.localeCompare(b.MigrationVersion));
   }
 
+
+  /** Sets the message that will be displayed when a new version is detected. */
   static setNewVersionMessage(newVersionMessage: string) {
     VersionModule.NewVersionMessage = newVersionMessage;
   }
 
+  /** Sends the currently configured "new version" message to the local player. */
   static sendNewVersionMessage() {
     sendLocalMessage('deeplib-new-version', VersionModule.NewVersionMessage);
   }
 
+  /**
+   * Determines if a given `candidate` version is newer than the `current` version.
+   * 
+   * Version strings are expected in `MAJOR.MINOR.PATCH` format.
+   */
   private static isNewVersion(current: string | undefined, candidate: string) {
     if (current !== undefined) {
       const CURRENT_ = current.split('.'),
@@ -77,12 +124,14 @@ export class VersionModule extends BaseModule {
     return false;
   }
 
+  /** Saves the current mod version into persistent player storage. */
   private static saveVersion() {
     if (modStorage.playerStorage) {
       Player[ModSdkManager.ModInfo.name].Version = VersionModule.Version;
     }
   }
 
+  /** Loads the stored mod version from persistent player storage. */
   private static loadVersion() {
     return modStorage.playerStorage?.Version;
   }

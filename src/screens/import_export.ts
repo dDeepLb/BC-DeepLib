@@ -2,17 +2,34 @@
 import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger } from '../deeplib';
 import { advElement, Modal } from '../utilities/elements/elements';
 
+/**
+ * Configuration options for the {@link GuiImportExport} class.
+ */
 export type ImportExportOptions = {
-  /** A custom save file extension. */
+  /** 
+   * A custom save file extension (e.g., ".mydata"). 
+   * If it doesn't start with a dot, it will be automatically prefixed.
+   */
   customFileExtension: string;
-  /** A callback to be called after data is imported. */
+
+  /** Optional callback invoked after data has been successfully imported. */
   onImport?: () => void;
-  /** A callback to be called after data is exported. */
+
+  /** Optional callback invoked after data has been successfully exported. */
   onExport?: () => void;
 };
 
+/**
+ * Possible data transfer methods for import/export operations.
+ * - `clipboard`: Uses the system clipboard.
+ * - `file`: Uses file save/load dialogs.
+ */
 type DataTransferMethod = 'clipboard' | 'file';
 
+/**
+ * GUI screen for importing and exporting mod data.
+ * Provides buttons to import/export data either via file or clipboard.
+ */
 export class GuiImportExport extends BaseSubscreen {
   private importExportOptions: ImportExportOptions;
 
@@ -78,6 +95,7 @@ export class GuiImportExport extends BaseSubscreen {
     super.resize();
   }
 
+  /** Exports the mod data using the specified method. */
   async dataExport(transferMethod: DataTransferMethod) {
     try {
       const data = LZString.compressToBase64(JSON.stringify(modStorage.playerStorage));
@@ -96,6 +114,7 @@ export class GuiImportExport extends BaseSubscreen {
     }
   }
 
+  /** Imports mod data using the specified method. */
   async dataImport(transferMethod: DataTransferMethod) {
     try {
       let importedData: string | null = '';
@@ -125,6 +144,7 @@ export class GuiImportExport extends BaseSubscreen {
     }
   }
 
+  /** Saves data to a file using the browser's save dialog. */
   async exportToFile(data: string, defaultFileName: string): Promise<void> {
     const CUSTOM_EXTENSION = this.importExportOptions.customFileExtension.startsWith('.')
       ? this.importExportOptions.customFileExtension
@@ -174,6 +194,7 @@ export class GuiImportExport extends BaseSubscreen {
     }
   }
 
+  /** Opens a file picker and reads the selected file's contents, importing the data. */
   async importFromFile(): Promise<string | null> {
     const CUSTOM_EXTENSION = this.importExportOptions.customFileExtension.startsWith('.')
       ? this.importExportOptions.customFileExtension
@@ -231,12 +252,14 @@ export class GuiImportExport extends BaseSubscreen {
     }
   }
 
+  /** Copies the given data to the clipboard. */
   async exportToClipboard(data: string): Promise<void> {
     return navigator.clipboard.writeText(data).catch((error) => {
       throw new Error('Failed to copy data to clipboard.' + error);
     });
   }
 
+  /** Prompts the user to enter data and returns it. */
   async importFromClipboard(): Promise<string | null> {
     return Modal.prompt('Enter data to import').catch((error) => {
       throw new Error('Failed to read data from clipboard.' + error);

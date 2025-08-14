@@ -1,12 +1,27 @@
 import { BaseModule, BaseSettingsModel, GUI, advElement, ModSdkManager, domUtil, getText, layout, modules, modStorage } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
+/** Optional configuration flags for a `BaseSubscreen` instance. */
 type SubscreenOptions = {
+  /**
+   * If `true`, the subscreen will draw the player's character model
+   * in the UI when `run()` is called.
+   * Also shift the UI to the right to make room for the character.
+   */
   drawCharacter?: boolean;
 };
 
-export type Subscreen = new (subscreenOptions?: SubscreenOptions, module?: BaseModule) => BaseSubscreen;
+/**
+ * Represents a constructor type for a subscreen.
+ * Allows dynamic instantiation of subscreen classes with optional
+ * configuration options and a parent module reference.
+ */
+export type Subscreen = new (
+  subscreenOptions?: SubscreenOptions,
+  module?: BaseModule
+) => BaseSubscreen;
 
+/** Switches the active subscreen in the global `GUI` instance. */
 export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubscreen | null {
   if (!GUI.instance) {
     throw new Error('Attempt to set subscreen before init');
@@ -16,10 +31,30 @@ export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubs
   return GUI.instance.currentSubscreen;
 }
 
+/**
+ * Abstract base class for creating settings/configuration subscreens in a module.
+ *
+ * ### Responsibilities
+ * This class defines the base contract for all modules in the system:
+ *  - Provides a standardized interface for retrieving and storing settings
+ *  - Ensures default settings are registered if missing
+ *  - Integrates with the module storage system (`modStorage`)
+ *  - Offers overridable lifecycle methods (`init`, `load`, `run`, `unload`)
+ *
+ * **Subclass Requirements:**
+ *  - Must extend `BaseSubscreen`
+ *  - Should override `name`, `icon` to define subscreen metadata
+ *  - May override `pageStructure` to define UI layout and controls
+ *  - May override lifecycle methods as needed
+ */
 export abstract class BaseSubscreen {
+  /** Global registry of currently rendered elements and their definitions. */
   static currentElements: [HTMLElement, SettingElement][] = [];
+  /** Tracks the currently visible page number (1-based index). */
   static currentPage: number = 1;
+  /** Runtime options for this subscreen. */
   readonly options: SubscreenOptions;
+  /** Reference to the module this subscreen belongs to. */
   readonly module!: BaseModule;
 
   constructor(subscreenOptions?: SubscreenOptions, module?: BaseModule) {
@@ -27,34 +62,57 @@ export abstract class BaseSubscreen {
     this.options = subscreenOptions || {} as SubscreenOptions;
   }
 
+  /**
+   * Logical name of this subscreen.
+   * Used for localization key resolution in `load()`.
+   * Subclasses should override this with a meaningful identifier.
+   */
   get name(): string {
     return 'UNKNOWN';
   }
 
+  /**
+   * Path to or Base64 data for an icon representing this subscreen.
+   * Defaults to empty string (no icon).
+   */
   get icon(): string {
     return '';
   }
 
+  /** Changes the currently active subscreen. */
   setSubscreen(screen: BaseSubscreen | string | null) {
     return setSubscreen(screen);
   }
 
+  /** Gets this subscreen's settings object from its parent module. */
   get settings(): BaseSettingsModel {
     return this.module.settings as BaseSettingsModel;
   }
 
+  /** Updates this subscreen's settings in its parent module. */
   set settings(value) {
     this.module.settings = value;
   }
 
+  /**
+   * Defines the paginated layout of the subscreen's settings UI.
+   * Each element in the outer array is a page; each page contains `SettingElement`s.
+   *
+   * Subclasses should override to define their actual UI structure.
+   */
   get pageStructure(): SettingElement[][] {
     return [[]];
   }
 
+  /** Gets the currently visible page's settings elements. */
   get currentPage(): SettingElement[] {
     return this.pageStructure[Math.min(BaseSubscreen.currentPage - 1, this.pageStructure.length - 1)];
   }
 
+  /**
+   * Changes the visible page in a multi-page subscreen.
+   * Automatically wraps around when going past the first or last page.
+   */
   changePage(page: number, setLabel: (label: string) => void) {
     const totalPages = this.pageStructure.length;
 
@@ -67,6 +125,10 @@ export abstract class BaseSubscreen {
     setLabel(`${BaseSubscreen.currentPage} of ${this.pageStructure.length}`);
   }
 
+  /**
+   * Updates the DOM to show only elements belonging to the current page.
+   * All elements on other pages are hidden.
+   */
   managePageElementsVisibility() {
     this.pageStructure.forEach((item, ix) => {
       if (ix != BaseSubscreen.currentPage - 1) {
@@ -81,6 +143,17 @@ export abstract class BaseSubscreen {
     });
   }
 
+  /**
+   * Called when this subscreen is first displayed.
+   * Builds the layout, initializes navigation, and renders all settings elements.
+   *
+   * Handles:
+   *  - Ensuring each module with a settings screen has its defaults loaded
+   *  - Creating navigation menus and back/next page controls
+   *  - Building and appending UI elements based on `pageStructure`
+   *  - Setting up exit button and tooltip
+   *  - Resetting to page 1
+   */
   load() {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
@@ -162,13 +235,27 @@ export abstract class BaseSubscreen {
     CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
   }
 
+
+  /**
+   * Called each frame while this subscreen is active.
+   * Default behavior draws the player's character if `drawCharacter` is enabled.
+   */
   run() {
     if (this.options.drawCharacter) DrawCharacter(Player, 50, 50, 0.9, false);
   }
 
+  /**
+   * Handles mouse clicks *on canvas* while the subscreen is active.
+   * Default implementation is empty — subclasses may override.
+   */
   click() {
   }
 
+  /**
+   * Exits this subscreen, returning to the main menu.
+   * Also saves persistent storage changes.
+   * Called after the `unload`.
+   */
   exit() {
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
@@ -177,6 +264,10 @@ export abstract class BaseSubscreen {
     modStorage.save();
   }
 
+  /**
+   * Called when the window is resized.
+   * Also checks for overflow in the settings div and applies styling accordingly.
+   */
   resize(onLoad: boolean = false) {
     const offset = this.options.drawCharacter ? 0 : 380;
     const subscreen = layout.getSubscreen();
@@ -219,6 +310,12 @@ export abstract class BaseSubscreen {
     }
   }
 
+
+  /**
+   * Called when this subscreen is being removed.
+   * Resets the static element registry and removes the subscreen from the layout.
+   * Called before `exit`.
+   */
   unload() {
     BaseSubscreen.currentElements = [];
 

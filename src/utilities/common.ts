@@ -1,3 +1,9 @@
+/**
+ * Deeply merges properties from `source` into `target`.
+ * - If both target and source properties are arrays, concatenates them.
+ * - If both are objects, recursively merges them.
+ * - Otherwise, source overwrites target.
+ */
 export function deepMerge(target: any, source: any): any {
   if (target === undefined) return source;
   if (source === undefined) return target;
@@ -18,6 +24,11 @@ export function deepMerge(target: any, source: any): any {
   return target;
 }
 
+
+/**
+ * Returns a new array with elements of the input array shuffled.
+ * Uses something-something shuffle algorithm by splicing from a cloned array.
+ */
 export function shuffleArray(array: string[]) {
   const temp: string[] = JSON.parse(JSON.stringify(array));
   const ret: string[] = [];
@@ -31,6 +42,12 @@ export function shuffleArray(array: string[]) {
   return ret;
 }
 
+/**
+ * Exports a value to the global object under a nested namespace path.
+ * Creates intermediate objects if they do not exist.
+ * 
+ * Example: `exportToGlobal('MyMod.Utils', value)` creates `globalThis.MyMod.Utils = value`.
+ */
 export function exportToGlobal(name: string, value: any): void {
   const keys = name.split('.');
   let current = globalThis as any;
@@ -45,7 +62,12 @@ export function exportToGlobal(name: string, value: any): void {
   current[keys[keys.length - 1]] = value;
 }
 
-/** Merges matching properties from `mergeFrom` into `mergeTo`. */
+
+/**
+ * Deeply merges only matching properties from `mergeFrom` into `mergeTo`.
+ * Properties not present in `mergeTo` are ignored.
+ * Objects are recursively merged, primitive properties overwritten.
+ */
 export function deepMergeMatchingProperties<T extends object>(mergeTo: T, mergeFrom: T): T  {
   const mergedObject = { ...mergeTo };
 
@@ -60,6 +82,7 @@ export function deepMergeMatchingProperties<T extends object>(mergeTo: T, mergeF
   return mergedObject;
 }
 
+/** Checks if the given property has a getter defined on the object or its prototype chain. */
 export function hasGetter<T extends object>(obj: T, prop: keyof T | string): boolean {
   while (obj && obj !== Object.prototype) {
     const descriptor = Object.getOwnPropertyDescriptor(obj, prop);
@@ -69,6 +92,7 @@ export function hasGetter<T extends object>(obj: T, prop: keyof T | string): boo
   return false;
 }
 
+/** Checks if the given property has a setter defined on the object or its prototype chain. */
 export function hasSetter<T extends object>(obj: T, prop: keyof T | string): boolean {
   while (obj && obj !== Object.prototype) {
     const descriptor = Object.getOwnPropertyDescriptor(obj, prop);

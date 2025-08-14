@@ -1,7 +1,18 @@
 import { SettingsModel, deepLibLogger } from '../deeplib';
 
+/**
+ * ModStorage is a singleton class responsible for managing
+ * mod-specific persistent storage both in player settings
+ * and in browser localStorage.
+ *
+ * It provides methods to load and save mod data compressed
+ * as base64 strings, and exposes typed accessors for
+ * playerStorage and extensionStorage.
+ */
 export class ModStorage<T extends SettingsModel = SettingsModel> {
+  /** Singleton instance of ModStorage */
   private static _instance: ModStorage | null = null;
+  /** The unique mod identifier used as key prefix in storage */
   private modName: string;
 
   constructor(modName: string) {

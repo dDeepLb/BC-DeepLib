@@ -2,6 +2,10 @@ import { Button, Checkbox, Custom, Input, Label } from '../../base/elements_typi
 import { BaseSubscreen } from '../../deeplib';
 import { deepMerge } from '../common';
 
+/**
+ * Collection of element creation utilities.
+ * Provides convenience wrappers for generating commonly used UI elements.
+ */
 export const advElement = {
   createButton: elementCreateButton,
   createCheckbox: elementCreateCheckbox,
@@ -356,34 +360,53 @@ function elementPrevNext(options: PrevNext) {
 }
 
 export type ModalButton<T extends string = string> = {
+  /** Button label text. */
   text: string
+  /** Action identifier returned when the button is clicked. */
   action: T
+  /** Whether the button is disabled. */
   disabled?: boolean
 };
 
 export type ModalInputOptions = {
+  /** Default input value. */
   defaultValue?: string
+  /** Makes the input read-only if true. */
   readOnly?: boolean
+  /** Placeholder text. */
   placeholder?: string
+  /** Input type. */
   type: 'input' | 'textarea'
+  /** Validation callback to check if the input value is valid. */
   validate?: (value: string) => string | null
 };
 
 export type ModalOptions<T extends string = string> = {
+  /** Content or DOM node displayed in the modal header. */
   prompt: string | Node
+  /** Optional input configuration. */
   input?: ModalInputOptions
+  /** Buttons to display in the modal. */
   buttons?: ModalButton<T>[]
+  /** Whether clicking backdrop closes the modal (default: true). */
   closeOnBackdrop?: boolean
+  /** Auto-close timeout in milliseconds. */
   timeoutMs?: number
 };
 
+/**
+ * Modal dialog implementation with queuing, buttons, optional input, and focus trapping.
+ * Multiple modals are queued to ensure only one is visible at a time.
+ */
 export class Modal<T extends string = string> {
   private dialog: HTMLDialogElement;
   private blocker: HTMLDivElement;
   private inputEl?: HTMLInputElement | HTMLTextAreaElement;
   private timeoutId?: number;
 
+  /** Static modal queue. */
   private static queue: Modal<any>[] = [];
+  /** Flag to indicate if a modal is currently being shown. */
   private static processing = false;
 
   constructor(private opts: ModalOptions<T>) {
@@ -429,24 +452,39 @@ export class Modal<T extends string = string> {
     }
   }
 
+  /**
+   * Displays the modal and resolves with the chosen action and input value.
+   */
   show(): Promise<[T, string | null]> {
     return Modal.enqueue(this);
   }
 
+  /**
+   * Shows a simple alert modal with a single "OK" button.
+   */
   static async alert(msg: string, timeoutMs?: number) {
     await new Modal({ prompt: msg, buttons: [{ action: 'close', text: 'OK' }], timeoutMs }).show();
   }
 
+  /**
+   * Shows a confirmation modal with "Cancel" and "OK" buttons.
+   * Returns true if "OK" is clicked.
+   */
   static async confirm(msg: string) {
     const [action] = await new Modal({ prompt: msg, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'OK', action: 'ok' }] }).show();
     return action === 'ok';
   }
 
+  /**
+   * Shows a prompt modal with an input field and "Submit"/"Cancel" buttons.
+   * Returns the input value if submitted, otherwise null.
+   */
   static async prompt(msg: string, defaultValue = ''): Promise<string | null> {
     const [action, value] = await new Modal({ prompt: msg, timeoutMs: 0, input: { type: 'input', defaultValue }, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'Submit', action: 'submit' }] }).show();
     return action === 'submit' ? value : null;
   }
 
+  /** Creates the input element for the modal, applying configuration and validation. */
   private renderInput(cfg: ModalInputOptions) {
     const el = document.createElement(cfg.type);
     el.classList.add('deeplib-modal-input');
@@ -463,6 +501,7 @@ export class Modal<T extends string = string> {
     return el;
   }
 
+  /** Creates modal action buttons from configuration. */
   private renderButtons() {
     const container = document.createElement('div');
     container.classList.add('deeplib-modal-button-container');
@@ -482,6 +521,7 @@ export class Modal<T extends string = string> {
     return container;
   }
 
+  /** Creates the modal backdrop blocker with optional click-to-close behavior. */
   private createBlocker() {
     const blocker = document.createElement('div');
     blocker.classList.add('deeplib-modal-blocker');
@@ -492,6 +532,7 @@ export class Modal<T extends string = string> {
     return blocker;
   }
 
+  /** Implements a focus trap to keep keyboard navigation inside the modal. */
   private setupFocusTrap() {
     const focusable = 'button, [href], input, textarea, select, [tabindex]:not([tabindex="-1"])';
     const elements = Array.from(this.dialog.querySelectorAll<HTMLElement>(focusable));
@@ -524,6 +565,7 @@ export class Modal<T extends string = string> {
     });
   }
 
+  /** Closes the modal, cleans up DOM, resolves promise, and shows next queued modal. */
   private close(action: T) {
     if (this.timeoutId) clearTimeout(this.timeoutId);
     this.dialog.close();

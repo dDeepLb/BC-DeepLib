@@ -3,10 +3,33 @@ import { BaseSubscreen, getText, GUI, GuiDebug, layout } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
+/**
+ * Configuration options for the main menu.
+ * 
+ * If these are defined, new button for each option will be added to the main menu.
+ */
 export type MainMenuOptions = {
+  /**
+   * Optional URL to the project's repository.
+   * Example: "https://github.com/user/project"
+   */
   repoLink?: string;
+
+  /**
+   * Optional URL to the project's wiki or documentation.
+   * Example: "https://github.com/user/project/wiki"
+   */
   wikiLink?: string;
+
+  /**
+   * Optional subscreen to use for the "reset" action.
+   */
   resetSubscreen?: BaseSubscreen;
+
+  /**
+   * Optional subscreen for import/export functionality.
+   * Provides tools to import or export data to or from the mod.
+   */
   importExportSubscreen?: GuiImportExport;
 };
 
