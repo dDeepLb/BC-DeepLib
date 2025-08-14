@@ -25,7 +25,8 @@
     "lint": "eslint src/",
     "build": "node scripts/build.js",
     "type-gen": "node scripts/type_gen.js",
-    "asset-copy": "node scripts/asset_copy.js"
+    "asset-copy": "node scripts/asset_copy.js",
+    "prepublishOnly": "pnpm all"
   },
   "bin": {
     "deeplib": "./lib/build.js"
