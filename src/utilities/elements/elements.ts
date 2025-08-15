@@ -383,7 +383,7 @@ export type ModalInputOptions = {
 
 export type ModalOptions<T extends string = string> = {
   /** Content or DOM node displayed in the modal header. */
-  prompt: string | Node
+  prompt: ElementButton.StaticNode
   /** Optional input configuration. */
   input?: ModalInputOptions
   /** Buttons to display in the modal. */
@@ -415,6 +415,8 @@ export class Modal<T extends string = string> {
 
     const promptId = `modal-prompt-${Date.now()}`;
 
+    const prompt = (CommonIsArray(opts.prompt) ? opts.prompt : [opts.prompt]).filter(i => i != null) ?? [''];
+
     this.dialog = ElementCreate({
       tag: 'dialog',
       classList: ['deeplib-modal'],
@@ -427,7 +429,13 @@ export class Modal<T extends string = string> {
         fontFamily: CommonGetFontName()
       },
       children: [
-        opts.prompt,
+        { 
+          tag: 'div',
+          classList: ['deeplib-modal-prompt-container'],
+          children: [
+            ...prompt,
+          ]
+        },
         {
           tag: 'div',
           classList: ['deeplib-modal-prompt'],
@@ -462,7 +470,7 @@ export class Modal<T extends string = string> {
   /**
    * Shows a simple alert modal with a single "OK" button.
    */
-  static async alert(msg: string, timeoutMs?: number) {
+  static async alert(msg: ElementButton.StaticNode, timeoutMs?: number) {
     await new Modal({ prompt: msg, buttons: [{ action: 'close', text: 'OK' }], timeoutMs }).show();
   }
 
@@ -470,7 +478,7 @@ export class Modal<T extends string = string> {
    * Shows a confirmation modal with "Cancel" and "OK" buttons.
    * Returns true if "OK" is clicked.
    */
-  static async confirm(msg: string) {
+  static async confirm(msg: ElementButton.StaticNode) {
     const [action] = await new Modal({ prompt: msg, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'OK', action: 'ok' }] }).show();
     return action === 'ok';
   }
@@ -479,7 +487,7 @@ export class Modal<T extends string = string> {
    * Shows a prompt modal with an input field and "Submit"/"Cancel" buttons.
    * Returns the input value if submitted, otherwise null.
    */
-  static async prompt(msg: string, defaultValue = ''): Promise<string | null> {
+  static async prompt(msg: ElementButton.StaticNode, defaultValue = ''): Promise<string | null> {
     const [action, value] = await new Modal({ prompt: msg, timeoutMs: 0, input: { type: 'input', defaultValue }, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'Submit', action: 'submit' }] }).show();
     return action === 'submit' ? value : null;
   }

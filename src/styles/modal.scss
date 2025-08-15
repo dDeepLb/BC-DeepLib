@@ -46,6 +46,13 @@
       }
     }
   }
+
+  .deeplib-modal-prompt-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .deeplib-modal-blocker {
