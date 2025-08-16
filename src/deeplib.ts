@@ -26,3 +26,4 @@ export * from './utilities/messages';
 export * from './utilities/sdk';
 export * from './utilities/style';
 export * from './utilities/translation';
+export * from './utilities/event_channel';
