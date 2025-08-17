@@ -64,11 +64,13 @@ export class MainMenu extends BaseSubscreen {
     const exitButton = advElement.createButton({
       id: 'exit',
       size: [90, 90],
-      image: `${PUBLIC_URL}/dl_images/exit.svg`,
       onClick: () => {
         this.exit();
       },
-      tooltip: getText('settings.button.back_button_hint')
+      options: {
+        image: `${PUBLIC_URL}/dl_images/exit.svg`,
+        tooltip: getText('settings.button.back_button_hint')
+      }
     });
 
     const menu = document.getElementById('deeplib-nav-menu');
@@ -82,12 +84,14 @@ export class MainMenu extends BaseSubscreen {
 
       const button = advElement.createButton({
         id: `${screen.name}-button`,
-        image: screen.icon,
-        label: getText(`mainmenu.button.${screen.name}`),
         onClick: () => {
           this.setSubscreen(screen);
         },
         size: [null, 90],
+        options: {
+          image: screen.icon,
+          label: getText(`mainmenu.button.${screen.name}`),
+        }
       });
 
       layout.appendToSettingsDiv(button);
@@ -99,12 +103,14 @@ export class MainMenu extends BaseSubscreen {
     if (MainMenu.options.wikiLink) {
       const wikiButton = advElement.createButton({
         id: 'deeplib-wiki-button',
-        image: `${PUBLIC_URL}/dl_images/notebook.svg`,
-        label: getText('mainmenu.button.wiki'),
         onClick: () => {
           window.open(MainMenu.options.wikiLink, '_blank');
         },
         size: [null, 80],
+        options: {
+          image: `${PUBLIC_URL}/dl_images/notebook.svg`,
+          label: getText('mainmenu.button.wiki'),
+        }
       });
       layout.appendToMiscDiv(wikiButton);
     }
@@ -112,12 +118,14 @@ export class MainMenu extends BaseSubscreen {
     if (MainMenu.options.repoLink) {
       const repoButton = advElement.createButton({
         id: 'deeplib-repo-button',
-        image: `${PUBLIC_URL}/dl_images/git.svg`,
-        label: getText('mainmenu.button.repo'),
         onClick: () => {
           window.open(MainMenu.options.repoLink, '_blank');
         },
         size: [null, 80],
+        options: {
+          image: `${PUBLIC_URL}/dl_images/git.svg`,
+          label: getText('mainmenu.button.repo'),
+        }
       });
       layout.appendToMiscDiv(repoButton);
     }
@@ -125,12 +133,14 @@ export class MainMenu extends BaseSubscreen {
     if (MainMenu.options.resetSubscreen) {
       const resetButton = advElement.createButton({
         id: 'deeplib-reset-button',
-        image: `${PUBLIC_URL}/dl_images/trash_bin.svg`,
-        label: getText('mainmenu.button.reset'),
         onClick: () => {
           this.setSubscreen(MainMenu.options.resetSubscreen!);
         },
         size: [null, 80],
+        options: {
+          image: `${PUBLIC_URL}/dl_images/trash_bin.svg`,
+          label: getText('mainmenu.button.reset'),
+        }
       });
       layout.appendToMiscDiv(resetButton);
     }
@@ -138,12 +148,14 @@ export class MainMenu extends BaseSubscreen {
     if (MainMenu.options.importExportSubscreen) {
       const importExportButton = advElement.createButton({
         id: 'deeplib-import-export-button',
-        image: `${PUBLIC_URL}/dl_images/transfer.svg`,
-        label: getText('mainmenu.button.import_export'),
         onClick: () => {
           this.setSubscreen(MainMenu.options.importExportSubscreen!);
         },
         size: [null, 80],
+        options: {
+          image: `${PUBLIC_URL}/dl_images/transfer.svg`,
+          label: getText('mainmenu.button.import_export'),
+        }
       });
       layout.appendToMiscDiv(importExportButton);
     }
@@ -156,34 +168,32 @@ export class MainMenu extends BaseSubscreen {
       const storageFullnessWrapper = advElement.createButton({
         id: CommonGenerateUniqueID(),
         size: [null, 80],
-        tooltip: CommonStringPartitionReplace(getText('mainmenu.meter.storage_hint'), { 
-          $percentage$: `${fullness}` 
-        }).join(''),
-        label: CommonStringPartitionReplace(getText('mainmenu.meter.storage_label'), { 
-          $currentCapacity$: `${currentStorageCapacityKB}`,
-          $maxCapacity$: `${maxStorageCapacityKB}`,
-        }).join(''),
+        options: {
+          tooltipPosition: 'left',
+          noStyling: true,
+          tooltip: CommonStringPartitionReplace(getText('mainmenu.meter.storage_hint'), { 
+            $percentage$: `${fullness}` 
+          }).join(''),
+          label: CommonStringPartitionReplace(getText('mainmenu.meter.storage_label'), { 
+            $currentCapacity$: `${currentStorageCapacityKB}`,
+            $maxCapacity$: `${maxStorageCapacityKB}`,
+          }).join(''),
+        },
         htmlOptions: {
-          options: {
-            tooltipPosition: 'left',
-            noStyling: true
-          },
-          htmlOptions: {
-            button: {
-              children: [
-                {
-                  tag: 'div',
-                  attributes: { id: 'deeplib-storage-meter' },
-                  children: [
-                    {
-                      tag: 'div',
-                      attributes: { id: 'deeplib-storage-bar' },
-                      style: { width: `${fullness}%` },
-                    },
-                  ]
-                }
-              ]
-            }
+          button: {
+            children: [
+              {
+                tag: 'div',
+                attributes: { id: 'deeplib-storage-meter' },
+                children: [
+                  {
+                    tag: 'div',
+                    attributes: { id: 'deeplib-storage-bar' },
+                    style: { width: `${fullness}%` },
+                  },
+                ]
+              }
+            ]
           }
         }
       });
@@ -193,11 +203,13 @@ export class MainMenu extends BaseSubscreen {
     if (IS_DEBUG) {
       const debugButton = advElement.createButton({
         id: 'deeplib-debug-button',
-        image: `${PUBLIC_URL}/dl_images/bug.svg`,
         onClick: () => {
           this.setSubscreen(new GuiDebug());
         },
         size: [90, 90],
+        options: {
+          image: `${PUBLIC_URL}/dl_images/bug.svg`,
+        }
       });
       if (menu) {
         ElementMenu.PrependItem(menu, debugButton);

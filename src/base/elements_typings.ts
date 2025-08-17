@@ -7,20 +7,12 @@ export type BaseElementModel = {
   disabled?: boolean | (() => boolean);
 };
 
-type CustomButtonOptions = {
-  id?: Parameters<typeof ElementButton.Create>[0];
+export type Button = Omit<BaseElementModel, 'id'> & {
+  id: Parameters<typeof ElementButton.Create>[0];
+  type: 'button';
   onClick?: Parameters<typeof ElementButton.Create>[1];
   options?: Parameters<typeof ElementButton.Create>[2];
   htmlOptions?: Parameters<typeof ElementButton.Create>[3];
-};
-
-export type Button = BaseElementModel & {
-  type: 'button';
-  image?: string;
-  label?: string;
-  tooltip?: string;
-  onClick?: () => void;
-  htmlOptions?: CustomButtonOptions;
 };
 
 export type Checkbox = BaseElementModel & {

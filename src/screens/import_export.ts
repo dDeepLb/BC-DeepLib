@@ -49,44 +49,52 @@ export class GuiImportExport extends BaseSubscreen {
     const importFromFileButton = advElement.createButton({
       id: 'deeplib-import-file-button',
       size: [600, 90],
-      image: `${PUBLIC_URL}/dl_images/file_import.svg`,
       onClick: () => {
         this.dataImport('file');
       },
-      label: getText('import-export.button.import_file')
+      options: {
+        image: `${PUBLIC_URL}/dl_images/file_import.svg`,
+        label: getText('import-export.button.import_file')
+      }
     });
     layout.appendToSettingsDiv(importFromFileButton);
 
     const exportToFileButton = advElement.createButton({
       id: 'deeplib-export-file-button',
       size: [600, 90],
-      image: `${PUBLIC_URL}/dl_images/file_export.svg`,
       onClick: () => {
         this.dataExport('file');
       },
-      label: getText('import-export.button.export_file')
+      options: {
+        image: `${PUBLIC_URL}/dl_images/file_export.svg`,
+        label: getText('import-export.button.export_file')
+      }
     });
     layout.appendToSettingsDiv(exportToFileButton);
 
     const importFromClipboardButton = advElement.createButton({
       id: 'deeplib-import-clipboard-button',
       size: [600, 90],
-      image: `${PUBLIC_URL}/dl_images/clipboard_import.svg`,
       onClick: () => {
         this.dataImport('clipboard');
       },
-      label: getText('import-export.button.import_clipboard')
+      options: {
+        image: `${PUBLIC_URL}/dl_images/clipboard_import.svg`,
+        label: getText('import-export.button.import_clipboard')
+      }
     });
     layout.appendToSettingsDiv(importFromClipboardButton);
 
     const exportToClipboardButton = advElement.createButton({
       id: 'deeplib-export-clipboard-button',
       size: [600, 90],
-      image: `${PUBLIC_URL}/dl_images/clipboard_export.svg`,
       onClick: () => {
         this.dataExport('clipboard');
       },
-      label: getText('import-export.button.export_clipboard')
+      options: {
+        image: `${PUBLIC_URL}/dl_images/clipboard_export.svg`,
+        label: getText('import-export.button.export_clipboard')
+      }
     });
     layout.appendToSettingsDiv(exportToClipboardButton);
   }
