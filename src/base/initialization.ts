@@ -51,6 +51,12 @@ interface InitOptions {
 export let modStorage: ModStorage;
 
 /**
+ * Global Mod SDK manager.
+ * Initialized by `initMod()`.
+ */
+export let sdk: ModSdkManager;
+
+/**
  * Entry point for initializing a mod. Handles:
  *  - Setting up the Mod SDK
  *  - Preparing persistent storage
@@ -58,7 +64,7 @@ export let modStorage: ModStorage;
  *  - Delaying initialization until login (if necessary)
  */
 export function initMod(options: InitOptions) {
-  const sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
+  sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
   const MOD_NAME = ModSdkManager.ModInfo.name;
 
   modStorage = new ModStorage(ModSdkManager.ModInfo.name);
@@ -81,8 +87,6 @@ export function initMod(options: InitOptions) {
     deepLibLogger.debug(`Already logged in, initing ${MOD_NAME}`);
     init(options);
   }
-
-  return { sdk };
 }
 
 
