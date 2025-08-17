@@ -192,11 +192,13 @@ export abstract class BaseSubscreen {
       const exitButton = advElement.createButton({
         id: 'deeplib-exit',
         size: [90, 90],
-        image: `${PUBLIC_URL}/dl_images/exit.svg`,
         onClick: () => {
           this.exit();
         },
-        tooltip: getText('settings.button.back_button_hint')
+        options: {
+          image: `${PUBLIC_URL}/dl_images/exit.svg`,
+          tooltip: getText('settings.button.back_button_hint')
+        }
       });
       ElementMenu.AppendButton(menu, exitButton);
     }
@@ -295,10 +297,11 @@ export abstract class BaseSubscreen {
     ElementSetSize(advElement.getTooltip() || '', 1500, 70);
 
     BaseSubscreen.currentElements.forEach((item) => {
+      const element = item[0];
       const options = item[1];
 
-      domUtil.autoSetPosition(options.id, options.position);
-      domUtil.autoSetSize(options.id, options.size);
+      domUtil.autoSetPosition(options.id ?? element.id, options.position);
+      domUtil.autoSetSize(options.id ?? element.id, options.size);
     });
 
     if (settingsDiv) {

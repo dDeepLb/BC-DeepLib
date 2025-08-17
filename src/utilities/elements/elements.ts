@@ -21,22 +21,27 @@ export const advElement = {
 };
 
 function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
+  options.id ??= ElementGenerateID();
   const elem = document.getElementById(options.id) as HTMLButtonElement;
 
   if (elem) return elem;
 
   (options as Button).type = 'button';
+  let image = undefined;
+
+  if (options.options?.image) {
+    image = options.options.image;
+    options.options.image = undefined;
+  }
 
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
   const button = ElementButton.Create(
-    options.htmlOptions?.id ?? options.id,
-    options.htmlOptions?.onClick ?? options?.onClick ?? (() => { }),
+    options.id,
+    options?.onClick ?? (() => { }),
     deepMerge({
-      tooltip: options.tooltip,
-      label: options.label,
       labelPosition: 'center',
-    }, options.htmlOptions?.options),
+    }, options.options),
     deepMerge({
       button: {
         classList: ['deeplib-button'],
@@ -44,7 +49,7 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
           disabled: disabled,
         },
         children: [
-          options.image ? {
+          image ? {
             tag: 'img',
             attributes: {
               id: `${options.id}-image`,
@@ -54,12 +59,12 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
               src: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7' // 1x1 transparent image to get rid of broken image
             },
             style: {
-              '--image': `url("${options.image}")`,
+              '--image': `url("${image}")`,
             },
           } : undefined,
         ],
       },
-    }, options.htmlOptions?.htmlOptions ?? {}));
+    }, options.htmlOptions ?? {}));
 
   BaseSubscreen.currentElements.push([button, options as Button]);
 
@@ -304,7 +309,6 @@ function elementPrevNext(options: PrevNext) {
     children: [
       advElement.createButton({
         id: `deeplib-prev-next-${options.id}-prev-button`,
-        image: `${PUBLIC_URL}/dl_images/arrow_left.svg`,
         onClick: () => {
           options.back({
             setLabel: setLabel,
@@ -312,16 +316,15 @@ function elementPrevNext(options: PrevNext) {
             setNextTooltip: setNextTooltip,
           });
         },
-        tooltip: options.initialPrevTooltip,
         htmlOptions: {
-          htmlOptions: {
-            button: {
-              classList: ['deeplib-prev-next-button']
-            }
-          },
-          options: {
-            noStyling: true
+          button: {
+            classList: ['deeplib-prev-next-button']
           }
+        },
+        options: {
+          noStyling: true,
+          image: `${PUBLIC_URL}/dl_images/arrow_left.svg`,
+          tooltip: options.initialPrevTooltip,
         }
       }),
       advElement.createLabel({
@@ -333,7 +336,6 @@ function elementPrevNext(options: PrevNext) {
       }),
       advElement.createButton({
         id: `deeplib-prev-next-${options.id}-next-button`,
-        image: `${PUBLIC_URL}/dl_images/arrow_right.svg`,
         onClick: () => {
           options.next({
             setLabel: setLabel,
@@ -341,16 +343,15 @@ function elementPrevNext(options: PrevNext) {
             setNextTooltip: setNextTooltip,
           });
         },
-        tooltip: options.initialNextTooltip,
         htmlOptions: {
-          htmlOptions: {
-            button: {
-              classList: ['deeplib-prev-next-button']
-            }
-          },
-          options: {
-            noStyling: true
+          button: {
+            classList: ['deeplib-prev-next-button']
           }
+        },
+        options: {
+          noStyling: true,
+          image: `${PUBLIC_URL}/dl_images/arrow_right.svg`,
+          tooltip: options.initialNextTooltip,
         }
       }),
     ]
@@ -518,10 +519,12 @@ export class Modal<T extends string = string> {
 
     btns.forEach(b => {
       const btn = advElement.createButton({
-        label: b.text,
         id: `deeplib-modal-${b.action}`,
-        disabled: b.disabled,
-        onClick: () => this.close(b.action)
+        onClick: () => this.close(b.action),
+        options: {
+          disabled: b.disabled,
+          label: b.text,
+        }
       });
       container.append(btn);
     });
