@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, getText, GUI, GuiDebug, layout } from '../deeplib';
+import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, modStorage, ModStorage } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
@@ -31,6 +31,11 @@ export type MainMenuOptions = {
    * Provides tools to import or export data to or from the mod.
    */
   importExportSubscreen?: GuiImportExport;
+
+  /**
+   * Optional boolean flag to enable the mod storage fullness indicator.
+   */
+  storageFullnessIndicator?: boolean;
 };
 
 export class MainMenu extends BaseSubscreen {
@@ -143,6 +148,48 @@ export class MainMenu extends BaseSubscreen {
       layout.appendToMiscDiv(importExportButton);
     }
 
+    if (MainMenu.options.storageFullnessIndicator) {
+      const maxStorageCapacityKB = 180;
+      const currentStorageCapacityKB = byteToKB(ModStorage.measureSize(Player.OnlineSettings));
+      const fullness = (currentStorageCapacityKB / maxStorageCapacityKB * 100).toFixed(1);
+
+      const storageFullnessWrapper = advElement.createButton({
+        id: CommonGenerateUniqueID(),
+        size: [null, 80],
+        tooltip: CommonStringPartitionReplace(getText('mainmenu.meter.storage_hint'), { 
+          $percentage$: `${fullness}` 
+        }).join(''),
+        label: CommonStringPartitionReplace(getText('mainmenu.meter.storage_label'), { 
+          $currentCapacity$: `${currentStorageCapacityKB}`,
+          $maxCapacity$: `${maxStorageCapacityKB}`,
+        }).join(''),
+        htmlOptions: {
+          options: {
+            tooltipPosition: 'left',
+            noStyling: true
+          },
+          htmlOptions: {
+            button: {
+              children: [
+                {
+                  tag: 'div',
+                  attributes: { id: 'deeplib-storage-meter' },
+                  children: [
+                    {
+                      tag: 'div',
+                      attributes: { id: 'deeplib-storage-bar' },
+                      style: { width: `${fullness}%` },
+                    },
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      });
+      layout.appendToMiscDiv(storageFullnessWrapper);
+    }
+
     if (IS_DEBUG) {
       const debugButton = advElement.createButton({
         id: 'deeplib-debug-button',
@@ -175,6 +222,8 @@ export class MainMenu extends BaseSubscreen {
     super.resize();
     ElementSetPosition('deeplib-misc', 1905, 930, 'bottom-right');
     ElementSetSize('deeplib-misc', 405, null);
+
+    ElementSetSize('deeplib-storage-meter', null, 80);
   }
 
   static setOptions(mainMenuOptions: MainMenuOptions) {
