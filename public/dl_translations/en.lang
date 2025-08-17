@@ -8,6 +8,8 @@ mainmenu.button.wiki = Wiki
 mainmenu.button.repo = Repository
 mainmenu.button.reset = Reset
 mainmenu.button.import_export = Import & Export
+mainmenu.meter.storage_hint = Storage fullness: $percentage$%
+mainmenu.meter.storage_label = $currentCapacity$ / $maxCapacity$ KB
 
 # Import & Export
 import-export.title = - Import & Export -

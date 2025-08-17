@@ -101,3 +101,8 @@ export function hasSetter<T extends object>(obj: T, prop: keyof T | string): boo
   }
   return false;
 }
+
+/**
+ * Converts bytes to kilobytes. 
+ */
+export const byteToKB = (nByte: number) => Math.round(nByte / 100) / 10;

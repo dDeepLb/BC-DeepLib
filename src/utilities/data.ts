@@ -89,4 +89,20 @@ export class ModStorage<T extends SettingsModel = SettingsModel> {
   static dataCompress(object: object) {
     return LZString.compressToBase64(JSON.stringify(object));
   }
+
+  static measureSize(data: unknown): number {
+    try {
+      if (typeof data !== 'string') {
+        data = JSON.stringify(data) || '';
+      }
+      
+      if (typeof data === 'string') {
+        return (new TextEncoder()).encode(data).byteLength;
+      }
+
+      throw new Error();
+    } catch {
+      return NaN;
+    }
+  }
 }
