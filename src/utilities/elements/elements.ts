@@ -1,5 +1,5 @@
 import { Button, Checkbox, Custom, Input, Label } from '../../base/elements_typings';
-import { BaseSubscreen } from '../../deeplib';
+import { BaseSubscreen, getText } from '../../deeplib';
 import { deepMerge } from '../common';
 
 /**
@@ -393,6 +393,10 @@ export type ModalOptions<T extends string = string> = {
   closeOnBackdrop?: boolean
   /** Auto-close timeout in milliseconds. */
   timeoutMs?: number
+  /** Action sent when Escape key is pressed. */
+  escapeAction?: T
+  /** Action sent when Enter key is pressed. */
+  enterAction?: T
 };
 
 /**
@@ -472,7 +476,12 @@ export class Modal<T extends string = string> {
    * Shows a simple alert modal with a single "OK" button.
    */
   static async alert(msg: ElementButton.StaticNode, timeoutMs?: number) {
-    await new Modal({ prompt: msg, buttons: [{ action: 'close', text: 'OK' }], timeoutMs }).show();
+    await new Modal({
+      prompt: msg,
+      buttons: [{ action: 'close', text: getText('modal.button.ok') }],
+      timeoutMs,
+      escapeAction: 'close',
+    }).show();
   }
 
   /**
@@ -480,8 +489,13 @@ export class Modal<T extends string = string> {
    * Returns true if "OK" is clicked.
    */
   static async confirm(msg: ElementButton.StaticNode) {
-    const [action] = await new Modal({ prompt: msg, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'OK', action: 'ok' }] }).show();
-    return action === 'ok';
+    const [action] = await new Modal({
+      prompt: msg,
+      buttons: [{ text: getText('modal.button.decline'), action: 'decline' }, { text: getText('modal.button.confirm'), action: 'confirm' }],
+      escapeAction: 'decline',
+      enterAction: 'confirm' 
+    }).show();
+    return action === 'confirm';
   }
 
   /**
@@ -489,7 +503,14 @@ export class Modal<T extends string = string> {
    * Returns the input value if submitted, otherwise null.
    */
   static async prompt(msg: ElementButton.StaticNode, defaultValue = ''): Promise<string | null> {
-    const [action, value] = await new Modal({ prompt: msg, timeoutMs: 0, input: { type: 'input', defaultValue }, buttons: [{ text: 'Cancel', action: 'cancel' }, { text: 'Submit', action: 'submit' }] }).show();
+    const [action, value] = await new Modal({ 
+      prompt: msg,
+      timeoutMs: 0,
+      input: { type: 'input', defaultValue },
+      buttons: [{ text: getText('modal.button.cancel'), action: 'cancel' }, { text: getText('modal.button.submit'), action: 'submit' }],
+      escapeAction: 'cancel',
+      enterAction: 'submit' 
+    }).show();
     return action === 'submit' ? value : null;
   }
 
@@ -568,7 +589,12 @@ export class Modal<T extends string = string> {
         }
       } else if (e.key === 'Escape') {
         e.stopPropagation();
-        this.close('close' as T);
+        this.close((this.opts.escapeAction ?? 'close') as T);
+      } else if (e.key === 'Enter') {
+        if (elements.some(el => el === document.activeElement) && document.activeElement !== this.inputEl) return;
+        e.preventDefault();
+        e.stopPropagation();
+        this.close((this.opts.enterAction ?? 'submit') as T);
       }
     });
     window.requestAnimationFrame(() => {

@@ -17,3 +17,10 @@ import-export.button.export_file = Export to file
 import-export.button.import_file = Import from file
 import-export.button.export_clipboard = Export to clipboard
 import-export.button.import_clipboard = Import from clipboard
+
+# Modal
+modal.button.close = Close
+modal.button.ok = OK
+modal.button.cancel = Cancel
+modal.button.submit = Submit
+modal.button.decline = Decline
