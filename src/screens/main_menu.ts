@@ -234,8 +234,6 @@ export class MainMenu extends BaseSubscreen {
     super.resize();
     ElementSetPosition('deeplib-misc', 1905, 930, 'bottom-right');
     ElementSetSize('deeplib-misc', 405, null);
-
-    ElementSetSize('deeplib-storage-meter', null, 80);
   }
 
   static setOptions(mainMenuOptions: MainMenuOptions) {
