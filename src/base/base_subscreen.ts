@@ -109,6 +109,13 @@ export abstract class BaseSubscreen {
     return this.pageStructure[Math.min(BaseSubscreen.currentPage - 1, this.pageStructure.length - 1)];
   }
 
+  getPageLabel(): string {
+    return CommonStringPartitionReplace(getText('settings.page.label'), {
+      $currentPage$: `${this.currentPage}`,
+      $totalPages$: `${this.pageStructure.length}`,
+    }).join('');
+  }
+
   /**
    * Changes the visible page in a multi-page subscreen.
    * Automatically wraps around when going past the first or last page.
@@ -122,7 +129,7 @@ export abstract class BaseSubscreen {
 
     this.managePageElementsVisibility();
 
-    setLabel(`${BaseSubscreen.currentPage} of ${this.pageStructure.length}`);
+    setLabel(this.getPageLabel());
   }
 
   /**
@@ -176,7 +183,7 @@ export abstract class BaseSubscreen {
         initialNextTooltip: getText('settings.button.next_button_hint'),
         back: ({ setLabel }) => this.changePage(BaseSubscreen.currentPage - 1, setLabel),
         initialPrevTooltip: getText('settings.button.prev_button_hint'),
-        initialLabel: `${BaseSubscreen.currentPage} of ${this.pageStructure.length}`,
+        initialLabel: this.getPageLabel()
       });
 
       ElementMenu.PrependItem(menu, backNext);
