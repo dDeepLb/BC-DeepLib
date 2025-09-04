@@ -22,15 +22,17 @@ function elementCreateSubscreenDiv() {
     return subscreenDiv;
   }
 
-  const div = document.createElement('div');
-  div.id = 'deeplib-subscreen';
-  div.classList.add('deeplib-subscreen', 'HideOnPopup');
+  const div = ElementCreate({
+    tag: 'div',
+    classList: ['deeplib-subscreen', 'HideOnPopup'],
+    attributes: { id: 'deeplib-subscreen' }
+  });
 
   return document.body.appendChild(div);
 }
 
 function elementGetSubscreenDiv() {
-  return document.getElementById('deeplib-subscreen') ?? undefined;
+  return ElementWrap('deeplib-subscreen');
 }
 
 function elementRemoveSubscreenDiv() {
@@ -58,7 +60,7 @@ function elementCreateSettingsDiv() {
 }
 
 function elementGetSettingsDiv() {
-  return document.getElementById('deeplib-settings') ?? undefined;
+  return ElementWrap('deeplib-settings');
 }
 
 function elementAppendToSettingsDiv(...element: HTMLElement[]) {
@@ -76,15 +78,17 @@ function elementCreateMiscDiv() {
     return miscDiv;
   }
 
-  const div = document.createElement('div');
-  div.id = 'deeplib-misc';
-  div.classList.add('deeplib-misc');
+  const div = ElementCreate({
+    tag: 'div', 
+    classList: ['deeplib-misc'], 
+    attributes: { id: 'deeplib-misc' }
+  });
 
   return div;
 }
 
 function elementGetMiscDiv() {
-  return document.getElementById('deeplib-misc');
+  return ElementWrap('deeplib-misc');
 }
 
 function elementAppendToMiscDiv(...element: HTMLElement[]) {
