@@ -48,9 +48,11 @@ function elementCreateSettingsDiv() {
     return settingsDiv;
   }
 
-  const div = document.createElement('div');
-  div.id = 'deeplib-settings';
-  div.classList.add('deeplib-settings');
+  const div = ElementCreate({
+    tag: 'div', 
+    classList: ['deeplib-settings', 'scroll-box'], 
+    attributes: { id: 'deeplib-settings' } 
+  });
 
   return div;
 }
