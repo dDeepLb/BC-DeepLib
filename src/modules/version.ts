@@ -16,13 +16,13 @@ export class VersionModule extends BaseModule {
   private static isItNewVersion: boolean = false;
 
   /** The current mod version (retrieved from `ModSdkManager.ModInfo.version`) */
-  static Version: string;
+  private static version: string;
 
   /** Message to display when a new version is detected */
-  static NewVersionMessage: string = '';
+  private static newVersionMessage: string = '';
 
   /** List of registered migration handlers, sorted by version */
-  private static Migrators: BaseMigrator[] = [];
+  private static migrators: BaseMigrator[] = [];
 
   /**
    * Initializes the module on load:
@@ -30,7 +30,7 @@ export class VersionModule extends BaseModule {
    * - Hooks into `ChatRoomSync` to show a "new version" message when applicable.
    */
   load(): void {
-    VersionModule.Version = ModSdkManager.ModInfo.version;
+    VersionModule.version = ModSdkManager.ModInfo.version;
 
     ModSdkManager.prototype.hookFunction(
       'ChatRoomSync',
@@ -55,7 +55,7 @@ export class VersionModule extends BaseModule {
    */
   static checkVersionUpdate() {
     const PreviousVersion = VersionModule.loadVersion();
-    const CurrentVersion = VersionModule.Version;
+    const CurrentVersion = VersionModule.version;
 
     if (VersionModule.isNewVersion(PreviousVersion, CurrentVersion)) {
       VersionModule.isItNewVersion = true;
@@ -73,7 +73,7 @@ export class VersionModule extends BaseModule {
   private static checkVersionMigration() {
     const PreviousVersion = VersionModule.loadVersion();
 
-    for (const migrator of VersionModule.Migrators) {
+    for (const migrator of VersionModule.migrators) {
       if (VersionModule.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
         migrator.Migrate();
         deepLibLogger.info(`Migrating ${ModSdkManager.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
@@ -86,20 +86,20 @@ export class VersionModule extends BaseModule {
    * Migrators are sorted by their `MigrationVersion` in ascending order.
    */
   static registerMigrator(migrator: BaseMigrator) {
-    VersionModule.Migrators.push(migrator);
+    VersionModule.migrators.push(migrator);
 
-    VersionModule.Migrators.sort((a, b) => a.MigrationVersion.localeCompare(b.MigrationVersion));
+    VersionModule.migrators.sort((a, b) => a.MigrationVersion.localeCompare(b.MigrationVersion));
   }
 
 
   /** Sets the message that will be displayed when a new version is detected. */
   static setNewVersionMessage(newVersionMessage: string) {
-    VersionModule.NewVersionMessage = newVersionMessage;
+    VersionModule.newVersionMessage = newVersionMessage;
   }
 
   /** Sends the currently configured "new version" message to the local player. */
   static sendNewVersionMessage() {
-    sendLocalMessage('deeplib-new-version', VersionModule.NewVersionMessage);
+    sendLocalMessage('deeplib-new-version', VersionModule.newVersionMessage);
   }
 
   /**
@@ -127,7 +127,7 @@ export class VersionModule extends BaseModule {
   /** Saves the current mod version into persistent player storage. */
   private static saveVersion() {
     if (modStorage.playerStorage) {
-      Player[ModSdkManager.ModInfo.name].Version = VersionModule.Version;
+      Player[ModSdkManager.ModInfo.name].Version = VersionModule.version;
     }
   }
 
