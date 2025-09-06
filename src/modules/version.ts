@@ -1,4 +1,8 @@
-import { BaseMigrator, BaseModule, HookPriority, ModSdkManager, deepLibLogger, modStorage, sendLocalMessage } from '../deeplib';
+import { BaseMigrator, BaseModule, ModSdkManager, deepLibLogger, getText, modStorage } from '../deeplib';
+
+export type VersionModuleOptions = {
+  newVersionMessage: string;
+};
 
 /**
  * Handles version tracking, new version detection, and version-based migrations
@@ -24,6 +28,12 @@ export class VersionModule extends BaseModule {
   /** List of registered migration handlers, sorted by version */
   private static migrators: BaseMigrator[] = [];
 
+  constructor(options: VersionModuleOptions) {
+    super();
+
+    VersionModule.newVersionMessage = options.newVersionMessage;
+  }
+
   /**
    * Initializes the module on load:
    * - Stores the current mod version.
@@ -32,17 +42,11 @@ export class VersionModule extends BaseModule {
   load(): void {
     VersionModule.version = ModSdkManager.ModInfo.version;
 
-    ModSdkManager.prototype.hookFunction(
-      'ChatRoomSync',
-      HookPriority.Observe,
-      (args, next) => {
-        next(args);
-        if (modStorage.playerStorage.GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
-          VersionModule.sendNewVersionMessage();
-        }
-      },
-      'VersionModule'
-    );
+    VersionModule.checkVersionUpdate();
+
+    if (modStorage.playerStorage.GlobalModule.doShowNewVersionMessage && VersionModule.isItNewVersion) {
+      VersionModule.sendNewVersionMessage();
+    }
   }
 
   /**
@@ -53,7 +57,7 @@ export class VersionModule extends BaseModule {
    * - Updates stored version in player data.
    * - Saves `modStorage`.
    */
-  static checkVersionUpdate() {
+  private static checkVersionUpdate() {
     const PreviousVersion = VersionModule.loadVersion();
     const CurrentVersion = VersionModule.version;
 
@@ -80,7 +84,7 @@ export class VersionModule extends BaseModule {
       }
     }
   }
-  
+
   /**
    * Registers a new migrator for handling version-specific changes.
    * Migrators are sorted by their `MigrationVersion` in ascending order.
@@ -91,15 +95,36 @@ export class VersionModule extends BaseModule {
     VersionModule.migrators.sort((a, b) => a.MigrationVersion.localeCompare(b.MigrationVersion));
   }
 
-
-  /** Sets the message that will be displayed when a new version is detected. */
-  static setNewVersionMessage(newVersionMessage: string) {
-    VersionModule.newVersionMessage = newVersionMessage;
-  }
-
   /** Sends the currently configured "new version" message to the local player. */
   static sendNewVersionMessage() {
-    sendLocalMessage('deeplib-new-version', VersionModule.newVersionMessage);
+    const beepLogLength = FriendListBeepLog.push({
+      MemberNumber: Player.MemberNumber,
+      MemberName: ModSdkManager.ModInfo.name,
+      ChatRoomName: getText('module.version.version_update'),
+      ChatRoomSpace: 'X',
+      Private: false,
+      Sent: false,
+      Time: new Date(),
+      Message: VersionModule.newVersionMessage
+    });
+
+    const beepIdx = beepLogLength - 1;
+    const title = CommonStringPartitionReplace(getText('module.version.new_version_toast_title'), { 
+      $modName$: ModSdkManager.ModInfo.name, 
+      $modVersion$: VersionModule.version 
+    }).join('');
+    const data = FriendListBeepLog[beepIdx];
+
+    ServerShowBeep(VersionModule.newVersionMessage, 10000, {
+      memberNumber: data.MemberNumber,
+      memberName: data.MemberName,
+      chatRoomName: data.ChatRoomName,
+      ...(data.Message && {
+        onClick: () => {
+          FriendListShowBeep(beepIdx);
+        }
+      })
+    }, title);
   }
 
   /**

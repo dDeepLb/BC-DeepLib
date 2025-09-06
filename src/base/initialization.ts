@@ -129,8 +129,6 @@ export async function init(options: InitOptions) {
   if (options.mainMenuOptions)
     MainMenu.setOptions(options.mainMenuOptions);
 
-  VersionModule.checkVersionUpdate();
-
   for (const m of modules()) {
     if (m.defaultSettings && hasGetter(m, 'defaultSettings') && m.settings && hasSetter(m, 'settings')) {
       if (Object.entries(m.defaultSettings).length === 0) continue;
