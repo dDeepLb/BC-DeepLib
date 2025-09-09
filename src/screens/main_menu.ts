@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, modStorage, ModStorage } from '../deeplib';
+import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, modStorage, ModStorage, SubscreenOptions } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
@@ -43,12 +43,12 @@ export class MainMenu extends BaseSubscreen {
 
   private static options: MainMenuOptions = {};
 
-  get name(): string {
-    return 'mainmenu';
-  }
+  protected static override subscreenOptions: SubscreenOptions = {
+    name: 'mainmenu',
+  };
 
   constructor(module: GUI) {
-    super({ drawCharacter: true }, module);
+    super(module);
 
     this.subscreens = module.subscreens;
   }
@@ -80,17 +80,17 @@ export class MainMenu extends BaseSubscreen {
 
     for (const screen of this.subscreens) {
 
-      if (screen.name == 'mainmenu') continue;
+      if (screen.options.name == 'mainmenu') continue;
 
       const button = advElement.createButton({
-        id: `${screen.name}-button`,
+        id: `${screen.options.name}-button`,
         onClick: () => {
           this.setSubscreen(screen);
         },
         size: [null, 90],
         options: {
-          image: screen.icon,
-          label: getText(`mainmenu.button.${screen.name}`),
+          image: screen.options.icon,
+          label: getText(`mainmenu.button.${screen.options.name}`),
         }
       });
 

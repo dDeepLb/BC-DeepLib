@@ -1,12 +1,12 @@
 
 import { Button, Checkbox, Input, Label, SettingElement } from '../base/elements_typings';
-import { BaseSubscreen, deepLibLogger } from '../deeplib';
+import { BaseSubscreen, deepLibLogger, SubscreenOptions } from '../deeplib';
 
 export class GuiDebug extends BaseSubscreen {
 
-  get name(): string {
-    return 'debug';
-  }
+  protected static override subscreenOptions: SubscreenOptions = {
+    name: 'debug',
+  };
 
   get pageStructure(): SettingElement[][] {
     return [[

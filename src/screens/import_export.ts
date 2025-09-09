@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger } from '../deeplib';
+import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger, SubscreenOptions } from '../deeplib';
 import { advElement, Modal } from '../utilities/elements/elements';
 
 /**
@@ -33,12 +33,12 @@ type DataTransferMethod = 'clipboard' | 'file';
 export class GuiImportExport extends BaseSubscreen {
   private importExportOptions: ImportExportOptions;
 
-  get name(): string {
-    return 'import-export';
-  }
+  static override subscreenOptions: SubscreenOptions = {
+    name: 'import-export',
+  };
 
   constructor(importExportOptions: ImportExportOptions) {
-    super({ drawCharacter: true });
+    super();
     this.importExportOptions = importExportOptions;
   }
 
