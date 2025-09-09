@@ -70,7 +70,7 @@ export class GUI extends BaseModule {
     }
 
     if (typeof subscreen === 'string') {
-      const scr = this._subscreens?.find((s) => s.name === subscreen);
+      const scr = this._subscreens?.find((s) => s.options.name === subscreen);
       if (!scr) throw `Failed to find screen name ${subscreen}`;
       this._currentSubscreen = scr;
     } else {
@@ -116,7 +116,7 @@ export class GUI extends BaseModule {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
 
-      this._subscreens.push(new module.settingsScreen({}, module));
+      this._subscreens.push(new module.settingsScreen(module));
     }
 
     this._mainMenu.subscreens = this._subscreens;

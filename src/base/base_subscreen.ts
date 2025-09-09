@@ -2,13 +2,26 @@ import { BaseModule, BaseSettingsModel, GUI, advElement, ModSdkManager, domUtil,
 import { SettingElement } from './elements_typings';
 
 /** Optional configuration flags for a `BaseSubscreen` instance. */
-type SubscreenOptions = {
+export type SubscreenOptions = {
   /**
    * If `true`, the subscreen will draw the player's character model
    * in the UI when `run()` is called.
    * Also shift the UI to the right to make room for the character.
    */
   drawCharacter?: boolean;
+
+  /**
+   * Logical name of this subscreen.
+   * Used for localization key resolution in `load()`.
+   * Subclasses should override this with a meaningful identifier.
+   */
+  name: string;
+
+  /**
+   * Path to or Base64 data for an icon representing this subscreen.
+   * Defaults to empty string (no icon).
+   */
+  icon?: string;
 };
 
 /**
@@ -17,7 +30,6 @@ type SubscreenOptions = {
  * configuration options and a parent module reference.
  */
 export type Subscreen = new (
-  subscreenOptions?: SubscreenOptions,
   module?: BaseModule
 ) => BaseSubscreen;
 
@@ -56,27 +68,21 @@ export abstract class BaseSubscreen {
   readonly options: SubscreenOptions;
   /** Reference to the module this subscreen belongs to. */
   readonly module!: BaseModule;
+  /** */
+  protected static readonly subscreenOptions: SubscreenOptions = {
+    drawCharacter: true,
+    name: 'UNKNOWN',
+    icon: ''
+  };
 
-  constructor(subscreenOptions?: SubscreenOptions, module?: BaseModule) {
+  constructor(module?: BaseModule) {
     if (module) this.module = module;
-    this.options = subscreenOptions || {} as SubscreenOptions;
-  }
 
-  /**
-   * Logical name of this subscreen.
-   * Used for localization key resolution in `load()`.
-   * Subclasses should override this with a meaningful identifier.
-   */
-  get name(): string {
-    return 'UNKNOWN';
-  }
-
-  /**
-   * Path to or Base64 data for an icon representing this subscreen.
-   * Defaults to empty string (no icon).
-   */
-  get icon(): string {
-    return '';
+    const ctor = this.constructor as typeof BaseSubscreen;
+    this.options = {
+      ...BaseSubscreen.subscreenOptions,
+      ...ctor.subscreenOptions
+    };
   }
 
   /** Changes the currently active subscreen. */
@@ -191,11 +197,11 @@ export abstract class BaseSubscreen {
 
     const subscreenTitle = advElement.createLabel({
       id: 'deeplib-subscreen-title',
-      label: getText(`${this.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
+      label: getText(`${this.options.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
     });
     layout.appendToSubscreen(subscreenTitle);
 
-    if (this.name !== 'mainmenu') {
+    if (this.options.name !== 'mainmenu') {
       const exitButton = advElement.createButton({
         id: 'deeplib-exit',
         size: [90, 90],
@@ -286,7 +292,7 @@ export abstract class BaseSubscreen {
     ElementSetSize(subscreen || '', 2000, 1000);
     ElementSetFontSize(subscreen || '', 'auto');
 
-    if (this.name === 'mainmenu') {
+    if (this.options.name === 'mainmenu') {
       ElementSetPosition(settingsDiv || '', 530 - offset, 170);
       ElementSetSize(settingsDiv || '', 600 + offset, 660);
     } else {
