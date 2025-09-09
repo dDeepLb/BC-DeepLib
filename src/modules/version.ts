@@ -76,10 +76,10 @@ export class VersionModule extends BaseModule {
    * - Saves `modStorage`.
    */
   private static checkVersionUpdate() {
-    const PreviousVersion = VersionModule.loadVersion();
-    const CurrentVersion = VersionModule.version;
+    const previousVersion = VersionModule.loadVersion();
+    const currentVersion = VersionModule.version;
 
-    if (VersionModule.isNewVersion(PreviousVersion, CurrentVersion)) {
+    if (VersionModule.isNewVersion(previousVersion, currentVersion)) {
       VersionModule.isItNewVersion = true;
       VersionModule.checkVersionMigration();
       VersionModule.saveVersion();
@@ -93,9 +93,9 @@ export class VersionModule extends BaseModule {
    * is newer than the previously stored version.
    */
   private static checkVersionMigration() {
-    const PreviousVersion = VersionModule.loadVersion();
+    const previousVersion = VersionModule.loadVersion();
     const toMigrate = VersionModule.migrators.filter(m =>
-      VersionModule.isNewVersion(PreviousVersion, m.MigrationVersion)
+      VersionModule.isNewVersion(previousVersion, m.MigrationVersion)
     );
 
     if (!toMigrate.length) return;
@@ -107,7 +107,7 @@ export class VersionModule extends BaseModule {
 
       migrator.Migrate();
       deepLibLogger.info(
-        `Migrating ${ModSdkManager.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`
+        `Migrating ${ModSdkManager.ModInfo.name} from ${previousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`
       );
 
       VersionModule.afterEach?.();
