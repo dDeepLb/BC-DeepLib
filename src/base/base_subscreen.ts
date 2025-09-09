@@ -22,6 +22,18 @@ export type SubscreenOptions = {
    * Defaults to empty string (no icon).
    */
   icon?: string;
+
+  /** 
+   * An optional help button to open a subscreen or URL or run a function when clicked.
+   */
+  help?: {
+    /** A URL or BaseSubscreen to open or a function to run when the help button is clicked  */
+    onClick: URL | string | BaseSubscreen | (() => void);
+    /** A tooltip to display when the help button is hovered over */
+    tooltip?: string;
+    /** An icon to display on the help button */
+    icon?: string;
+  }
 };
 
 /**
@@ -193,6 +205,33 @@ export abstract class BaseSubscreen {
       });
 
       ElementMenu.PrependItem(menu, backNext);
+    }
+
+    if (this.options.help) {
+      const onClick = this.options.help.onClick;
+      let action = () => {};
+      if (typeof onClick === 'string' || onClick instanceof URL) {
+        action = () => window.open(onClick, '_blank');
+      } else if (typeof onClick === 'function') {
+        action = onClick;
+      } else if (onClick instanceof BaseSubscreen) {
+        action = () => this.setSubscreen(onClick);
+      }
+
+      this.options.help.tooltip ??= getText('settings.button.help_button_hint');
+      this.options.help.icon ??= `${PUBLIC_URL}/dl_images/bookmark.svg`;
+      
+      const helpButton = advElement.createButton({
+        id: 'deeplib-help',
+        size: [90, 90],
+        onClick: action,
+        options: {
+          image: this.options.help.icon,
+          tooltip: this.options.help.tooltip
+        }
+      });
+
+      ElementMenu.AppendButton(menu, helpButton);
     }
 
     const subscreenTitle = advElement.createLabel({
