@@ -2,6 +2,10 @@ import { BaseMigrator, BaseModule, ModSdkManager, deepLibLogger, getText, modSto
 
 export type VersionModuleOptions = {
   newVersionMessage: string;
+  beforeEach?: () => void;
+  afterEach?: () => void;
+  beforeAll?: () => void;
+  afterAll?: () => void;
 };
 
 /**
@@ -28,10 +32,24 @@ export class VersionModule extends BaseModule {
   /** List of registered migration handlers, sorted by version */
   private static migrators: BaseMigrator[] = [];
 
+  /** Optional lifecycle hook. Runs before each migration */
+  private static beforeEach?: () => void;
+  /** Optional lifecycle hook. Runs after each migration */
+  private static afterEach?: () => void;
+  /** Optional lifecycle hook. Runs before all migrations */
+  private static beforeAll?: () => void;
+  /** Optional lifecycle hook. Runs after all migrations */
+  private static afterAll?: () => void;
+
   constructor(options: VersionModuleOptions) {
     super();
 
     VersionModule.newVersionMessage = options.newVersionMessage;
+
+    VersionModule.beforeEach = options.beforeEach;
+    VersionModule.afterEach = options.afterEach;
+    VersionModule.beforeAll = options.beforeAll;
+    VersionModule.afterAll = options.afterAll;
   }
 
   /**
@@ -58,10 +76,10 @@ export class VersionModule extends BaseModule {
    * - Saves `modStorage`.
    */
   private static checkVersionUpdate() {
-    const PreviousVersion = VersionModule.loadVersion();
-    const CurrentVersion = VersionModule.version;
+    const previousVersion = VersionModule.loadVersion();
+    const currentVersion = VersionModule.version;
 
-    if (VersionModule.isNewVersion(PreviousVersion, CurrentVersion)) {
+    if (VersionModule.isNewVersion(previousVersion, currentVersion)) {
       VersionModule.isItNewVersion = true;
       VersionModule.checkVersionMigration();
       VersionModule.saveVersion();
@@ -75,14 +93,27 @@ export class VersionModule extends BaseModule {
    * is newer than the previously stored version.
    */
   private static checkVersionMigration() {
-    const PreviousVersion = VersionModule.loadVersion();
+    const previousVersion = VersionModule.loadVersion();
+    const toMigrate = VersionModule.migrators.filter(m =>
+      VersionModule.isNewVersion(previousVersion, m.MigrationVersion)
+    );
 
-    for (const migrator of VersionModule.migrators) {
-      if (VersionModule.isNewVersion(PreviousVersion, migrator.MigrationVersion)) {
-        migrator.Migrate();
-        deepLibLogger.info(`Migrating ${ModSdkManager.ModInfo.name} from ${PreviousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`);
-      }
+    if (!toMigrate.length) return;
+
+    VersionModule.beforeAll?.();
+
+    for (const migrator of toMigrate) {
+      VersionModule.beforeEach?.();
+
+      migrator.Migrate();
+      deepLibLogger.info(
+        `Migrating ${ModSdkManager.ModInfo.name} from ${previousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`
+      );
+
+      VersionModule.afterEach?.();
     }
+
+    VersionModule.afterAll?.();
   }
 
   /**
@@ -109,9 +140,9 @@ export class VersionModule extends BaseModule {
     });
 
     const beepIdx = beepLogLength - 1;
-    const title = CommonStringPartitionReplace(getText('module.version.new_version_toast_title'), { 
-      $modName$: ModSdkManager.ModInfo.name, 
-      $modVersion$: VersionModule.version 
+    const title = CommonStringPartitionReplace(getText('module.version.new_version_toast_title'), {
+      $modName$: ModSdkManager.ModInfo.name,
+      $modVersion$: VersionModule.version
     }).join('');
     const data = FriendListBeepLog[beepIdx];
 
