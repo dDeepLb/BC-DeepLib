@@ -283,7 +283,7 @@ export abstract class BaseSubscreen {
    * Called when the window is resized.
    * Also checks for overflow in the settings div and applies styling accordingly.
    */
-  resize(onLoad: boolean = false) {
+  resize(_onLoad: boolean = false) {
     const offset = this.options.drawCharacter ? 0 : 380;
     const subscreen = layout.getSubscreen();
     const settingsDiv = layout.getSettingsDiv();
