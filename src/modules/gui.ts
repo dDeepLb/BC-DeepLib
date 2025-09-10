@@ -23,7 +23,7 @@ type GuiOptions = {
   /**
    * The main menu screen for the mod.
    */
-  mainMenu: typeof MainMenu;
+  mainMenu?: typeof MainMenu;
 };
 
 /**
