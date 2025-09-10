@@ -15,7 +15,19 @@ export default tseslint.config(
       'style/semi': ['error', 'always'],
       'style/linebreak-style': ['warn', 'unix'],
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn'],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          'args': 'all',
+          'argsIgnorePattern': '^_',
+          'caughtErrors': 'all',
+          'caughtErrorsIgnorePattern': '^_',
+          'destructuredArrayIgnorePattern': '^_',
+          'varsIgnorePattern': '^_',
+          'ignoreRestSiblings': true
+        }
+      ]
     },
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },

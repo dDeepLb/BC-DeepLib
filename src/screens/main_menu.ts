@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, modStorage, ModStorage, SubscreenOptions } from '../deeplib';
+import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, ModStorage, SubscreenOptions } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 

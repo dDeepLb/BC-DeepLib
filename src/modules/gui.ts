@@ -1,25 +1,29 @@
 import { BaseModule, BaseSubscreen, MainMenu, modules, setSubscreen } from '../deeplib';
 
 /** Options for configuring a mod's main button in the extensions menu. */
-type ModButtonOptions = {
+type GuiOptions = {
 
   /**
    * Unique identifier for the mod's settings button.
    * Used internally by the preference system to track the button.
    */
-  Identifier: string;
+  identifier: string;
 
   /**
    * The label displayed on the settings button.
    * Can be a string or a function that returns a string dynamically.
    */
-  ButtonText: string | (() => string);
+  buttonText: string | (() => string);
 
   /** 
    * The path to or Base64 data of the icon for the settings button.
    * Can be a string or a function that returns a string dynamically.
    */
-  Image: string | (() => string);
+  image: string | (() => string);
+  /**
+   * The main menu screen for the mod.
+   */
+  mainMenu: typeof MainMenu;
 };
 
 /**
@@ -41,7 +45,7 @@ export class GUI extends BaseModule {
   /** The currently active subscreen, or `null` if none is active. */
   private _currentSubscreen: BaseSubscreen | null = null;
   /** Options defining how the mod's settings button is displayed and behaves. */
-  private _modButtonOptions: ModButtonOptions;
+  private _modButtonOptions: GuiOptions;
 
   /** Returns all registered subscreens. */
   get subscreens(): BaseSubscreen[] {
@@ -88,7 +92,7 @@ export class GUI extends BaseModule {
    * 
    * @throws If another `GUI` instance already exists.
    */
-  constructor(modButtonOptions: ModButtonOptions) {
+  constructor(guiOptions: GuiOptions) {
     super();
     if (GUI.instance) {
       throw new Error('Duplicate initialization');
@@ -98,9 +102,9 @@ export class GUI extends BaseModule {
       if (!module.settingsScreen) continue;
     }
 
-    this._mainMenu = new MainMenu(this);
+    this._mainMenu = guiOptions.mainMenu ? new guiOptions.mainMenu(this) : new MainMenu(this);
     this._subscreens = [this._mainMenu];
-    this._modButtonOptions = modButtonOptions;
+    this._modButtonOptions = guiOptions;
 
     GUI.instance = this;
   }
@@ -121,11 +125,11 @@ export class GUI extends BaseModule {
 
     this._mainMenu.subscreens = this._subscreens;
     PreferenceRegisterExtensionSetting({
-      Identifier: this._modButtonOptions.Identifier,
-      ButtonText: this._modButtonOptions.ButtonText,
-      Image: this._modButtonOptions.Image,
+      Identifier: this._modButtonOptions.identifier,
+      ButtonText: this._modButtonOptions.buttonText,
+      Image: this._modButtonOptions.image,
       load: (() => {
-        setSubscreen(new MainMenu(this));
+        setSubscreen(this._mainMenu);
       }),
       run: (() => {
         if (this._currentSubscreen) {
