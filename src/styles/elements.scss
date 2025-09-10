@@ -48,6 +48,7 @@
   padding: min(1vh, 0.5vw);
   font-size: 0.8em;
   border: min(0.2vh, 0.1vw) solid var(--deeplib-border-color);
+  z-index: 1;
 }
 
 .deeplib-overflow-box {
