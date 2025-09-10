@@ -95,7 +95,7 @@ export class VersionModule extends BaseModule {
   private static checkVersionMigration() {
     const previousVersion = VersionModule.loadVersion();
     const toMigrate = VersionModule.migrators.filter(m =>
-      VersionModule.isNewVersion(previousVersion, m.MigrationVersion)
+      VersionModule.isNewVersion(previousVersion, m.migrationVersion)
     );
 
     if (!toMigrate.length) return;
@@ -105,9 +105,9 @@ export class VersionModule extends BaseModule {
     for (const migrator of toMigrate) {
       VersionModule.beforeEach?.();
 
-      migrator.Migrate();
+      migrator.migrate();
       deepLibLogger.info(
-        `Migrating ${ModSdkManager.ModInfo.name} from ${previousVersion} to ${migrator.MigrationVersion} with ${migrator.constructor.name}`
+        `Migrating ${ModSdkManager.ModInfo.name} from ${previousVersion} to ${migrator.migrationVersion} with ${migrator.constructor.name}`
       );
 
       VersionModule.afterEach?.();
@@ -123,7 +123,7 @@ export class VersionModule extends BaseModule {
   static registerMigrator(migrator: BaseMigrator) {
     VersionModule.migrators.push(migrator);
 
-    VersionModule.migrators.sort((a, b) => a.MigrationVersion.localeCompare(b.MigrationVersion));
+    VersionModule.migrators.sort((a, b) => a.migrationVersion.localeCompare(b.migrationVersion));
   }
 
   /** Sends the currently configured "new version" message to the local player. */
