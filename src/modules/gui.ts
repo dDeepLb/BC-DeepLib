@@ -20,6 +20,9 @@ type GuiOptions = {
    * Can be a string or a function that returns a string dynamically.
    */
   image: string | (() => string);
+  /**
+   * The main menu screen for the mod.
+   */
   mainMenu: typeof MainMenu;
 };
 
