@@ -7,19 +7,19 @@ type GuiOptions = {
    * Unique identifier for the mod's settings button.
    * Used internally by the preference system to track the button.
    */
-  Identifier: string;
+  identifier: string;
 
   /**
    * The label displayed on the settings button.
    * Can be a string or a function that returns a string dynamically.
    */
-  ButtonText: string | (() => string);
+  buttonText: string | (() => string);
 
   /** 
    * The path to or Base64 data of the icon for the settings button.
    * Can be a string or a function that returns a string dynamically.
    */
-  Image: string | (() => string);
+  image: string | (() => string);
   mainMenu: typeof MainMenu;
 };
 
@@ -122,9 +122,9 @@ export class GUI extends BaseModule {
 
     this._mainMenu.subscreens = this._subscreens;
     PreferenceRegisterExtensionSetting({
-      Identifier: this._modButtonOptions.Identifier,
-      ButtonText: this._modButtonOptions.ButtonText,
-      Image: this._modButtonOptions.Image,
+      Identifier: this._modButtonOptions.identifier,
+      ButtonText: this._modButtonOptions.buttonText,
+      Image: this._modButtonOptions.image,
       load: (() => {
         setSubscreen(this._mainMenu);
       }),
