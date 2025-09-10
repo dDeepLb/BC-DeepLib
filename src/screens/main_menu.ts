@@ -97,7 +97,7 @@ export class MainMenu extends BaseSubscreen {
       layout.appendToSettingsDiv(button);
     }
 
-    const miscDiv = layout.createMiscDiv();
+    const miscDiv = layout.getMiscDiv();
     layout.appendToSubscreen(miscDiv);
 
     if (MainMenu.options.wikiLink) {

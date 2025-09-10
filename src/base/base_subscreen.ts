@@ -187,8 +187,8 @@ export abstract class BaseSubscreen {
 
     BaseSubscreen.currentPage = 1;
 
-    layout.createSubscreen();
-    const settingsElement = layout.createSettingsDiv();
+    layout.getSubscreen();
+    const settingsElement = layout.getSettingsDiv();
     layout.appendToSubscreen(settingsElement);
 
     const menu = ElementMenu.Create('deeplib-nav-menu', []);
