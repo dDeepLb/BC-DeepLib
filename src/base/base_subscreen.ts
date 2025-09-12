@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, advElement, ModSdkManager, domUtil, getText, layout, modules, modStorage } from '../deeplib';
+import { BaseModule, BaseSettingsModel, GUI, advElement, ModSdkManager, domUtil, getText, layout, modules, modStorage, exportToGlobal } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
 /** Optional configuration flags for a `BaseSubscreen` instance. */
@@ -33,7 +33,20 @@ export type SubscreenOptions = {
     tooltip?: string;
     /** An icon to display on the help button */
     icon?: string;
-  }
+  },
+
+  /** 
+   * Screen to return to when exiting this subscreen. 
+   * If not configured, the default is the main menu for all screens, but main menu itself.
+   * For main menu, the default is the Extensions menu 
+   */
+  returnScreen?: (() => ScreenSpecifier | BaseSubscreen) | ScreenSpecifier | BaseSubscreen;
+
+  /** 
+   * The background image for this subscreen. 
+   * Currently supports only images from the Club.
+   */
+  background?: string;
 };
 
 /**
@@ -46,13 +59,14 @@ export type Subscreen = new (
 ) => BaseSubscreen;
 
 /** Switches the active subscreen in the global `GUI` instance. */
-export function setSubscreen(subscreen: BaseSubscreen | string | null): BaseSubscreen | null {
+export async function setSubscreen(subscreen: BaseSubscreen | string | null) {
   if (!GUI.instance) {
     throw new Error('Attempt to set subscreen before init');
   }
-  GUI.instance.currentSubscreen = subscreen;
+  const screenName = typeof subscreen === 'string' ? subscreen : subscreen?.options.name;
+  const screenId = `${BaseSubscreen.id}_${screenName}`;
 
-  return GUI.instance.currentSubscreen;
+  await CommonSetScreen(...['DeepLibMod', `${screenId}`] as unknown as ScreenSpecifier);
 }
 
 /**
@@ -80,11 +94,14 @@ export abstract class BaseSubscreen {
   readonly options: SubscreenOptions;
   /** Reference to the module this subscreen belongs to. */
   readonly module!: BaseModule;
-  /** */
+  /** Identifier for internal use to avoid screen name collisions. */
+  static readonly id: string = CommonGenerateUniqueID();
+  /** Optional configuration flags for a BaseSubscreen instance. */
   protected static readonly subscreenOptions: SubscreenOptions = {
     drawCharacter: true,
     name: 'UNKNOWN',
-    icon: ''
+    icon: '',
+    background: 'Sheet',
   };
 
   constructor(module?: BaseModule) {
@@ -95,11 +112,24 @@ export abstract class BaseSubscreen {
       ...BaseSubscreen.subscreenOptions,
       ...ctor.subscreenOptions
     };
+
+    const screenName = this.options.name;
+    const screenId = `${BaseSubscreen.id}_${screenName}`;
+
+    exportToGlobal(`${screenId}Load`, this.load.bind(this));
+    exportToGlobal(`${screenId}Run`, this.run.bind(this));
+    exportToGlobal(`${screenId}Click`, this.click.bind(this));
+    exportToGlobal(`${screenId}Exit`, this.exit.bind(this));
+    exportToGlobal(`${screenId}Unload`, this.unload.bind(this));
+    exportToGlobal(`${screenId}Resize`, this.resize.bind(this));
+    exportToGlobal(`${screenId}Background`, this.options.background);
+
+    CommonCSVCache[ScreenFileGetTranslation('DeepLibMod', screenId) as string] = [];
   }
 
   /** Changes the currently active subscreen. */
-  setSubscreen(screen: BaseSubscreen | string | null) {
-    return setSubscreen(screen);
+  async setSubscreen(screen: BaseSubscreen | string | null) {
+    return await setSubscreen(screen);
   }
 
   /** Gets this subscreen's settings object from its parent module. */
@@ -209,18 +239,18 @@ export abstract class BaseSubscreen {
 
     if (this.options.help) {
       const onClick = this.options.help.onClick;
-      let action = () => {};
+      let action = () => { };
       if (typeof onClick === 'string' || onClick instanceof URL) {
         action = () => window.open(onClick, '_blank');
       } else if (typeof onClick === 'function') {
         action = onClick;
       } else if (onClick instanceof BaseSubscreen) {
-        action = () => this.setSubscreen(onClick);
+        action = async () => await this.setSubscreen(onClick);
       }
 
       this.options.help.tooltip ??= getText('settings.button.help_button_hint');
       this.options.help.icon ??= `${PUBLIC_URL}/dl_images/bookmark.svg`;
-      
+
       const helpButton = advElement.createButton({
         id: 'deeplib-help',
         size: [90, 90],
@@ -314,8 +344,17 @@ export abstract class BaseSubscreen {
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
 
-    setSubscreen('mainmenu');
-    modStorage.save();
+    const returnScreen = typeof this.options.returnScreen === 'function' ? this.options.returnScreen() : this.options.returnScreen;
+
+    if (returnScreen instanceof BaseSubscreen || !returnScreen) {
+      setSubscreen(returnScreen ?? 'mainmenu').then(() => {
+        modStorage.save();
+      });
+    } else if (Array.isArray(returnScreen)) {
+      CommonSetScreen(...returnScreen).then(() => {
+        modStorage.save();
+      });
+    }
   }
 
   /**

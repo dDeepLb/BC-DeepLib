@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, ModStorage, SubscreenOptions } from '../deeplib';
+import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, ModStorage, setSubscreen, SubscreenOptions } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
@@ -54,7 +54,7 @@ export class MainMenu extends BaseSubscreen {
   }
 
   load(): void {
-    if (!GUI.instance?.currentSubscreen) {
+    if (!GUI.instance || CurrentModule as string !== 'DeepLibMod') {
       this.setSubscreen(this);
       return;
     }
@@ -171,10 +171,10 @@ export class MainMenu extends BaseSubscreen {
         options: {
           tooltipPosition: 'left',
           noStyling: true,
-          tooltip: CommonStringPartitionReplace(getText('mainmenu.meter.storage_hint'), { 
-            $percentage$: `${fullness}` 
+          tooltip: CommonStringPartitionReplace(getText('mainmenu.meter.storage_hint'), {
+            $percentage$: `${fullness}`
           }).join(''),
-          label: CommonStringPartitionReplace(getText('mainmenu.meter.storage_label'), { 
+          label: CommonStringPartitionReplace(getText('mainmenu.meter.storage_label'), {
             $currentCapacity$: `${currentStorageCapacityKB}`,
             $maxCapacity$: `${maxStorageCapacityKB}`,
           }).join(''),
@@ -226,8 +226,19 @@ export class MainMenu extends BaseSubscreen {
   exit(): void {
     CharacterAppearanceForceUpCharacter = -1;
     CharacterLoadCanvas(Player);
-    this.setSubscreen(null);
-    PreferenceSubscreenExtensionsClear();
+
+    const returnScreen = typeof this.options.returnScreen === 'function' ? this.options.returnScreen() : this.options.returnScreen;
+
+    if (!returnScreen) {
+      PreferenceOpenSubscreen('Extensions').then(() => {
+        PreferenceSubscreenExtensionsClear();
+      });
+    } else if (returnScreen instanceof BaseSubscreen) {
+      setSubscreen(returnScreen ?? null).then(() => {
+      });
+    } else if (Array.isArray(returnScreen)) {
+      CommonSetScreen(...returnScreen);
+    }
   }
 
   resize(): void {
@@ -239,4 +250,21 @@ export class MainMenu extends BaseSubscreen {
   static setOptions(mainMenuOptions: MainMenuOptions) {
     MainMenu.options = mainMenuOptions;
   }
+}
+
+/**
+ * Open a specific subscreen. 
+ */
+// TODO - Remove after R120. 
+async function PreferenceOpenSubscreen(subscreen: PreferenceSubscreenName, page: number = 1) {
+  if (CurrentModule !== 'Character' || CurrentScreen !== 'Preference') {
+    await CommonSetScreen('Character', 'Preference');
+  }
+  PreferenceSubscreen?.unload?.();
+
+  PreferenceSubscreen = PreferenceSubscreens.find(s => s.name === subscreen) ?? null;
+  if (!CommonIsNonNegativeInteger(page)) page = 1;
+  PreferencePageCurrent = page;
+  PreferenceMessage = '';
+  PreferenceSubscreen?.load?.();
 }
