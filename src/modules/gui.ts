@@ -20,6 +20,7 @@ type GuiOptions = {
    * Can be a string or a function that returns a string dynamically.
    */
   image: string | (() => string);
+  
   /**
    * The main menu screen for the mod.
    */
@@ -42,10 +43,8 @@ export class GUI extends BaseModule {
   private _subscreens: BaseSubscreen[];
   /** The mod's main menu screen. */
   private _mainMenu: MainMenu;
-  /** The currently active subscreen, or `null` if none is active. */
-  private _currentSubscreen: BaseSubscreen | null = null;
   /** Options defining how the mod's settings button is displayed and behaves. */
-  private _modButtonOptions: GuiOptions;
+  private _modButtonOptions: GuiOptions | null;
 
   /** Returns all registered subscreens. */
   get subscreens(): BaseSubscreen[] {
@@ -57,42 +56,12 @@ export class GUI extends BaseModule {
     return this._mainMenu;
   }
 
-  /** Returns the currently active subscreen. */
-  get currentSubscreen(): BaseSubscreen | null {
-    return this._currentSubscreen;
-  }
-
-  /**
-   * Sets the current subscreen.
-   * Accepts either a `BaseSubscreen` instance or the `name` of a subscreen.
-   *
-   * @throws If a string is provided but no subscreen with that name exists.
-   */
-  set currentSubscreen(subscreen: BaseSubscreen | string | null) {
-    if (this._currentSubscreen) {
-      this._currentSubscreen.unload();
-    }
-
-    if (typeof subscreen === 'string') {
-      const scr = this._subscreens?.find((s) => s.options.name === subscreen);
-      if (!scr) throw `Failed to find screen name ${subscreen}`;
-      this._currentSubscreen = scr;
-    } else {
-      this._currentSubscreen = subscreen;
-    }
-
-    if (this._currentSubscreen) {
-      this._currentSubscreen.load();
-      this._currentSubscreen.resize(true);
-    }
-  }
-
   /** 
    * Creates the GUI instance and initializes the main menu. 
    * 
    * @throws If another `GUI` instance already exists.
    */
-  constructor(guiOptions: GuiOptions) {
+  constructor(guiOptions: GuiOptions | null = null) {
     super();
     if (GUI.instance) {
       throw new Error('Duplicate initialization');
@@ -102,7 +71,7 @@ export class GUI extends BaseModule {
       if (!module.settingsScreen) continue;
     }
 
-    this._mainMenu = guiOptions.mainMenu ? new guiOptions.mainMenu(this) : new MainMenu(this);
+    this._mainMenu = guiOptions?.mainMenu ? new guiOptions.mainMenu(this) : new MainMenu(this);
     this._subscreens = [this._mainMenu];
     this._modButtonOptions = guiOptions;
 
@@ -117,6 +86,8 @@ export class GUI extends BaseModule {
    * - Sets up the main menu and its subscreens.
    */
   load(): void {
+    if (!this._modButtonOptions) return;
+    
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
 
@@ -124,39 +95,17 @@ export class GUI extends BaseModule {
     }
 
     this._mainMenu.subscreens = this._subscreens;
+
     PreferenceRegisterExtensionSetting({
       Identifier: this._modButtonOptions.identifier,
       ButtonText: this._modButtonOptions.buttonText,
       Image: this._modButtonOptions.image,
-      load: (() => {
-        setSubscreen(this._mainMenu);
-      }),
-      run: (() => {
-        if (this._currentSubscreen) {
-          this._currentSubscreen.run();
-
-          const newCanvasPosition: RectTuple = [MainCanvas.canvas.offsetLeft, MainCanvas.canvas.offsetTop, MainCanvas.canvas.clientWidth, MainCanvas.canvas.clientHeight];
-          if (!CommonArraysEqual(newCanvasPosition, DrawCanvasPosition)) {
-            DrawCanvasPosition = newCanvasPosition;
-            this._currentSubscreen.resize(false);
-          }
-        }
-      }),
-      click: (() => {
-        if (this._currentSubscreen) {
-          this._currentSubscreen.click();
-        }
-      }),
-      exit: (() => {
-        if (this._currentSubscreen) {
-          this._currentSubscreen.exit();
-        }
-      }),
-      unload: (() => {
-        if (this._currentSubscreen) {
-          this._currentSubscreen.unload();
-        }
-      })
+      load: async () => {
+        await setSubscreen(this._mainMenu);
+      },
+      run: () => {},
+      click: () => {},
+      exit: () => {},
     });
   }
 }
