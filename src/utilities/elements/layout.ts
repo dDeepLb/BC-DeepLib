@@ -15,7 +15,6 @@ export const layout = {
 function elementGetSubscreenDiv() {
   const subscreenDiv = ElementWrap('deeplib-subscreen');
   if (subscreenDiv) {
-    console.error('Subscreen already exists');
     return subscreenDiv;
   }
 
@@ -39,7 +38,6 @@ function elementAppendToSubscreenDiv(...element: HTMLElement[]) {
 function elementGetSettingsDiv() {
   const settingsDiv = ElementWrap('deeplib-settings');
   if (settingsDiv) {
-    console.error('Settings screen already exists');
     return settingsDiv;
   }
 
@@ -63,7 +61,6 @@ function elementRemoveSettingsDiv() {
 function elementGetMiscDiv() {
   const miscDiv = ElementWrap('deeplib-misc');
   if (miscDiv) {
-    console.error('Settings screen already exists');
     return miscDiv;
   }
 
