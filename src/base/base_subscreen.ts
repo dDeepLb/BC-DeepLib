@@ -47,6 +47,24 @@ export type SubscreenOptions = {
    * Currently supports only images from the Club.
    */
   background?: string;
+
+  /**
+   * If `true`, the exit button will be shown on the subscreen.
+   * Defaults to `true`.
+   */
+  doShowExitButton?: boolean;
+
+  /**
+   * If `true`, the title will be shown on the subscreen.
+   * Defaults to `true`.
+   */
+  doShowTitle?: boolean;
+
+  /** 
+   * The width of the settings div in canvas pixels.
+   * Defaults to 1000.
+   */
+  settingsWidth?: number;
 };
 
 /**
@@ -102,6 +120,9 @@ export abstract class BaseSubscreen {
     name: 'UNKNOWN',
     icon: '',
     background: 'Sheet',
+    doShowExitButton: true,
+    doShowTitle: true,
+    settingsWidth: 1000,
   };
 
   constructor(module?: BaseModule) {
@@ -264,13 +285,15 @@ export abstract class BaseSubscreen {
       ElementMenu.AppendButton(menu, helpButton);
     }
 
-    const subscreenTitle = advElement.createLabel({
-      id: 'deeplib-subscreen-title',
-      label: getText(`${this.options.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
-    });
-    layout.appendToSubscreen(subscreenTitle);
+    if (this.options.doShowTitle) {
+      const subscreenTitle = advElement.createLabel({
+        id: 'deeplib-subscreen-title',
+        label: getText(`${this.options.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
+      });
+      layout.appendToSubscreen(subscreenTitle);
+    }
 
-    if (this.options.name !== 'mainmenu') {
+    if (this.options.doShowExitButton) {
       const exitButton = advElement.createButton({
         id: 'deeplib-exit',
         size: [90, 90],
@@ -366,17 +389,12 @@ export abstract class BaseSubscreen {
     const subscreen = layout.getSubscreen();
     const settingsDiv = layout.getSettingsDiv();
 
-    ElementSetPosition(subscreen || '', 0, 0);
-    ElementSetSize(subscreen || '', 2000, 1000);
-    ElementSetFontSize(subscreen || '', 'auto');
+    ElementSetPosition(subscreen, 0, 0);
+    ElementSetSize(subscreen, 2000, 1000);
+    ElementSetFontSize(subscreen, 'auto');
 
-    if (this.options.name === 'mainmenu') {
-      ElementSetPosition(settingsDiv || '', 530 - offset, 170);
-      ElementSetSize(settingsDiv || '', 600 + offset, 660);
-    } else {
-      ElementSetPosition(settingsDiv || '', 530 - offset, 170);
-      ElementSetSize(settingsDiv || '', 1000 + offset, 660);
-    }
+    ElementSetPosition(settingsDiv, 530 - offset, 170);
+    ElementSetSize(settingsDiv, this.options.settingsWidth ?? 1000 + offset, 660);
 
     ElementSetPosition('deeplib-subscreen-title', 530 - offset, 75);
     ElementSetSize('deeplib-subscreen-title', 800, 60);

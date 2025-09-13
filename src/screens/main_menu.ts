@@ -45,6 +45,8 @@ export class MainMenu extends BaseSubscreen {
 
   protected static override subscreenOptions: SubscreenOptions = {
     name: 'mainmenu',
+    doShowExitButton: false,
+    settingsWidth: 600
   };
 
   constructor(module: GUI) {
