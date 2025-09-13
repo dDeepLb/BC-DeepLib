@@ -96,7 +96,7 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
           disabled: disabled,
           checked: options?.setElementValue?.() || undefined,
         },
-      }, options.htmlOptions),
+      } as HTMLOptions<'input'>, options.htmlOptions),
       {
         tag: 'label',
         classList: ['deeplib-text'],
@@ -166,7 +166,7 @@ function elementCreateInput(options: Input) {
           disabled: disabled,
           value: options?.setElementValue?.() || undefined,
         },
-      }, options.htmlOptions),
+      } as HTMLOptions<'input'>, options.htmlOptions),
       options.label ? {
         tag: 'label',
         classList: ['deeplib-text'],
@@ -214,7 +214,7 @@ function elementCreateLabel(options: Omit<Label, 'type'>) {
     children: [
       options.label,
     ],
-  }, options.htmlOptions));
+  }  as HTMLOptions<'span'>, options.htmlOptions));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {

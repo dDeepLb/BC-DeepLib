@@ -1,29 +1,46 @@
-/**
- * Deeply merges properties from `source` into `target`.
- * - If both target and source properties are arrays, concatenates them.
- * - If both are objects, recursively merges them.
- * - Otherwise, source overwrites target.
- */
-export function deepMerge(target: any, source: any): any {
-  if (target === undefined) return source;
-  if (source === undefined) return target;
-  if (typeof target !== 'object' || typeof source !== 'object') {
-    return source;
-  }
+type PlainObject = Record<string, unknown>;
 
-  for (const key of Object.keys(source)) {
-    if (Array.isArray(source[key]) && Array.isArray(target[key])) {
-      target[key] = [...target[key], ...source[key]];
-    } else if (typeof source[key] === 'object' && source[key] !== null) {
-      target[key] = deepMerge(target[key] || {}, source[key]);
-    } else {
-      target[key] = source[key];
-    }
-  }
-
-  return target;
+function isPlainObject(value: unknown): value is PlainObject {
+  return (
+    value !== null &&
+    typeof value === 'object' &&
+    Object.getPrototypeOf(value) === Object.prototype
+  );
 }
 
+/**
+ * Deeply merges two values into a new value.
+ * - Arrays are concatenated.
+ * - Plain objects are merged recursively.
+ * - Other values are replaced by `source`.
+ */
+export function deepMerge<T, U>(target: T, source: U): T & U {
+  if (target === undefined) return source as T & U;
+  if (source === undefined) return target as T & U;
+
+  if (Array.isArray(target) && Array.isArray(source)) {
+    return [...target, ...source] as unknown as T & U;
+  }
+
+  if (isPlainObject(target) && isPlainObject(source)) {
+    const result: PlainObject = { ...target };
+
+    for (const key of Object.keys(source)) {
+      // Protect against prototype pollution
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+        continue;
+      }
+
+      result[key] = key in target
+        ? deepMerge((target as PlainObject)[key], source[key])
+        : source[key];
+    }
+
+    return result as T & U;
+  }
+
+  return source as T & U;
+}
 
 /**
  * Returns a new array with elements of the input array shuffled.
