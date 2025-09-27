@@ -49,7 +49,7 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
           disabled: disabled,
         },
         children: [
-          image ? {
+          image ? deepMerge({
             tag: 'img',
             attributes: {
               id: `${options.id}-image`,
@@ -61,7 +61,7 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
             style: {
               '--image': `url("${image}")`,
             },
-          } : undefined,
+          }, options.htmlOptions?.img) : undefined,
         ],
       },
     }, options.htmlOptions ?? {}));
@@ -80,7 +80,7 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
 
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
-  const retElem = ElementCreate({
+  const retElem = ElementCreate(deepMerge({
     tag: 'div',
     classList: ['deeplib-checkbox-container'],
     attributes: {
@@ -96,22 +96,22 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
           disabled: disabled,
           checked: options?.setElementValue?.() || undefined,
         },
-      } as HTMLOptions<'input'>, options.htmlOptions),
-      {
+      } as HTMLOptions<'input'>, options.htmlOptions?.checkbox),
+      deepMerge({
         tag: 'label',
         classList: ['deeplib-text'],
         attributes: {
           for: options.id,
         },
         children: [options.label]
-      },
+      } as HTMLOptions<'label'>, options.htmlOptions?.label),
     ],
     eventListeners: {
       change: () => {
         options?.setSettingValue?.((document.getElementById(options.id) as HTMLInputElement)?.checked);
       }
     }
-  });
+  } as HTMLOptions<'div'>, options.htmlOptions?.container));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
@@ -149,7 +149,7 @@ function elementCreateInput(options: Input) {
 
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
-  const retElem = ElementCreate({
+  const retElem = ElementCreate(deepMerge({
     tag: 'div',
     classList: ['deeplib-input-container'],
     attributes: {
@@ -166,22 +166,22 @@ function elementCreateInput(options: Input) {
           disabled: disabled,
           value: options?.setElementValue?.() || undefined,
         },
-      } as HTMLOptions<'input'>, options.htmlOptions),
-      options.label ? {
+      } as HTMLOptions<'input'>, options.htmlOptions?.input),
+      options.label ? deepMerge({
         tag: 'label',
         classList: ['deeplib-text'],
         attributes: {
           for: options.id,
         },
         children: [options.label]
-      } : undefined,
+      } as HTMLOptions<'label'>, options.htmlOptions?.label) : undefined,
     ],
     eventListeners: {
       input: () => {
         options?.setSettingValue?.((document.getElementById(options.id) as HTMLInputElement)?.value);
       }
     }
-  });
+  } as HTMLOptions<'div'>, options.htmlOptions?.container));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {

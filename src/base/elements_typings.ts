@@ -21,7 +21,7 @@ export type Checkbox = BaseElementModel & {
   description?: string;
   setElementValue?: () => boolean;
   setSettingValue?: (val: boolean) => void;
-  htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
+  htmlOptions?: Partial<Record<'container' | 'checkbox' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
 };
 
 export type Input = BaseElementModel & {
@@ -30,7 +30,7 @@ export type Input = BaseElementModel & {
   description?: string;
   setElementValue?: () => string;
   setSettingValue?: (val: string) => void;
-  htmlOptions?: Omit<HTMLOptions<any>, 'tag'>;
+  htmlOptions?: Partial<Record<'container' | 'input' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
 };
 
 export type Label = BaseElementModel & {
