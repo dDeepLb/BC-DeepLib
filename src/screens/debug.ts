@@ -13,10 +13,12 @@ export class GuiDebug extends BaseSubscreen {
       <Button>{
         type: 'button',
         id: 'test-deeplib-big-button',
+        options: {
+          label: 'Big Button',
+          tooltip: 'This is a big button',
+          image: 'Icons/Exit.png',
+        },
         size: [405, 80],
-        label: 'Big Button',
-        tooltip: 'This is a big button',
-        image: 'Icons/Exit.png',
         onClick() {
           deepLibLogger.info('Big Button Clicked');
         }
@@ -24,9 +26,11 @@ export class GuiDebug extends BaseSubscreen {
       <Button>{
         type: 'button',
         id: 'test-deeplib-small-button',
+        options: {
+          tooltip: 'This is a small button',
+          image: 'Icons/Exit.png',
+        },
         size: [90, 90],
-        tooltip: 'This is a small button',
-        image: 'Icons/Exit.png',
         onClick() {
           deepLibLogger.info('Small Button Clicked');
         }
@@ -78,10 +82,12 @@ export class GuiDebug extends BaseSubscreen {
       <Button>{
         type: 'button',
         id: 'test-deeplib-big-button2',
+        options: {
+          label: 'Big Button',
+          tooltip: 'This is a big button',
+          image: 'Icons/Exit.png',
+        },
         size: [405, 80],
-        label: 'Big Button',
-        tooltip: 'This is a big button',
-        image: 'Icons/Prev.png',
         onClick() {
           deepLibLogger.info('Big Button Clicked');
         }
@@ -89,9 +95,11 @@ export class GuiDebug extends BaseSubscreen {
       <Button>{
         type: 'button',
         id: 'test-deeplib-small-button2',
+        options: {
+          tooltip: 'This is a small button',
+          image: 'Icons/Next.png',
+        },
         size: [90, 90],
-        tooltip: 'This is a small button',
-        image: 'Icons/Next.png',
         onClick() {
           deepLibLogger.info('Small Button Clicked');
         }
