@@ -1,4 +1,4 @@
-import { SettingsModel, deepLibLogger } from '../deeplib';
+import { ModSdkManager, SettingsModel, deepLibLogger } from '../deeplib';
 
 /**
  * ModStorage is a singleton class responsible for managing
@@ -57,7 +57,9 @@ export class ModStorage<T extends SettingsModel = SettingsModel> {
     if (this.extensionStorage) {
       const parsed = ModStorage.dataDecompress<T>(this.extensionStorage || '');
       if (parsed === null || !Object.hasOwn(parsed, 'Version')) {
-        this.playerStorage = {} as T;
+        this.playerStorage = {
+          Version: ModSdkManager.ModInfo.version
+        } as T;
       } else {
         this.playerStorage = parsed;
       };
