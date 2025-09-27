@@ -50,14 +50,3 @@
   border: var(--deeplib-blocked-color) solid var(--deeplib-border-width);
   cursor: not-allowed;
 }
-
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  appearance: textfield;
-  -moz-appearance: textfield;
-}
