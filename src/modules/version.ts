@@ -1,7 +1,7 @@
 import { BaseMigrator, BaseModule, ModSdkManager, deepLibLogger, getText, modStorage } from '../deeplib';
 
 export type VersionModuleOptions = {
-  newVersionMessage: string;
+  newVersionMessage?: string;
   beforeEach?: () => void;
   afterEach?: () => void;
   beforeAll?: () => void;
@@ -27,7 +27,7 @@ export class VersionModule extends BaseModule {
   private static version: string;
 
   /** Message to display when a new version is detected */
-  private static newVersionMessage: string = '';
+  private static newVersionMessage?: string = '';
 
   /** List of registered migration handlers, sorted by version */
   private static migrators: BaseMigrator[] = [];
@@ -128,6 +128,8 @@ export class VersionModule extends BaseModule {
 
   /** Sends the currently configured "new version" message to the local player. */
   static sendNewVersionMessage() {
+    if (!VersionModule.newVersionMessage) return;
+    
     const beepLogLength = FriendListBeepLog.push({
       MemberNumber: Player.MemberNumber,
       MemberName: ModSdkManager.ModInfo.name,
