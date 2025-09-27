@@ -8,6 +8,9 @@
 .deeplib-checkbox-container input.deeplib-input {
   width: min(5vh, 2.5vw);
   height: min(5vh, 2.5vw);
+  width: min(5dvh, 2.5dvw);
+  height: min(5dvh, 2.5dvw);
+  border-radius: min(1.0vh, 0.5vw);
   border-radius: min(1.0dvh, 0.5dvw);
 }
 
@@ -25,24 +28,27 @@
 
 .deeplib-input-container:has(label.deeplib-text) {
   margin-top: min(1vh, 0.5vw);
+  margin-top: min(1dvh, 0.5dvw);
 }
 
 .deeplib-input-container input.deeplib-input {
   font-size: 0.6em;
-  padding: 5px 0;
+  padding: min(1vh, 0.5vw);
+  padding: min(1dvh, 0.5dvw);
   background-color: transparent;
   outline: none;
-  padding-left: min(1vh, 0.5vw);
-  padding-right: min(1vh, 0.5vw);
+  min-height: min(5vh, 2.5vw);
   min-height: min(5dvh, 2.5dvw);
+  border-radius: min(1.0vh, 0.5vw);
   border-radius: min(1.0dvh, 0.5dvw);
 }
-
 
 .deeplib-input-container input.deeplib-input[type="color"] {
   padding: 0px;
   width: min(5vh, 2.5vw);
   height: min(5vh, 2.5vw);
+  width: min(5dvh, 2.5dvw);
+  height: min(5dvh, 2.5dvw);
   border-radius: 0px;
 }
 
