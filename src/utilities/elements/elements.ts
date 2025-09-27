@@ -96,6 +96,11 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
           disabled: disabled,
           checked: options?.setElementValue?.() || undefined,
         },
+        eventListeners: {
+          change: function () {
+            options?.setSettingValue?.(this.checked);
+          }
+        }
       } as HTMLOptions<'input'>, options.htmlOptions?.checkbox),
       deepMerge({
         tag: 'label',
@@ -106,11 +111,6 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
         children: [options.label]
       } as HTMLOptions<'label'>, options.htmlOptions?.label),
     ],
-    eventListeners: {
-      change: () => {
-        options?.setSettingValue?.((document.getElementById(options.id) as HTMLInputElement)?.checked);
-      }
-    }
   } as HTMLOptions<'div'>, options.htmlOptions?.container));
 
   if (options.description) {
@@ -166,6 +166,11 @@ function elementCreateInput(options: Input) {
           disabled: disabled,
           value: options?.setElementValue?.() || undefined,
         },
+        eventListeners: {
+          input: function () {
+            options?.setSettingValue?.(this.value);
+          }
+        }
       } as HTMLOptions<'input'>, options.htmlOptions?.input),
       options.label ? deepMerge({
         tag: 'label',
@@ -176,11 +181,6 @@ function elementCreateInput(options: Input) {
         children: [options.label]
       } as HTMLOptions<'label'>, options.htmlOptions?.label) : undefined,
     ],
-    eventListeners: {
-      input: () => {
-        options?.setSettingValue?.((document.getElementById(options.id) as HTMLInputElement)?.value);
-      }
-    }
   } as HTMLOptions<'div'>, options.htmlOptions?.container));
 
   if (options.description) {
