@@ -129,7 +129,10 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
 }
 
 function elementCreateCustom(options: Omit<Custom, 'type'>) {
-  const elem = document.getElementById(options.id);
+  options.id ??= ElementGenerateID();
+  options.htmlOptions.attributes ??= {};
+  options.htmlOptions.attributes.id ??= options.id;
+  const elem = document.getElementById(options.htmlOptions.attributes.id as string);
 
   if (elem) return elem;
 
