@@ -1,5 +1,6 @@
 export * from './base/base_module';
 export * from './base/base_subscreen';
+export * from './base/elements_typings';
 export * from './base/initialization';
 export * from './base/modules';
 
