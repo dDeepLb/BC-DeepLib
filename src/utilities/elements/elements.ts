@@ -214,7 +214,7 @@ function elementCreateLabel(options: Omit<Label, 'type'>) {
     children: [
       options.label,
     ],
-  }  as HTMLOptions<'span'>, options.htmlOptions));
+  } as HTMLOptions<'span'>, options.htmlOptions));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
@@ -434,7 +434,7 @@ export class Modal<T extends string = string> {
         fontFamily: CommonGetFontName()
       },
       children: [
-        { 
+        {
           tag: 'div',
           classList: ['deeplib-modal-prompt-container'],
           children: [
@@ -493,7 +493,7 @@ export class Modal<T extends string = string> {
       prompt: msg,
       buttons: [{ text: getText('modal.button.decline'), action: 'decline' }, { text: getText('modal.button.confirm'), action: 'confirm' }],
       escapeAction: 'decline',
-      enterAction: 'confirm' 
+      enterAction: 'confirm'
     }).show();
     return action === 'confirm';
   }
@@ -503,13 +503,13 @@ export class Modal<T extends string = string> {
    * Returns the input value if submitted, otherwise null.
    */
   static async prompt(msg: ElementButton.StaticNode, defaultValue = ''): Promise<string | null> {
-    const [action, value] = await new Modal({ 
+    const [action, value] = await new Modal({
       prompt: msg,
       timeoutMs: 0,
       input: { type: 'input', defaultValue },
       buttons: [{ text: getText('modal.button.cancel'), action: 'cancel' }, { text: getText('modal.button.submit'), action: 'submit' }],
       escapeAction: 'cancel',
-      enterAction: 'submit' 
+      enterAction: 'submit'
     }).show();
     return action === 'submit' ? value : null;
   }
