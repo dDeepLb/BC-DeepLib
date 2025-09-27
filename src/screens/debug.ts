@@ -1,5 +1,5 @@
 
-import { Button, Checkbox, Input, Label, SettingElement } from '../base/elements_typings';
+import { Button, Checkbox, Dropdown, Input, Label, SettingElement } from '../base/elements_typings';
 import { BaseSubscreen, deepLibLogger, SubscreenOptions } from '../deeplib';
 
 export class GuiDebug extends BaseSubscreen {
@@ -145,6 +145,22 @@ export class GuiDebug extends BaseSubscreen {
         id: 'test-deeplib-label2',
         label: 'Label',
         description: 'This is a label',
+      },
+      <Dropdown>{
+        type: 'dropdown',
+        id: 'test-deeplib-dropdown',
+        label: 'Dropdown',
+        description: 'This is a dropdown',
+        optionsList: ['Option 1', 'Option 2', 'Option 3'],
+        setElementValue() {
+          return 'Option 2';
+        },
+        setSettingValue(val: string) {
+          deepLibLogger.info('Dropdown value:', val);
+        },
+        options: {
+          width: 200,
+        }
       }
     ]];
   }
