@@ -103,7 +103,7 @@ export function initMod(options: InitOptions) {
  *
  * @param options {InitOptions} Configuration for mod initialization.
  */
-export async function init(options: InitOptions) {
+async function init(options: InitOptions) {
   const MOD_NAME = ModSdkManager.ModInfo.name;
   const MOD_VERSION = ModSdkManager.ModInfo.version;
 
