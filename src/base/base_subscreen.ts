@@ -207,15 +207,15 @@ export abstract class BaseSubscreen {
    */
   managePageElementsVisibility() {
     this.pageStructure.forEach((item, ix) => {
-      if (ix != BaseSubscreen.currentPage - 1) {
-        item.forEach((setting) => {
-          domUtil.hide(`${setting.id}-container`);
-        });
-      } else {
-        item.forEach((setting) => {
-          domUtil.unhide(`${setting.id}-container`);
-        });
-      }
+      item.forEach((setting) => {
+        const element = ElementWrap(`${setting.id}-container`) ?? ElementWrap(`${setting.id}`);
+        
+        if (ix != BaseSubscreen.currentPage - 1) {
+          if (element) domUtil.hide(element);
+        } else {
+          if (element) domUtil.unhide(element);
+        }
+      });
     });
   }
 
