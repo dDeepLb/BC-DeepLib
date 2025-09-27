@@ -56,3 +56,19 @@
   border: var(--deeplib-blocked-color) solid var(--deeplib-border-width);
   cursor: not-allowed;
 }
+
+.deeplib-dropdown-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: min(2vh, 1vw);
+  gap: min(2dvh, 1dvw);
+  color: var(--deeplib-text-color);
+
+  select {
+    padding: 0 min(1vh, 0.5vw);
+    padding: 0 min(1dvh, 0.5dvw);
+    border-radius: min(1vh, 0.5vw);
+    border-radius: min(1dvh, 0.5dvw);
+  }
+}

@@ -332,6 +332,9 @@ export abstract class BaseSubscreen {
           case 'custom':
             element = advElement.createCustom(item);
             break;
+          case 'dropdown':
+            element = advElement.createDropdown(item);
+            break;
         }
         layout.appendToSettingsDiv(element);
       })

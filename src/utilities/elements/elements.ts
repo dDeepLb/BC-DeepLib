@@ -1,4 +1,4 @@
-import { Button, Checkbox, Custom, Input, Label } from '../../base/elements_typings';
+import { Button, Checkbox, Custom, Dropdown, Input, Label } from '../../base/elements_typings';
 import { BaseSubscreen, getText } from '../../deeplib';
 import { deepMerge } from '../common';
 
@@ -12,6 +12,7 @@ export const advElement = {
   createInput: elementCreateInput,
   createLabel: elementCreateLabel,
   createCustom: elementCreateCustom,
+  createDropdown: elementCreateDropdown,
 
   createTooltip: elementCreateTooltip,
   getTooltip: elementGetTooltip,
@@ -230,6 +231,52 @@ function elementCreateLabel(options: Omit<Label, 'type'>) {
   }
 
   BaseSubscreen.currentElements.push([retElem, options as Label]);
+
+  return retElem;
+}
+
+function elementCreateDropdown(options: Omit<Dropdown, 'type'>) {
+  options.id ??= ElementGenerateID();
+  const elem = document.getElementById(`${options.id}-container`) as HTMLDivElement;
+
+  if (elem) return elem;
+
+  (options as Dropdown).type = 'dropdown';
+
+  const retElem = ElementCreate(deepMerge({
+    tag: 'div',
+    classList: ['deeplib-dropdown-container'],
+    attributes: {
+      id: `${options.id}-container`
+    },
+    children: [
+      options.label ? deepMerge({
+        tag: 'label',
+        classList: ['deeplib-text'],
+        attributes: {
+          for: options.id,
+        },
+        children: [options.label]
+      } as HTMLOptions<'label'>, options.htmlOptions?.label) : undefined,
+      ElementCreateDropdown(
+        options.id,
+        options.optionsList,
+        function () { return options.setSettingValue?.(this.value); },
+        options.options,
+        options.htmlOptions?.select
+      ),
+    ],
+    eventListeners: {
+      mouseover: function () {
+        elementSetTooltip(options.description ?? '');
+      },
+      mouseout: function () {
+        elementSetTooltip('');
+      }
+    }
+  } as HTMLOptions<'div'>, options.htmlOptions?.container));
+
+  BaseSubscreen.currentElements.push([retElem, options as Dropdown]);
 
   return retElem;
 }

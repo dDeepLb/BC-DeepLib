@@ -1,4 +1,4 @@
-export type SettingElement = Button | Checkbox | Input | Label | Custom;
+export type SettingElement = Button | Checkbox | Input | Label | Dropdown | Custom;
 
 export type BaseElementModel = {
   id: string;
@@ -32,6 +32,22 @@ export type Input = Prettify<{
   setSettingValue?: (val: string) => void;
   htmlOptions?: Partial<Record<'container' | 'input' | 'label', Omit<HTMLOptions<any>, 'tag'>>> | null | undefined;
 } & BaseElementModel>;
+
+export type Dropdown = Prettify<{
+  id: Parameters<typeof ElementCreateDropdown>[0];
+  type: 'dropdown';
+  label?: string;
+  description?: string;
+  optionsList: Parameters<typeof ElementCreateDropdown>[1];
+  setElementValue?: () => string;
+  setSettingValue?: (val: string) => void;
+  options?: Parameters<typeof ElementCreateDropdown>[3];
+  htmlOptions?: {
+    container?: Partial<Omit<HTMLOptions<any>, 'tag'>>
+    select?: Parameters<typeof ElementCreateDropdown>[4];
+    label?: Partial<Omit<HTMLOptions<'label'>, 'tag'>>;
+  };
+} & Omit<BaseElementModel, 'id' | 'disabled'>>;
 
 export type Label = Prettify<{
   type: 'label';
