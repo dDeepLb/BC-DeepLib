@@ -253,20 +253,3 @@ export class MainMenu extends BaseSubscreen {
     MainMenu.options = mainMenuOptions;
   }
 }
-
-/**
- * Open a specific subscreen. 
- */
-// TODO - Remove after R120. 
-async function PreferenceOpenSubscreen(subscreen: PreferenceSubscreenName, page: number = 1) {
-  if (CurrentModule !== 'Character' || CurrentScreen !== 'Preference') {
-    await CommonSetScreen('Character', 'Preference');
-  }
-  PreferenceSubscreen?.unload?.();
-
-  PreferenceSubscreen = PreferenceSubscreens.find(s => s.name === subscreen) ?? null;
-  if (!CommonIsNonNegativeInteger(page)) page = 1;
-  PreferencePageCurrent = page;
-  PreferenceMessage = '';
-  PreferenceSubscreen?.load?.();
-}
