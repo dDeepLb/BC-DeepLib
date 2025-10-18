@@ -65,6 +65,11 @@ export type SubscreenOptions = {
    * Defaults to 1000.
    */
   settingsWidth?: number;
+
+  /**
+   * If `true`, the character will be forced to the top of the screen.
+   */
+  forceUpCharacter?: boolean;
 };
 
 /**
@@ -123,6 +128,7 @@ export abstract class BaseSubscreen {
     doShowExitButton: true,
     doShowTitle: true,
     settingsWidth: 1000,
+    forceUpCharacter: false
   };
 
   constructor(module?: BaseModule) {
@@ -209,7 +215,7 @@ export abstract class BaseSubscreen {
     this.pageStructure.forEach((item, ix) => {
       item.forEach((setting) => {
         const element = ElementWrap(`${setting.id}-container`) ?? ElementWrap(`${setting.id}`);
-        
+
         if (ix != BaseSubscreen.currentPage - 1) {
           if (element) domUtil.hide(element);
         } else {
@@ -342,7 +348,11 @@ export abstract class BaseSubscreen {
 
     this.managePageElementsVisibility();
 
-    CharacterAppearanceForceUpCharacter = Player.MemberNumber ?? -1;
+    if (this.options.drawCharacter && this.options.forceUpCharacter) {
+      CharacterAppearanceForceUpCharacter = Player.MemberNumber;
+    } else {
+      CharacterAppearanceForceUpCharacter = -1;
+    }
   }
 
 
