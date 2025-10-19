@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, hasSetter, deepMergeMatchingProperties, hasGetter, ModStorage, MainMenuOptions, MainMenu, TranslationOptions } from '../deeplib';
+import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, hasSetter, deepMergeMatchingProperties, hasGetter, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger } from '../deeplib';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -51,6 +51,12 @@ export let modStorage: ModStorage;
 export let sdk: ModSdkManager;
 
 /**
+ * Mod specific logger instance.
+ * Initialized by `initMod()`.
+ */
+export let logger: Logger;
+
+/**
  * Entry point for initializing a mod. Handles:
  *  - Setting up the Mod SDK
  *  - Preparing persistent storage
@@ -62,13 +68,14 @@ export function initMod(options: InitOptions) {
   const MOD_NAME = ModSdkManager.ModInfo.name;
 
   modStorage = new ModStorage(ModSdkManager.ModInfo.name);
+  logger = new Logger(MOD_NAME);
   Style.injectInline('deeplib-style', deeplib_style);
 
-  deepLibLogger.debug(`Init wait for ${MOD_NAME}`);
+  logger.debug('Init wait');
   if (CurrentScreen == null || CurrentScreen === 'Login') {
     options.beforeLogin?.();
     const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
-      deepLibLogger.debug(`Init for ${MOD_NAME}! LoginResponse caught: `, args);
+      logger.debug('Init! LoginResponse caught: ', args);
       next(args);
       const response = args[0];
       if (response === 'InvalidNamePassword') return next(args);
@@ -78,7 +85,7 @@ export function initMod(options: InitOptions) {
       }
     });
   } else {
-    deepLibLogger.debug(`Already logged in, initing ${MOD_NAME}`);
+    logger.debug(`Already logged in, initing ${MOD_NAME}`);
     init(options);
   }
 }
@@ -125,7 +132,7 @@ async function init(options: InitOptions) {
   }
 
   (window as any)[MOD_NAME + 'Loaded'] = true;
-  deepLibLogger.log(`Loaded ${MOD_NAME}! Version: ${MOD_VERSION}`);
+  logger.log(`Loaded! Version: ${MOD_VERSION}`);
 }
 
 
@@ -134,8 +141,6 @@ async function init(options: InitOptions) {
  * Runs `init()`, `load()`, and `run()` for each module in order.
  */
 function initModules(modulesToRegister: BaseModule[]): boolean {
-  const MOD_NAME = ModSdkManager.ModInfo.name;
-
   for (const module of modulesToRegister) {
     registerModule(module);
   }
@@ -152,7 +157,7 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
     module.run();
   }
 
-  deepLibLogger.debug(`Modules Loaded for ${MOD_NAME}.`);
+  logger.debug('Modules Loaded.');
   return true;
 }
 
@@ -165,7 +170,7 @@ export function unloadMod(): true {
   unloadModules();
 
   delete (window as any)[MOD_NAME + 'Loaded'];
-  deepLibLogger.debug(`Unloaded ${MOD_NAME}.`);
+  logger.debug('Unloaded.');
   return true;
 }
 
