@@ -6,10 +6,15 @@ export type VersionModuleOptions = {
    * Each `BaseMigrator` handles upgrading data from one version to another.
    */
   migrators?: BaseMigrator[];
+  /** Message to display when a new version is detected */
   newVersionMessage?: string;
+  /** Optional lifecycle hook. Runs before each migration */
   beforeEach?: () => void;
+  /** Optional lifecycle hook. Runs after each migration */
   afterEach?: () => void;
+  /** Optional lifecycle hook. Runs before all migrations */
   beforeAll?: () => void;
+  /** Optional lifecycle hook. Runs after all migrations */
   afterAll?: () => void;
 };
 
@@ -31,19 +36,14 @@ export class VersionModule extends BaseModule {
   /** The current mod version (retrieved from `ModSdkManager.ModInfo.version`) */
   private static version: string;
 
-  /** Message to display when a new version is detected */
   private static newVersionMessage?: string = '';
 
   /** List of registered migration handlers, sorted by version */
   private static migrators: BaseMigrator[] = [];
 
-  /** Optional lifecycle hook. Runs before each migration */
   private static beforeEach?: () => void;
-  /** Optional lifecycle hook. Runs after each migration */
   private static afterEach?: () => void;
-  /** Optional lifecycle hook. Runs before all migrations */
   private static beforeAll?: () => void;
-  /** Optional lifecycle hook. Runs after all migrations */
   private static afterAll?: () => void;
 
   constructor(options: VersionModuleOptions) {
