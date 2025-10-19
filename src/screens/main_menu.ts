@@ -236,7 +236,7 @@ export class MainMenu extends BaseSubscreen {
         PreferenceSubscreenExtensionsClear();
       });
     } else if (returnScreen instanceof BaseSubscreen) {
-      setSubscreen(returnScreen ?? null).then(() => {
+      setSubscreen(returnScreen).then(() => {
       });
     } else if (Array.isArray(returnScreen)) {
       CommonSetScreen(...returnScreen);

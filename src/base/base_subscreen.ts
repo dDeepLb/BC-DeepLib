@@ -82,7 +82,7 @@ export type Subscreen = new (
 ) => BaseSubscreen;
 
 /** Switches the active subscreen in the global `GUI` instance. */
-export async function setSubscreen(subscreen: BaseSubscreen | string | null) {
+export async function setSubscreen(subscreen: BaseSubscreen | string) {
   if (!GUI.instance) {
     throw new Error('Attempt to set subscreen before init');
   }
@@ -155,7 +155,7 @@ export abstract class BaseSubscreen {
   }
 
   /** Changes the currently active subscreen. */
-  async setSubscreen(screen: BaseSubscreen | string | null) {
+  async setSubscreen(screen: BaseSubscreen | string) {
     return await setSubscreen(screen);
   }
 
