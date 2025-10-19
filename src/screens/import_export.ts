@@ -111,7 +111,9 @@ export class GuiImportExport extends BaseSubscreen {
       if (transferMethod === 'clipboard') {
         await this.exportToClipboard(data);
       } else if (transferMethod === 'file') {
-        await this.exportToFile(data, 'settings');
+        if (!await this.exportToFile(data, 'settings')) {
+          return;
+        };
       }
 
       this.importExportOptions.onExport?.();
@@ -157,7 +159,7 @@ export class GuiImportExport extends BaseSubscreen {
   }
 
   /** Saves data to a file using the browser's save dialog. */
-  async exportToFile(data: string, defaultFileName: string): Promise<void> {
+  async exportToFile(data: string, defaultFileName: string): Promise<boolean> {
     const CUSTOM_EXTENSION = this.importExportOptions.customFileExtension.startsWith('.')
       ? this.importExportOptions.customFileExtension
       : '.' + this.importExportOptions.customFileExtension;
@@ -180,6 +182,8 @@ export class GuiImportExport extends BaseSubscreen {
         const writable = await handle.createWritable();
         await writable.write(data);
         await writable.close();
+
+        return true;
       } catch (error: any) {
         throw new Error('File save cancelled or failed: ' + error.message);
       }
@@ -187,7 +191,7 @@ export class GuiImportExport extends BaseSubscreen {
       const fileName = await Modal.prompt('Enter file name', suggestedName);
 
       if (fileName === null) {
-        return;
+        return false;
       } else if (fileName === '') {
         throw new Error('File name cannot be empty.');
       }
@@ -203,6 +207,8 @@ export class GuiImportExport extends BaseSubscreen {
 
       link.click();
       URL.revokeObjectURL(link.href);
+
+      return true;
     }
   }
 
