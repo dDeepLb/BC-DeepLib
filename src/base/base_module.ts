@@ -49,8 +49,11 @@ export abstract class BaseModule {
     if (!this.settingsStorage) return {} as BaseSettingsModel;
     if (!modStorage.playerStorage) {
       Player[modName] = <SettingsModel>{};
-      this.registerDefaultSettings();
-    } else if (!modStorage.playerStorage[this.settingsStorage]) this.registerDefaultSettings();
+      this.registerDefaultSettings(modStorage.playerStorage);
+    } else if (!modStorage.playerStorage[this.settingsStorage]) {
+      this.registerDefaultSettings(modStorage.playerStorage);
+    }
+
     return modStorage.playerStorage[this.settingsStorage];
   }
 
@@ -64,8 +67,11 @@ export abstract class BaseModule {
     if (!this.settingsStorage) return;
     if (!storage.playerStorage) {
       Player[modName] = <SettingsModel>{};
-      this.registerDefaultSettings();
-    } else if (!storage.playerStorage[this.settingsStorage]) this.registerDefaultSettings();
+      this.registerDefaultSettings(modStorage.playerStorage);
+    } else if (!storage.playerStorage[this.settingsStorage]) {
+      this.registerDefaultSettings(modStorage.playerStorage);
+    }
+
     storage.playerStorage[this.settingsStorage] = value;
   }
 
@@ -75,7 +81,7 @@ export abstract class BaseModule {
    * Subclasses can override to perform additional setup.
    */
   init() {
-    this.registerDefaultSettings();
+    this.registerDefaultSettings(modStorage.playerStorage);
   }
 
   /**
@@ -85,12 +91,12 @@ export abstract class BaseModule {
    * If some settings already exist, they will be merged with defaults.
    * Existing values will NOT be overwritten.
    */
-  registerDefaultSettings(): void {
+  registerDefaultSettings(target: SettingsModel): void {
     const storage = this.settingsStorage;
     const defaults = this.defaultSettings;
     if (!storage || !defaults) return;
 
-    Player[ModSdkManager.ModInfo.name][storage] = Object.assign(defaults, Player[ModSdkManager.ModInfo.name][storage] ?? {});
+    target[storage] = Object.assign(defaults, target[storage] ?? {});
   }
 
   /**

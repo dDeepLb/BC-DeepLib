@@ -239,7 +239,7 @@ export abstract class BaseSubscreen {
   load() {
     for (const module of modules()) {
       if (!module.settingsScreen) continue;
-      if (!module.settings || !Object.keys(module.settings).length) module.registerDefaultSettings();
+      if (!module.settings || !Object.keys(module.settings).length) module.registerDefaultSettings(modStorage.playerStorage);
     }
 
     BaseSubscreen.currentPage = 1;

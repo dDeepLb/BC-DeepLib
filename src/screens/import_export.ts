@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger, SubscreenOptions } from '../deeplib';
+import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger, SubscreenOptions, modules } from '../deeplib';
 import { advElement, Modal } from '../utilities/elements/elements';
 
 /**
@@ -141,6 +141,10 @@ export class GuiImportExport extends BaseSubscreen {
 
       if (!data) {
         throw new Error('Invalid data.');
+      }
+
+      for (const module of modules()) {
+        module.registerDefaultSettings(data);
       }
 
       modStorage.playerStorage = data;
