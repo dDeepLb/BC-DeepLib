@@ -1,6 +1,11 @@
 import { BaseMigrator, BaseModule, ModSdkManager, deepLibLogger, getText, modStorage } from '../deeplib';
 
 export type VersionModuleOptions = {
+  /**
+   * List of data migration handlers to register with the `VersionModule`.
+   * Each `BaseMigrator` handles upgrading data from one version to another.
+   */
+  migrators?: BaseMigrator[];
   newVersionMessage?: string;
   beforeEach?: () => void;
   afterEach?: () => void;
@@ -45,6 +50,11 @@ export class VersionModule extends BaseModule {
     super();
 
     VersionModule.newVersionMessage = options.newVersionMessage;
+
+    if (options.migrators) {
+      VersionModule.migrators = options.migrators;
+      VersionModule.migrators.sort((a, b) => a.migrationVersion.localeCompare(b.migrationVersion));
+    }
 
     VersionModule.beforeEach = options.beforeEach;
     VersionModule.afterEach = options.afterEach;
@@ -114,16 +124,6 @@ export class VersionModule extends BaseModule {
     }
 
     VersionModule.afterAll?.();
-  }
-
-  /**
-   * Registers a new migrator for handling version-specific changes.
-   * Migrators are sorted by their `MigrationVersion` in ascending order.
-   */
-  static registerMigrator(migrator: BaseMigrator) {
-    VersionModule.migrators.push(migrator);
-
-    VersionModule.migrators.sort((a, b) => a.migrationVersion.localeCompare(b.migrationVersion));
   }
 
   /** Sends the currently configured "new version" message to the local player. */

@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, VersionModule, hasSetter, deepMergeMatchingProperties, hasGetter, BaseMigrator, ModStorage, MainMenuOptions, MainMenu, TranslationOptions } from '../deeplib';
+import { BaseModule, ModSdkManager, deepLibLogger, Localization, modules, registerModule, Style, hasSetter, deepMergeMatchingProperties, hasGetter, ModStorage, MainMenuOptions, MainMenu, TranslationOptions } from '../deeplib';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -18,12 +18,6 @@ interface InitOptions {
    * Modules are initialized, loaded, and run in order.
    */
   modules?: BaseModule[];
-
-  /**
-   * List of data migration handlers to register with the `VersionModule`.
-   * Each `BaseMigrator` handles upgrading data from one version to another.
-   */
-  migrators?: BaseMigrator[];
 
   /** Configuration for customizing the main menu when the mod is active. */
   mainMenuOptions?: MainMenuOptions;
@@ -116,12 +110,6 @@ async function init(options: InitOptions) {
   if (options.modules && !initModules(options.modules)) {
     unloadMod();
     return;
-  }
-
-  if (options.migrators) {
-    for (const m of options.migrators) {
-      VersionModule.registerMigrator(m);
-    }
   }
 
   await options.initFunction?.();
