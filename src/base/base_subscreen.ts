@@ -409,8 +409,10 @@ export abstract class BaseSubscreen {
     ElementSetPosition(settingsDiv, 530 - offset, 170);
     ElementSetSize(settingsDiv, this.options.settingsWidth ?? 1000 + offset, 660);
 
-    ElementSetPosition('deeplib-subscreen-title', 530 - offset, 75);
-    ElementSetSize('deeplib-subscreen-title', 800, 60);
+    if (this.options.doShowTitle) {
+      ElementSetPosition('deeplib-subscreen-title', 530 - offset, 75);
+      ElementSetSize('deeplib-subscreen-title', 800, 60);
+    }
 
     ElementSetPosition('deeplib-nav-menu', 1905, 75, 'top-right');
     ElementSetSize('deeplib-nav-menu', null, 90);
