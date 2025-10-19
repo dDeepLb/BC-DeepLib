@@ -111,7 +111,7 @@ export class GuiImportExport extends BaseSubscreen {
       if (transferMethod === 'clipboard') {
         await this.exportToClipboard(data);
       } else if (transferMethod === 'file') {
-        await this.exportToFile(data, 'themed_settings');
+        await this.exportToFile(data, 'settings');
       }
 
       this.importExportOptions.onExport?.();
