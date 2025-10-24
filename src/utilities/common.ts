@@ -4,9 +4,14 @@ function isPlainObject(value: unknown): value is PlainObject {
   return (
     value !== null &&
     typeof value === 'object' &&
-    Object.getPrototypeOf(value) === Object.prototype
+    Object.getPrototypeOf(value) === Object.prototype &&
+    !Array.isArray(value)
   );
 }
+
+export type DeepMergeOptions = {
+  concatArrays?: boolean
+};
 
 /**
  * Deeply merges two values into a new value.
@@ -14,11 +19,11 @@ function isPlainObject(value: unknown): value is PlainObject {
  * - Plain objects are merged recursively.
  * - Other values are replaced by `source`.
  */
-export function deepMerge<T, U>(target: T, source: U): T & U {
+export function deepMerge<T, U>(target: T, source: U, options: DeepMergeOptions = { concatArrays: true }): T & U {
   if (target === undefined) return source as T & U;
   if (source === undefined) return target as T & U;
 
-  if (Array.isArray(target) && Array.isArray(source)) {
+  if (Array.isArray(target) && Array.isArray(source) && options.concatArrays) {
     return [...target, ...source] as unknown as T & U;
   }
 
@@ -32,7 +37,7 @@ export function deepMerge<T, U>(target: T, source: U): T & U {
       }
 
       result[key] = key in target
-        ? deepMerge((target as PlainObject)[key], source[key])
+        ? deepMerge((target as PlainObject)[key], source[key], options)
         : source[key];
     }
 
@@ -77,26 +82,6 @@ export function exportToGlobal(name: string, value: any): void {
   }
 
   current[keys[keys.length - 1]] = value;
-}
-
-
-/**
- * Deeply merges only matching properties from `mergeFrom` into `mergeTo`.
- * Properties not present in `mergeTo` are ignored.
- * Objects are recursively merged, primitive properties overwritten.
- */
-export function deepMergeMatchingProperties<T extends object>(mergeTo: T, mergeFrom: T): T  {
-  const mergedObject = { ...mergeTo };
-
-  for (const key in mergeFrom) {
-    if (mergeFrom[key] !== null && typeof mergeFrom[key] === 'object') {
-      (mergedObject as any)[key] = deepMergeMatchingProperties(mergedObject[key] || {}, mergeFrom[key]);
-    } else if (key in mergedObject) {
-      (mergedObject as any)[key] = mergeFrom[key];
-    }
-  }
-
-  return mergedObject;
 }
 
 /** Checks if the given property has a getter defined on the object or its prototype chain. */

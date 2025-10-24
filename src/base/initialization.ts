@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, hasSetter, deepMergeMatchingProperties, hasGetter, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger } from '../deeplib';
+import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, hasSetter, hasGetter, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, deepMerge } from '../deeplib';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -127,7 +127,7 @@ async function init(options: InitOptions) {
   for (const m of modules()) {
     if (m.defaultSettings && hasGetter(m, 'defaultSettings') && m.settings && hasSetter(m, 'settings')) {
       if (Object.entries(m.defaultSettings).length === 0) continue;
-      m.settings = deepMergeMatchingProperties(m.defaultSettings, m.settings);
+      m.settings = deepMerge(m.defaultSettings, m.settings, { concatArrays: false });
     }
   }
 
