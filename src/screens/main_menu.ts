@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, ModStorage, setSubscreen, SubscreenOptions } from '../deeplib';
+import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, modStorage, ModStorage, setSubscreen, SubscreenOptions } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
@@ -164,7 +164,7 @@ export class MainMenu extends BaseSubscreen {
 
     if (MainMenu.options.storageFullnessIndicator) {
       const maxStorageCapacityKB = 180;
-      const currentStorageCapacityKB = byteToKB(ModStorage.measureSize(Player.OnlineSettings));
+      const currentStorageCapacityKB = byteToKB(ModStorage.measureSize(modStorage.extensionStorage));
       const fullness = (currentStorageCapacityKB / maxStorageCapacityKB * 100).toFixed(1);
 
       const storageFullnessWrapper = advElement.createButton({
