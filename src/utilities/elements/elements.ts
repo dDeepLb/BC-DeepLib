@@ -82,10 +82,11 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
   const retElem = ElementCreate(deepMerge({
-    tag: 'div',
+    tag: 'label',
     classList: ['deeplib-checkbox-container'],
     attributes: {
       id: `${options.id}-container`,
+      for: options.id,
     },
     children: [
       deepMerge({
@@ -104,15 +105,15 @@ function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
         }
       } as HTMLOptions<'input'>, options.htmlOptions?.checkbox),
       deepMerge({
-        tag: 'label',
+        tag: 'span',
         classList: ['deeplib-text'],
         attributes: {
-          for: options.id,
+          id: `${options.id}-label`,
         },
         children: [options.label]
-      } as HTMLOptions<'label'>, options.htmlOptions?.label),
+      } as HTMLOptions<'span'>, options.htmlOptions?.label),
     ],
-  } as HTMLOptions<'div'>, options.htmlOptions?.container));
+  } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
@@ -154,10 +155,11 @@ function elementCreateInput(options: Input) {
   const disabled = typeof options?.disabled === 'function' ? options?.disabled() : options?.disabled;
 
   const retElem = ElementCreate(deepMerge({
-    tag: 'div',
+    tag: 'label',
     classList: ['deeplib-input-container'],
     attributes: {
       id: `${options.id}-container`,
+      for: options.id,
     },
     children: [
       deepMerge({
@@ -177,15 +179,15 @@ function elementCreateInput(options: Input) {
         }
       } as HTMLOptions<'input'>, options.htmlOptions?.input),
       options.label ? deepMerge({
-        tag: 'label',
+        tag: 'span',
         classList: ['deeplib-text'],
         attributes: {
-          for: options.id,
+          id: `${options.id}-label`,
         },
         children: [options.label]
-      } as HTMLOptions<'label'>, options.htmlOptions?.label) : undefined,
+      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
     ],
-  } as HTMLOptions<'div'>, options.htmlOptions?.container));
+  } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
@@ -210,7 +212,7 @@ function elementCreateLabel(options: Omit<Label, 'type'>) {
   (options as Label).type = 'label';
 
   const retElem = ElementCreate(deepMerge({
-    tag: 'span',
+    tag: 'label',
     classList: ['deeplib-label', 'deeplib-text'],
     attributes: {
       id: options.id
@@ -218,7 +220,7 @@ function elementCreateLabel(options: Omit<Label, 'type'>) {
     children: [
       options.label,
     ],
-  } as HTMLOptions<'span'>, options.htmlOptions));
+  } as HTMLOptions<'label'>, options.htmlOptions));
 
   if (options.description) {
     retElem.addEventListener('mouseover', () => {
@@ -244,20 +246,21 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>) {
   (options as Dropdown).type = 'dropdown';
 
   const retElem = ElementCreate(deepMerge({
-    tag: 'div',
+    tag: 'label',
     classList: ['deeplib-dropdown-container'],
     attributes: {
-      id: `${options.id}-container`
+      id: `${options.id}-container`,
+      for: options.id,
     },
     children: [
       options.label ? deepMerge({
-        tag: 'label',
+        tag: 'span',
         classList: ['deeplib-text'],
         attributes: {
-          for: options.id,
+          id: `${options.id}-label`,
         },
         children: [options.label]
-      } as HTMLOptions<'label'>, options.htmlOptions?.label) : undefined,
+      } as HTMLOptions<'span'>, options.htmlOptions?.label) : undefined,
       ElementCreateDropdown(
         options.id,
         options.optionsList,
@@ -274,7 +277,7 @@ function elementCreateDropdown(options: Omit<Dropdown, 'type'>) {
         elementSetTooltip('');
       }
     }
-  } as HTMLOptions<'div'>, options.htmlOptions?.container));
+  } as HTMLOptions<'label'>, options.htmlOptions?.container));
 
   BaseSubscreen.currentElements.push([retElem, options as Dropdown]);
 

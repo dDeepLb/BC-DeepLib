@@ -2,44 +2,45 @@
   color: var(--deeplib-text-color);
   width: 100%;
   height: 100%;
-}
 
-.deeplib-button.button-styling,
-.deeplib-button.button-styling::before {
-  border-radius: min(1.0dvh, 0.5dvw);
-}
+  &.button-styling,
+  &.button-styling::before {
+    border-radius: min(1.0dvh, 0.5dvw);
+  }
 
-.deeplib-button img {
-  position: absolute;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  background-position: left;
-  background-color: var(--deeplib-icon-color);
-  background-blend-mode: multiply;
-  background-size: contain;
-  mask-position: left;
-  mask-size: contain;
-  background-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  color: transparent;
+  img {
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    width: 100%;
+    height: 100%;
+    background-position: left;
+    background-color: var(--deeplib-icon-color);
+    background-blend-mode: multiply;
+    background-size: contain;
+    mask-position: left;
+    mask-size: contain;
+    background-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    color: transparent;
 
-  background-image: var(--image);
-  mask-image: var(--image);
-  pointer-events: none;
-}
+    background-image: var(--image);
+    mask-image: var(--image);
+    pointer-events: none;
+  }
 
-.deeplib-button:hover img {
-  background-color: var(--deeplib-icon-hover-color);
-}
+  &:hover img {
+    background-color: var(--deeplib-icon-hover-color);
+  }
 
-.deeplib-button .button-label {
-  background-color: transparent !important;
-  color: var(--deeplib-text-color);
-  font-size: min(3.6dvh, 1.8dvw);
-}
+  .button-label {
+    background-color: transparent !important;
+    color: var(--deeplib-text-color);
+    font-size: min(3.6dvh, 1.8dvw);
+    display: contents;
+  }
 
-.deeplib-button .button-tooltip {
-  border-radius: min(1.0dvh, 0.5dvw);
+  .button-tooltip {
+    border-radius: min(1.0dvh, 0.5dvw);
+  }
 }
