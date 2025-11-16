@@ -130,6 +130,8 @@ export abstract class BaseSubscreen {
     settingsWidth: 1000,
     forceUpCharacter: false
   };
+  /** The menu at the top of the subscreen */
+  protected static menu: HTMLDivElement | null = null;
 
   constructor(module?: BaseModule) {
     if (module) this.module = module;
@@ -248,8 +250,8 @@ export abstract class BaseSubscreen {
     const settingsElement = layout.getSettingsDiv();
     layout.appendToSubscreen(settingsElement);
 
-    const menu = ElementMenu.Create('deeplib-nav-menu', []);
-    layout.appendToSubscreen(menu);
+    BaseSubscreen.menu = ElementMenu.Create('deeplib-nav-menu', []);
+    layout.appendToSubscreen(BaseSubscreen.menu);
 
     if (this.pageStructure.length > 1) {
       const backNext = advElement.createBackNext({
@@ -261,7 +263,7 @@ export abstract class BaseSubscreen {
         initialLabel: this.getPageLabel()
       });
 
-      ElementMenu.PrependItem(menu, backNext);
+      BaseSubscreen.menu.prepend(backNext);
     }
 
     if (this.options.help) {
@@ -288,7 +290,7 @@ export abstract class BaseSubscreen {
         }
       });
 
-      ElementMenu.AppendButton(menu, helpButton);
+      BaseSubscreen.menu.append(helpButton);
     }
 
     if (this.options.doShowTitle) {
@@ -311,7 +313,7 @@ export abstract class BaseSubscreen {
           tooltip: getText('settings.button.back_button_hint')
         }
       });
-      ElementMenu.AppendButton(menu, exitButton);
+      BaseSubscreen.menu.append(exitButton);
     }
 
     const tooltip = advElement.createTooltip();
