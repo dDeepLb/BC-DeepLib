@@ -1,4 +1,4 @@
-import { BaseSettingsModel, SettingsModel, Subscreen, ModSdkManager, ModStorage, modStorage } from '../deeplib';
+import { BaseSettingsModel, SettingsModel, Subscreen, ModSdkManager, ModStorage, modStorage, hasGetter, hasSetter, deepMerge } from '../deeplib';
 
 /**
  * An abstract foundation for modular systems that require:
@@ -81,7 +81,6 @@ export abstract class BaseModule {
    * Subclasses can override to perform additional setup.
    */
   init() {
-    this.registerDefaultSettings(modStorage.playerStorage);
   }
 
   /**
@@ -95,8 +94,9 @@ export abstract class BaseModule {
     const storage = this.settingsStorage;
     const defaults = this.defaultSettings;
     if (!storage || !defaults) return;
+    if (Object.entries(this.defaultSettings).length === 0) return;
 
-    target[storage] = Object.assign(defaults, target[storage] ?? {});
+    target[storage] = deepMerge(this.defaultSettings, target[storage], { concatArrays: false });
   }
 
   /**

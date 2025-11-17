@@ -124,13 +124,6 @@ async function init(options: InitOptions) {
   if (options.mainMenuOptions)
     MainMenu.setOptions(options.mainMenuOptions);
 
-  for (const m of modules()) {
-    if (m.defaultSettings && hasGetter(m, 'defaultSettings') && m.settings && hasSetter(m, 'settings')) {
-      if (Object.entries(m.defaultSettings).length === 0) continue;
-      m.settings = deepMerge(m.defaultSettings, m.settings, { concatArrays: false });
-    }
-  }
-
   (window as any)[MOD_NAME + 'Loaded'] = true;
   logger.log(`Loaded! Version: ${MOD_VERSION}`);
 }
@@ -155,6 +148,12 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
 
   for (const module of modules()) {
     module.run();
+  }
+
+  // Running after `.load` because the version modules runs migrations.
+  // If this will run before `.load` some data used in migration might be overwriten.
+  for (const module of modules()) {
+    module.registerDefaultSettings(modStorage.playerStorage);
   }
 
   logger.debug('Modules Loaded.');
