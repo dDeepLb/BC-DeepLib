@@ -1,4 +1,4 @@
-import { BaseSettingsModel, SettingsModel, Subscreen, ModSdkManager, ModStorage, modStorage, hasGetter, hasSetter, deepMerge } from '../deeplib';
+import { BaseSettingsModel, SettingsModel, Subscreen, ModSdkManager, ModStorage, modStorage, deepMerge } from '../deeplib';
 
 /**
  * An abstract foundation for modular systems that require:

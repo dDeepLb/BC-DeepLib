@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, hasSetter, hasGetter, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, deepMerge } from '../deeplib';
+import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger } from '../deeplib';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
