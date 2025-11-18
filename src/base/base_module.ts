@@ -96,7 +96,7 @@ export abstract class BaseModule {
     if (!storage || !defaults) return;
     if (Object.entries(this.defaultSettings).length === 0) return;
 
-    target[storage] = deepMerge(this.defaultSettings, target[storage], { concatArrays: false });
+    target[storage] = deepMerge(this.defaultSettings, target[storage], { concatArrays: false, matchingOnly: true });
   }
 
   /**

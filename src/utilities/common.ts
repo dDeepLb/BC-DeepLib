@@ -10,7 +10,11 @@ function isPlainObject(value: unknown): value is PlainObject {
 }
 
 export type DeepMergeOptions = {
-  concatArrays?: boolean
+  /** Concatenate arrays instead of replacing them. */
+  concatArrays?: boolean,
+
+  /** Only merge matching keys. */
+  matchingOnly?: boolean
 };
 
 /**
@@ -19,7 +23,11 @@ export type DeepMergeOptions = {
  * - Plain objects are merged recursively.
  * - Other values are replaced by `source`.
  */
-export function deepMerge<T, U>(target: T, source: U, options: DeepMergeOptions = { concatArrays: true }): T & U {
+export function deepMerge<T, U>(
+  target: T,
+  source: U,
+  options: DeepMergeOptions = { concatArrays: true, matchingOnly: false }
+): T & U {
   if (target === undefined) return source as T & U;
   if (source === undefined) return target as T & U;
 
@@ -29,15 +37,15 @@ export function deepMerge<T, U>(target: T, source: U, options: DeepMergeOptions 
 
   if (isPlainObject(target) && isPlainObject(source)) {
     const result: PlainObject = { ...target };
+    const keys = options.matchingOnly
+      ? Object.keys(source).filter(k => k in target)
+      : Object.keys(source);
 
-    for (const key of Object.keys(source)) {
-      // Protect against prototype pollution
-      if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
-        continue;
-      }
+    for (const key of keys) {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
 
       result[key] = key in target
-        ? deepMerge((target as PlainObject)[key], source[key], options)
+        ? deepMerge(target[key], source[key], options)
         : source[key];
     }
 
