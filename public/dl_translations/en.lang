@@ -25,6 +25,7 @@ modal.button.close = Close
 modal.button.ok = OK
 modal.button.cancel = Cancel
 modal.button.submit = Submit
+modal.button.confirm = Confirm
 modal.button.decline = Decline
 
 # Version Module
