@@ -64,30 +64,34 @@ export let logger: Logger;
  *  - Delaying initialization until login (if necessary)
  */
 export function initMod(options: InitOptions) {
-  sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
-  const MOD_NAME = ModSdkManager.ModInfo.name;
+  const url = 'https://cdn.jsdelivr.net/npm/bondage-club-mod-sdk@1.2.0/+esm';
 
-  modStorage = new ModStorage(ModSdkManager.ModInfo.name);
-  logger = new Logger(MOD_NAME);
-  Style.injectInline('deeplib-style', deeplib_style);
+  import(`${url}`).then(() => {
+    sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
+    const MOD_NAME = ModSdkManager.ModInfo.name;
 
-  logger.debug('Init wait');
-  if (CurrentScreen == null || CurrentScreen === 'Login') {
-    options.beforeLogin?.();
-    const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
-      logger.debug('Init! LoginResponse caught: ', args);
-      next(args);
-      const response = args[0];
-      if (response === 'InvalidNamePassword') return next(args);
-      if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
-        init(options);
-        removeHook();
-      }
-    });
-  } else {
-    logger.debug(`Already logged in, initing ${MOD_NAME}`);
-    init(options);
-  }
+    modStorage = new ModStorage(ModSdkManager.ModInfo.name);
+    logger = new Logger(MOD_NAME);
+    Style.injectInline('deeplib-style', deeplib_style);
+
+    logger.debug('Init wait');
+    if (CurrentScreen == null || CurrentScreen === 'Login') {
+      options.beforeLogin?.();
+      const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
+        logger.debug('Init! LoginResponse caught: ', args);
+        next(args);
+        const response = args[0];
+        if (response === 'InvalidNamePassword') return next(args);
+        if (response && typeof response.Name === 'string' && typeof response.AccountName === 'string') {
+          init(options);
+          removeHook();
+        }
+      });
+    } else {
+      logger.debug(`Already logged in, initing ${MOD_NAME}`);
+      init(options);
+    }
+  });
 }
 
 

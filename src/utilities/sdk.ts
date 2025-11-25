@@ -1,10 +1,3 @@
-import rawSdkImport from 'bondage-club-mod-sdk';
-
-// What the fuck is this?? 
-// It seems that ESBuild breaks things, either when building this package or a final mod
-const rawSdk = rawSdkImport as any;
-const bcModSdkRef = (rawSdk.default ?? rawSdk) as ModSDKGlobalAPI;
-
 /**
  * Defines priority levels for hooking functions.
  * Hooks with higher priority are called first in hook chain.
@@ -46,7 +39,7 @@ export class ModSdkManager {
 
   /** Registers a mod with the SDK and stores mod information. */
   constructor(info: ModSDKModInfo, options?: ModSDKModOptions) {
-    ModSdkManager.SDK = bcModSdkRef.registerMod(info, options);
+    ModSdkManager.SDK = bcModSdk.registerMod(info, options);
     ModSdkManager.ModInfo = info;
   }
 
