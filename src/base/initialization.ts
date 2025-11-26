@@ -75,7 +75,7 @@ export function initMod(options: InitOptions) {
     Style.injectInline('deeplib-style', deeplib_style);
 
     logger.debug('Init wait');
-    if (CurrentScreen == null || CurrentScreen === 'Login') {
+    if (!CurrentScreen || CurrentScreen === 'Login') {
       options.beforeLogin?.();
       const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
         logger.debug('Init! LoginResponse caught: ', args);

@@ -81,7 +81,7 @@ export class Modal<T extends string = string> {
 
     const promptId = `modal-prompt-${Date.now()}`;
 
-    const prompt = (CommonIsArray(opts.prompt) ? opts.prompt : [opts.prompt]).filter(i => i != null) ?? [''];
+    const prompt = (CommonIsArray(opts.prompt) ? opts.prompt : [opts.prompt]).filter(i => i !== null) ?? [''];
 
     this.dialog = ElementCreate({
       tag: 'dialog',

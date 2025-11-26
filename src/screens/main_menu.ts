@@ -82,7 +82,7 @@ export class MainMenu extends BaseSubscreen {
 
     for (const screen of this.subscreens) {
 
-      if (screen.options.name == 'mainmenu') continue;
+      if (screen.options.name === 'mainmenu') continue;
 
       const button = advElement.createButton({
         id: `${screen.options.name}-button`,

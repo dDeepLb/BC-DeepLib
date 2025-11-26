@@ -218,7 +218,7 @@ export abstract class BaseSubscreen {
       item.forEach((setting) => {
         const element = ElementWrap(`${setting.id}-container`) ?? ElementWrap(`${setting.id}`);
 
-        if (ix != BaseSubscreen.currentPage - 1) {
+        if (ix !== BaseSubscreen.currentPage - 1) {
           if (element) domUtil.hide(element);
         } else {
           if (element) domUtil.unhide(element);
