@@ -72,8 +72,8 @@ function elementCreateButton(options: Omit<Button, 'type'>): HTMLButtonElement {
   return button;
 };
 
-function elementCreateCheckbox(options: Omit<Checkbox, 'type'>) {
-  const elem = document.getElementById(options.id);
+function elementCreateCheckbox(options: Omit<Checkbox, 'type'>): HTMLLabelElement {
+  const elem = document.getElementById(options.id) as HTMLLabelElement;
 
   if (elem) return elem;
 
@@ -147,8 +147,8 @@ function elementCreateCustom(options: Omit<Custom, 'type'>) {
   return retElem;
 }
 
-function elementCreateInput(options: Input) {
-  const elem = document.getElementById(options.id);
+function elementCreateInput(options: Input): HTMLLabelElement {
+  const elem = document.getElementById(options.id) as HTMLLabelElement;
 
   if (elem) return elem;
 
@@ -204,8 +204,8 @@ function elementCreateInput(options: Input) {
   return retElem;
 }
 
-function elementCreateLabel(options: Omit<Label, 'type'>) {
-  const elem = document.getElementById(options.id);
+function elementCreateLabel(options: Omit<Label, 'type'>): HTMLLabelElement {
+  const elem = document.getElementById(options.id) as HTMLLabelElement;
 
   if (elem) return elem;
 
@@ -237,9 +237,9 @@ function elementCreateLabel(options: Omit<Label, 'type'>) {
   return retElem;
 }
 
-function elementCreateDropdown(options: Omit<Dropdown, 'type'>) {
+function elementCreateDropdown(options: Omit<Dropdown, 'type'>): HTMLLabelElement {
   options.id ??= ElementGenerateID();
-  const elem = document.getElementById(`${options.id}-container`) as HTMLDivElement;
+  const elem = document.getElementById(`${options.id}-container`) as HTMLLabelElement;
 
   if (elem) return elem;
 
