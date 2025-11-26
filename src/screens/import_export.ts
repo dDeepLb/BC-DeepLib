@@ -1,6 +1,7 @@
 
 import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger, SubscreenOptions, modules } from '../deeplib';
-import { advElement, Modal } from '../utilities/elements/elements';
+import { advElement } from '../utilities/elements/elements';
+import { Modal } from '../utilities/elements/modal';
 
 /**
  * Configuration options for the {@link GuiImportExport} class.
@@ -188,7 +189,7 @@ export class GuiImportExport extends BaseSubscreen {
         throw new Error('File save cancelled or failed: ' + error.message);
       }
     } else {
-      const fileName = await Modal.prompt('Enter file name', suggestedName);
+      const fileName = await Modal.prompt('Enter file name', { defaultValue: suggestedName });
 
       if (fileName === null) {
         return false;
