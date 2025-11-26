@@ -21,11 +21,14 @@
     }
   },
   "scripts": {
-    "all": "pnpm build && pnpm type-gen && pnpm asset-copy",
-    "lint": "eslint src/",
+    "all": "pnpm type:check && pnpm build && pnpm type:gen && pnpm type:copy && pnpm asset:copy",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "build": "node scripts/build.js",
-    "type-gen": "node scripts/type_gen.js",
-    "asset-copy": "node scripts/asset_copy.js",
+    "type:check": "tsc --noEmit",
+    "type:gen": "npm-dts generate -e ./src/deeplib.ts -o ./dist/deeplib.d.ts -L error",
+    "type:copy": "node scripts/type_copy.js",
+    "asset:copy": "node scripts/asset_copy.js",
     "prepublishOnly": "pnpm all"
   },
   "bin": {
