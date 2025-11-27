@@ -39,17 +39,20 @@ export const domUtil = {
 function autoSetPosition(_: ElementHelp.ElementOrId, position: SettingElement['position']) {
   let xPos = undefined;
   let yPos = undefined;
+  let anchor = undefined;
 
   if (Array.isArray(position)) {
     xPos = position[0];
     yPos = position[1];
+    anchor = position[2];
   } else if (typeof position === 'function') {
     const result = position();
     xPos = result[0];
     yPos = result[1];
+    anchor = result[2];
   }
 
-  if (xPos !== undefined && yPos !== undefined) ElementSetPosition(_, xPos, yPos);
+  if (xPos !== undefined && yPos !== undefined) ElementSetPosition(_, xPos, yPos, anchor);
 }
 
 function autoSetSize(_: ElementHelp.ElementOrId, size: SettingElement['size']) {

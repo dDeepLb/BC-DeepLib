@@ -2,9 +2,9 @@ export type SettingElement = Button | Checkbox | Input | Label | Dropdown | Cust
 
 export type BaseElementModel = {
   id: string;
-  size?: [width: number | null, height: number | null] | (() => [width: number | null, height: number | null]);
-  position?: [x: number, y: number] | (() => [x: number, y: number]);
-  disabled?: boolean | (() => boolean);
+  size?: Thunk<[width: number | null, height: number | null]>;
+  position?: Thunk<[x: number, y: number, anchor?: ElementHelp.AnchorXY]>;
+  disabled?: Thunk<boolean>;
 };
 
 export type Button = Prettify<{
