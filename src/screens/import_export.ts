@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, ModSdkManager, getText, layout, SettingsModel, modStorage, deepLibLogger, SubscreenOptions, modules } from '../deeplib';
+import { BaseSubscreen, ModSdkManager, getText, layout, deepLibLogger, SubscreenOptions, modules, BaseModule, getModule, hasGetter, deepMerge, BaseSettingsModel } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { Modal } from '../utilities/elements/modal';
 
@@ -26,6 +26,8 @@ export type ImportExportOptions = {
  * - `file`: Uses file save/load dialogs.
  */
 type DataTransferMethod = 'clipboard' | 'file';
+
+type DataTransferDirection = 'import' | 'export';
 
 /**
  * GUI screen for importing and exporting mod data.
@@ -107,7 +109,16 @@ export class GuiImportExport extends BaseSubscreen {
   /** Exports the mod data using the specified method. */
   async dataExport(transferMethod: DataTransferMethod) {
     try {
-      const data = LZString.compressToBase64(JSON.stringify(modStorage.playerStorage));
+      const selected = await this.getSelectedModules(modules(), 'export');
+
+      if (!selected) return;
+
+      if (selected.length === 0) {
+        ToastManager.error('No modules selected for export.');
+        return;
+      }
+
+      const data = this.buildExportPayload(selected);
 
       if (transferMethod === 'clipboard') {
         await this.exportToClipboard(data);
@@ -128,29 +139,19 @@ export class GuiImportExport extends BaseSubscreen {
   /** Imports mod data using the specified method. */
   async dataImport(transferMethod: DataTransferMethod) {
     try {
-      let importedData: string | null = '';
+      const raw =
+        transferMethod === 'clipboard'
+          ? await this.importFromClipboard()
+          : await this.importFromFile();
 
-      if (transferMethod === 'clipboard') {
-        importedData = await this.importFromClipboard() ?? null;
-      } else if (transferMethod === 'file') {
-        importedData = await this.importFromFile() ?? null;
-      }
+      if (raw === null) return;
 
-      if (!importedData) {
-        throw new Error('No data imported.');
-      }
+      if (!raw) throw new Error('No data');
 
-      const data = JSON.parse(LZString.decompressFromBase64(importedData) ?? '') as SettingsModel;
+      const importResult = await this.applyImportPayload(raw);
 
-      if (!data) {
-        throw new Error('Invalid data.');
-      }
+      if (!importResult) return;
 
-      for (const module of modules()) {
-        module.registerDefaultSettings(data);
-      }
-
-      modStorage.playerStorage = data;
       this.importExportOptions.onImport?.();
       ToastManager.success('Data imported successfully.');
     } catch (error) {
@@ -283,5 +284,98 @@ export class GuiImportExport extends BaseSubscreen {
     return Modal.prompt('Enter data to import').catch((error) => {
       throw new Error('Failed to read data from clipboard.' + error);
     });
+  }
+
+  private async getSelectedModules(modulesToChoose: BaseModule[], transferDirection: DataTransferDirection): Promise<BaseModule[] | null> {
+    const modulesFiltered = modulesToChoose.filter(m => hasGetter(m, 'settings') && !!m.settings);
+    const checkedModules: Record<string, boolean> = Object.fromEntries(
+      modulesFiltered.map(m => [m.constructor.name, true])
+    );
+
+    if (modulesFiltered.length === 0) {
+      throw new Error('No modules to choose from.');
+    }
+
+    const checkboxes = modulesFiltered
+      .map(m => advElement.createCheckbox({
+        id: m.constructor.name,
+        label: getText(m.constructor.name),
+        setElementValue: () => checkedModules[m.constructor.name],
+        setSettingValue: (val: boolean) => checkedModules[m.constructor.name] = val
+      }));
+    const text = transferDirection === 'import' ?
+      'import_export.import.select_modules' :
+      'import_export.export.select_modules';
+
+    const response = await Modal.confirm([
+      getText(text),
+      ElementCreate({ tag: 'br' }),
+      getText('import_export.text.not_sure'),
+      {
+        tag: 'div',
+        classList: ['deeplib-modal-checkbox-container'],
+        children: checkboxes
+      }
+    ], { modalId: 'deeplib-modal-import_export' });
+
+    if (!response) {
+      return null;
+    }
+
+    const ret = Object.entries(checkedModules)
+      .filter(([_, checked]) => checked)
+      .map(([id]) => getModule(id));
+
+    if (ret.length === 0) {
+      throw new Error('No modules selected.');
+    }
+
+    return ret;
+  }
+
+  private buildExportPayload(selectedModules: BaseModule[]): string {
+    const payload: Record<string, BaseSettingsModel> = {};
+
+    for (const module of selectedModules) {
+      if (!hasGetter(module, 'settings') || module.settings === null) continue;
+
+      payload[module.constructor.name] = module.settings;
+    }
+
+    return LZString.compressToBase64(JSON.stringify(payload));
+  }
+
+  private async applyImportPayload(raw: string): Promise<void | boolean> {
+    const decoded = JSON.parse(
+      LZString.decompressFromBase64(raw) ?? ''
+    ) as Record<string, BaseSettingsModel>;
+
+    if (!decoded) {
+      throw new Error('Invalid import format.');
+    }
+
+    const modules = Object.keys(decoded).map(id => getModule(id));
+    const selectedModules = await this.getSelectedModules(modules, 'import');
+
+    if (!selectedModules) {
+      return false;
+    }
+
+    if (selectedModules.length === 0) {
+      throw new Error('No modules selected.');
+    }
+
+    for (const module of selectedModules) {
+      const data = decoded[module.constructor.name];
+      if (!data) continue;
+
+      const merged = deepMerge(module.defaultSettings, data);
+
+      if (!merged) continue;
+
+      module.settings = merged;
+    }
+
+    return true;
   }
 }

@@ -44,9 +44,9 @@ export abstract class BaseModule {
    * Retrieves the current settings for this module.
    * If no settings exist yet, registers default settings first.
    */
-  get settings(): BaseSettingsModel {
+  get settings(): BaseSettingsModel | null {
     const modName = ModSdkManager.ModInfo.name;
-    if (!this.settingsStorage) return {} as BaseSettingsModel;
+    if (!this.settingsStorage) return null;
     if (!modStorage.playerStorage) {
       Player[modName] = <SettingsModel>{};
       this.registerDefaultSettings(modStorage.playerStorage);
