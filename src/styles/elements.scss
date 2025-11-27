@@ -10,6 +10,8 @@
   color: var(--deeplib-text-color);
   user-select: none;
   pointer-events: none;
+  display: flex;
+  align-items: center;
 }
 
 .deeplib-text {
