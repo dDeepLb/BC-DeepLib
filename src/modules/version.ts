@@ -185,7 +185,7 @@ export class VersionModule extends BaseModule {
   /** Saves the current mod version into persistent player storage. */
   private static saveVersion() {
     if (modStorage.playerStorage) {
-      Player[ModSdkManager.ModInfo.name].Version = VersionModule.version;
+      modStorage.playerStorage.Version = VersionModule.version;
     }
   }
 

@@ -37,7 +37,7 @@ export class ModStorage<T extends SettingsModel = SettingsModel> {
     return Player.ExtensionSettings[this.modName];
   }
 
-  set extensionStorage(value: string) {
+  private set extensionStorage(value: string) {
     Player.ExtensionSettings[this.modName] = value;
   }
 
@@ -72,6 +72,10 @@ export class ModStorage<T extends SettingsModel = SettingsModel> {
     if (!this.extensionStorage) this.extensionStorage = '';
     this.extensionStorage = ModStorage.dataCompress(this.playerStorage);
     ServerPlayerExtensionSettingsSync(this.modName);
+  }
+
+  storageSize(): number {
+    return ModStorage.measureSize(this.extensionStorage);
   }
 
   static dataDecompress<T = object>(string: string): T | null {

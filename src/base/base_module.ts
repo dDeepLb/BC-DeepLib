@@ -1,4 +1,4 @@
-import { BaseSettingsModel, SettingsModel, Subscreen, ModSdkManager, ModStorage, modStorage, deepMerge } from '../deeplib';
+import { BaseSettingsModel, SettingsModel, Subscreen, modStorage, deepMerge } from '../deeplib';
 
 /**
  * An abstract foundation for modular systems that require:
@@ -45,10 +45,8 @@ export abstract class BaseModule {
    * If no settings exist yet, registers default settings first.
    */
   get settings(): BaseSettingsModel | null {
-    const modName = ModSdkManager.ModInfo.name;
     if (!this.settingsStorage) return null;
     if (!modStorage.playerStorage) {
-      Player[modName] = <SettingsModel>{};
       this.registerDefaultSettings(modStorage.playerStorage);
     } else if (!modStorage.playerStorage[this.settingsStorage]) {
       this.registerDefaultSettings(modStorage.playerStorage);
@@ -62,17 +60,14 @@ export abstract class BaseModule {
    * Automatically initializes storage and defaults if they don't exist.
    */
   set settings(value) {
-    const modName = ModSdkManager.ModInfo.name;
-    const storage = new ModStorage<SettingsModel>(modName);
     if (!this.settingsStorage) return;
-    if (!storage.playerStorage) {
-      Player[modName] = <SettingsModel>{};
+    if (!modStorage.playerStorage) {
       this.registerDefaultSettings(modStorage.playerStorage);
-    } else if (!storage.playerStorage[this.settingsStorage]) {
+    } else if (!modStorage.playerStorage[this.settingsStorage]) {
       this.registerDefaultSettings(modStorage.playerStorage);
     }
 
-    storage.playerStorage[this.settingsStorage] = value;
+    modStorage.playerStorage[this.settingsStorage] = value;
   }
 
   /**
