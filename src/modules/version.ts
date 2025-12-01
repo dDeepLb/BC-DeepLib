@@ -1,4 +1,4 @@
-import { BaseMigrator, BaseModule, ModSdkManager, deepLibLogger, getText, modStorage } from '../deeplib';
+import { BaseMigrator, BaseModule, ModSdkManager, getText, modLogger, modStorage } from '../deeplib';
 
 export type VersionModuleOptions = {
   /**
@@ -118,8 +118,8 @@ export class VersionModule extends BaseModule {
       VersionModule.beforeEach?.();
 
       migrator.migrate();
-      deepLibLogger.info(
-        `Migrating ${ModSdkManager.ModInfo.name} from ${previousVersion} to ${migrator.migrationVersion} with ${migrator.constructor.name}`
+      modLogger.info(
+        `Migrating from ${previousVersion} to ${migrator.migrationVersion} with ${migrator.constructor.name}`
       );
 
       VersionModule.afterEach?.();

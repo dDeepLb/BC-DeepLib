@@ -54,7 +54,7 @@ export let sdk: ModSdkManager;
  * Mod specific logger instance.
  * Initialized by `initMod()`.
  */
-export let logger: Logger;
+export let modLogger: Logger;
 
 /**
  * Entry point for initializing a mod. Handles:
@@ -71,14 +71,14 @@ export function initMod(options: InitOptions) {
     const MOD_NAME = ModSdkManager.ModInfo.name;
 
     modStorage = new ModStorage(ModSdkManager.ModInfo.name);
-    logger = new Logger(MOD_NAME);
+    modLogger = new Logger(MOD_NAME);
     Style.injectInline('deeplib-style', deeplib_style);
 
-    logger.debug('Init wait');
+    modLogger.debug('Init wait');
     if (!CurrentScreen || CurrentScreen === 'Login') {
       options.beforeLogin?.();
       const removeHook = sdk.hookFunction('LoginResponse', 0, (args, next) => {
-        logger.debug('Init! LoginResponse caught: ', args);
+        modLogger.debug('Init! LoginResponse caught: ', args);
         next(args);
         const response = args[0];
         if (response === 'InvalidNamePassword') return next(args);
@@ -88,7 +88,7 @@ export function initMod(options: InitOptions) {
         }
       });
     } else {
-      logger.debug(`Already logged in, initing ${MOD_NAME}`);
+      modLogger.debug(`Already logged in, initing ${MOD_NAME}`);
       init(options);
     }
   });
@@ -129,7 +129,7 @@ async function init(options: InitOptions) {
     MainMenu.setOptions(options.mainMenuOptions);
 
   (window as any)[MOD_NAME + 'Loaded'] = true;
-  logger.log(`Loaded! Version: ${MOD_VERSION}`);
+  modLogger.log(`Loaded! Version: ${MOD_VERSION}`);
 }
 
 
@@ -160,7 +160,7 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
     module.registerDefaultSettings(modStorage.playerStorage);
   }
 
-  logger.debug('Modules Loaded.');
+  modLogger.debug('Modules Loaded.');
   return true;
 }
 
@@ -173,7 +173,7 @@ export function unloadMod(): true {
   unloadModules();
 
   delete (window as any)[MOD_NAME + 'Loaded'];
-  logger.debug('Unloaded.');
+  modLogger.debug('Unloaded.');
   return true;
 }
 

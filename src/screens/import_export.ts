@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, ModSdkManager, getText, layout, deepLibLogger, SubscreenOptions, modules, BaseModule, getModule, hasGetter, deepMerge, BaseSettingsModel } from '../deeplib';
+import { BaseModule, BaseSettingsModel, BaseSubscreen, SubscreenOptions, deepMerge, getModule, getText, hasGetter, layout, modLogger, modules } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { Modal } from '../utilities/elements/modal';
 
@@ -132,7 +132,7 @@ export class GuiImportExport extends BaseSubscreen {
       ToastManager.success('Data exported successfully.');
     } catch (error) {
       ToastManager.error('Data export failed.');
-      deepLibLogger.error(`Data export failed for ${ModSdkManager.ModInfo.name}.`, error,);
+      modLogger.error('Data export failed.', error,);
     }
   }
 
@@ -156,7 +156,7 @@ export class GuiImportExport extends BaseSubscreen {
       ToastManager.success('Data imported successfully.');
     } catch (error) {
       ToastManager.error('Data import failed.');
-      deepLibLogger.error(`Data import failed for ${ModSdkManager.ModInfo.name}.`, error,);
+      modLogger.error('Data import failed.', error,);
     }
   }
 
