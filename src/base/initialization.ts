@@ -171,6 +171,7 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
 export function unloadMod(): true {
   const MOD_NAME = ModSdkManager.ModInfo.name;
   unloadModules();
+  sdk.unload();
 
   delete (window as any)[MOD_NAME + 'Loaded'];
   modLogger.debug('Unloaded.');

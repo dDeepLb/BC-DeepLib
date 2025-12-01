@@ -133,4 +133,11 @@ export class ModSdkManager {
 
     return true;
   }
+
+  /**
+   * Unloads the mod removing all hooks and patches by it.
+   */
+  unload() {
+    ModSdkManager.SDK?.unload();
+  }
 }
