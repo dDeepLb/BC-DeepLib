@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger } from '../deeplib';
+import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, getModule } from '../deeplib';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -21,7 +21,10 @@ interface InitOptions {
    */
   modules?: BaseModule[];
 
-  /** Configuration for customizing the main menu when the mod is active. */
+  /** 
+   * Configuration for customizing the main menu when the mod is active.
+   * Does nothing if GUI module is not loaded. 
+   */
   mainMenuOptions?: Prettify<Omit<MainMenuOptions, 'repoLink'>>;
 
   /**
@@ -124,18 +127,28 @@ async function init(options: InitOptions) {
 
   await Localization.init(options.translationOptions);
 
-  if (options.modules && !initModules(options.modules)) {
+  options.modules ??= [];
+  const modulesToRegister: BaseModule[] = [];
+
+  if (!options.modules.some(m => m instanceof VersionModule)) {
+    modulesToRegister.push(new VersionModule());
+  }
+
+  modulesToRegister.push(...options.modules);
+
+  if (!initModules(modulesToRegister)) {
     unloadMod();
     return;
   }
 
   await options.initFunction?.();
 
-  if (options.mainMenuOptions)
+  if (options.mainMenuOptions && getModule('GUI')) {
     MainMenu.setOptions({
       ...options.mainMenuOptions,
       repoLink: options.modRepository,
     });
+  }
 
   (window as any)[options.modName + 'Loaded'] = true;
   modLogger.log(`Loaded! Version: ${MOD_VERSION_CAPTION}`);
