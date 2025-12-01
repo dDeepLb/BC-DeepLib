@@ -324,7 +324,8 @@ export class GuiImportExport extends BaseSubscreen {
 
     const ret = Object.entries(checkedModules)
       .filter(([_, checked]) => checked)
-      .map(([id]) => getModule(id));
+      .map(([id]) => getModule(id))
+      .filter(m => !!m);
 
     if (ret.length === 0) {
       throw new Error('No modules selected.');
@@ -354,7 +355,7 @@ export class GuiImportExport extends BaseSubscreen {
       throw new Error('Invalid import format.');
     }
 
-    const modules = Object.keys(decoded).map(id => getModule(id));
+    const modules = Object.keys(decoded).map(id => getModule(id)).filter(m => !!m);
     const selectedModules = await this.getSelectedModules(modules, 'import');
 
     if (!selectedModules) {

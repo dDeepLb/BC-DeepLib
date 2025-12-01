@@ -6,7 +6,7 @@ import { BaseModule } from '../deeplib';
  * The map is populated via {@link registerModule} and accessed via {@link modules} or {@link getModule}.
  * This is the central storage for active `BaseModule` instances during the mod lifecycle.
  */
-export const modulesMap: Map<string, BaseModule> = new Map<string, BaseModule>();
+const modulesMap: Map<string, BaseModule> = new Map<string, BaseModule>();
 
 /**
  * Retrieves all registered module instances.
@@ -65,6 +65,6 @@ export function registerModule<T extends BaseModule>(module: T): T {
  * themeModule?.reloadTheme();
  * ```
  */
-export function getModule<T extends BaseModule>(moduleType: string): T {
-  return modulesMap.get(moduleType) as T;
+export function getModule<T extends BaseModule>(moduleType: string): T | undefined {
+  return modulesMap.get(moduleType) as T | undefined;
 }
