@@ -22,7 +22,7 @@ interface InitOptions {
   modules?: BaseModule[];
 
   /** Configuration for customizing the main menu when the mod is active. */
-  mainMenuOptions?: MainMenuOptions;
+  mainMenuOptions?: Prettify<Omit<MainMenuOptions, 'repoLink'>>;
 
   /**
    * Optional hook executed *before* login when the player is not yet authenticated.
@@ -132,7 +132,10 @@ async function init(options: InitOptions) {
   await options.initFunction?.();
 
   if (options.mainMenuOptions)
-    MainMenu.setOptions(options.mainMenuOptions);
+    MainMenu.setOptions({
+      ...options.mainMenuOptions,
+      repoLink: options.modRepository,
+    });
 
   (window as any)[options.modName + 'Loaded'] = true;
   modLogger.log(`Loaded! Version: ${MOD_VERSION_CAPTION}`);
