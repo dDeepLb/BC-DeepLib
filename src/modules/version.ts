@@ -46,8 +46,10 @@ export class VersionModule extends BaseModule {
   private static beforeAll?: () => void;
   private static afterAll?: () => void;
 
-  constructor(options: VersionModuleOptions) {
+  constructor(options?: VersionModuleOptions) {
     super();
+
+    options ??= {};
 
     VersionModule.newVersionMessage = options.newVersionMessage;
 
