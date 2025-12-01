@@ -13,13 +13,13 @@ type GuiOptions = {
    * The label displayed on the settings button.
    * Can be a string or a function that returns a string dynamically.
    */
-  buttonText: string | (() => string);
+  buttonText: Thunk<string>;
 
   /** 
    * The path to or Base64 data of the icon for the settings button.
    * Can be a string or a function that returns a string dynamically.
    */
-  image: string | (() => string);
+  image: Thunk<string>;
   
   /**
    * The main menu screen for the mod.
