@@ -106,7 +106,7 @@ export function initMod(options: InitOptions) {
  *  - Applying main menu changes
  *  - Merging default settings into module settings
  *
- * @param options {InitOptions} Configuration for mod initialization.
+ * @param {InitOptions} options Configuration for mod initialization.
  */
 async function init(options: InitOptions) {
   const MOD_NAME = ModSdkManager.ModInfo.name;
