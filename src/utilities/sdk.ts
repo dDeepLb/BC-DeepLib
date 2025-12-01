@@ -32,23 +32,23 @@ interface IPatchedFunctionData {
  * provides methods to register mods, hook functions, and manage patches.
  */
 export class ModSdkManager {
-  private static SDK: ModSDKModAPI;
-  private static patchedFunctions: Map<string, IPatchedFunctionData> = new Map();
+  private SDK: ModSDKModAPI;
+  private patchedFunctions: Map<string, IPatchedFunctionData> = new Map();
 
   /** Registers a mod with the SDK and stores mod information. */
   constructor(info: ModSDKModInfo, options?: ModSDKModOptions) {
-    ModSdkManager.SDK = bcModSdk.registerMod(info, options);
+    this.SDK = bcModSdk.registerMod(info, options);
   }
 
   /** Retrieves or initializes patch data for a given target function. */
   initPatchableFunction(target: string): IPatchedFunctionData {
-    let result = ModSdkManager.patchedFunctions.get(target);
+    let result = this.patchedFunctions.get(target);
     if (!result) {
       result = {
         name: target,
         hooks: []
       };
-      ModSdkManager.patchedFunctions.set(target, result);
+      this.patchedFunctions.set(target, result);
     }
     return result;
   }
@@ -70,7 +70,7 @@ export class ModSdkManager {
       return () => null;
     }
 
-    const removeCallback = ModSdkManager.SDK?.hookFunction(target, priority, hook);
+    const removeCallback = this.SDK.hookFunction(target, priority, hook);
 
     data.hooks.push({
       hook,
@@ -89,14 +89,14 @@ export class ModSdkManager {
    * **This method is DANGEROUS** to use and has high potential to conflict with other mods.
    */
   patchFunction(target: string, patches: Record<string, string>): void {
-    ModSdkManager.SDK?.patchFunction(target, patches);
+    this.SDK.patchFunction(target, patches);
   }
 
   /**
    * Removes all patches from a target function.
    */
   unpatchFunction(target: string): void {
-    ModSdkManager.SDK?.removePatches(target);
+    this.SDK.removePatches(target);
   }
 
   /**
@@ -119,7 +119,7 @@ export class ModSdkManager {
    * Removes all hooks associated with a specific module across all patched functions.
    */
   removeAllHooksByModule(module: ModuleCategory): boolean {
-    for (const data of ModSdkManager.patchedFunctions.values()) {
+    for (const data of this.patchedFunctions.values()) {
       for (let i = data.hooks.length - 1; i >= 0; i--) {
         if (data.hooks[i].module === module) {
           data.hooks[i].removeCallback();
@@ -135,6 +135,6 @@ export class ModSdkManager {
    * Unloads the mod removing all hooks and patches by it.
    */
   unload() {
-    ModSdkManager.SDK?.unload();
+    this.SDK.unload();
   }
 }
