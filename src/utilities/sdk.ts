@@ -35,12 +35,9 @@ export class ModSdkManager {
   private static SDK: ModSDKModAPI;
   private static patchedFunctions: Map<string, IPatchedFunctionData> = new Map();
 
-  public static ModInfo: ModSDKModInfo;
-
   /** Registers a mod with the SDK and stores mod information. */
   constructor(info: ModSDKModInfo, options?: ModSDKModOptions) {
     ModSdkManager.SDK = bcModSdk.registerMod(info, options);
-    ModSdkManager.ModInfo = info;
   }
 
   /** Retrieves or initializes patch data for a given target function. */

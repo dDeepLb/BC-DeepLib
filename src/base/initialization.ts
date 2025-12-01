@@ -4,14 +4,16 @@ import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
   /**
-   * Information about the mod being initialized.
-   * - `info`    — Required metadata describing the mod.
-   * - `options` — Optional runtime configuration for the Mod SDK.
+   * Name of the mod.
+   * Used to identify the mod in the Mod SDK and storage.
    */
-  modInfo: {
-    info: ModSDKModInfo,
-    options?: ModSDKModOptions
-  };
+  modName: string,
+
+  /**
+   * Repository URL for the mod.
+   * Used to register the mod with the Mod SDK and display in the main menu.
+   */
+  modRepository?: string,
 
   /**
    * List of modules (`BaseModule` subclasses) to register with the mod system.
@@ -56,6 +58,8 @@ export let sdk: ModSdkManager;
  */
 export let modLogger: Logger;
 
+export let MOD_NAME: string;
+
 /**
  * Entry point for initializing a mod. Handles:
  *  - Setting up the Mod SDK
@@ -67,10 +71,15 @@ export function initMod(options: InitOptions) {
   const url = 'https://cdn.jsdelivr.net/npm/bondage-club-mod-sdk@1.2.0/+esm';
 
   import(`${url}`).then(() => {
-    sdk = new ModSdkManager(options.modInfo.info, options.modInfo.options);
-    const MOD_NAME = ModSdkManager.ModInfo.name;
+    sdk = new ModSdkManager({
+      name: options.modName,
+      fullName: options.modName,
+      version: MOD_VERSION,
+      repository: options.modRepository
+    });
+    MOD_NAME = options.modName;
 
-    modStorage = new ModStorage(ModSdkManager.ModInfo.name);
+    modStorage = new ModStorage(options.modName);
     modLogger = new Logger(MOD_NAME);
     Style.injectInline('deeplib-style', deeplib_style);
 
@@ -109,10 +118,7 @@ export function initMod(options: InitOptions) {
  * @param {InitOptions} options Configuration for mod initialization.
  */
 async function init(options: InitOptions) {
-  const MOD_NAME = ModSdkManager.ModInfo.name;
-  const MOD_VERSION = ModSdkManager.ModInfo.version;
-
-  if ((window as any)[MOD_NAME + 'Loaded']) return;
+  if ((window as any)[options.modName + 'Loaded']) return;
 
   modStorage.load();
 
@@ -128,8 +134,8 @@ async function init(options: InitOptions) {
   if (options.mainMenuOptions)
     MainMenu.setOptions(options.mainMenuOptions);
 
-  (window as any)[MOD_NAME + 'Loaded'] = true;
-  modLogger.log(`Loaded! Version: ${MOD_VERSION}`);
+  (window as any)[options.modName + 'Loaded'] = true;
+  modLogger.log(`Loaded! Version: ${MOD_VERSION_CAPTION}`);
 }
 
 
@@ -169,7 +175,6 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
  * Calls `unload()` on all modules and removes the global loaded flag.
  */
 export function unloadMod(): true {
-  const MOD_NAME = ModSdkManager.ModInfo.name;
   unloadModules();
   sdk.unload();
 

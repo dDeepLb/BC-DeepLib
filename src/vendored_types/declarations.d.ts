@@ -28,7 +28,16 @@ declare const MOD_VERSION: string;
  * Used for build identification.
  * @example "a1b2c3d4"
  */
-declare const VERSION_HASH: string;
+declare const COMMIT_HASH: string;
+
+/**
+ * The current mod version caption.
+ * 
+ * This value is computed at build time depending on IS_DEVEL.
+ * @example
+ * IS_DEVEL === true ? "1.0.0 (a1b2c3d4)" : "1.0.0"
+ */
+declare const MOD_VERSION_CAPTION: string;
 
 /**
  * Whether the build is a development build.

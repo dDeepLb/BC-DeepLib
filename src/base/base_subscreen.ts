@@ -1,4 +1,4 @@
-import { BaseModule, BaseSettingsModel, GUI, advElement, ModSdkManager, domUtil, getText, layout, modules, modStorage, exportToGlobal } from '../deeplib';
+import { BaseModule, BaseSettingsModel, GUI, advElement, domUtil, getText, layout, modules, modStorage, exportToGlobal } from '../deeplib';
 import { SettingElement } from './elements_typings';
 
 /** Optional configuration flags for a `BaseSubscreen` instance. */
@@ -296,7 +296,7 @@ export abstract class BaseSubscreen {
     if (this.options.doShowTitle) {
       const subscreenTitle = advElement.createLabel({
         id: 'deeplib-subscreen-title',
-        label: getText(`${this.options.name}.title`).replace('$ModVersion', ModSdkManager.ModInfo.version),
+        label: getText(`${this.options.name}.title`).replace('$ModVersion', MOD_VERSION_CAPTION),
       });
       layout.appendToSubscreen(subscreenTitle);
     }

@@ -1,4 +1,4 @@
-import { BaseMigrator, BaseModule, ModSdkManager, getText, modLogger, modStorage } from '../deeplib';
+import { BaseMigrator, BaseModule, MOD_NAME, getText, modLogger, modStorage } from '../deeplib';
 
 export type VersionModuleOptions = {
   /**
@@ -70,7 +70,7 @@ export class VersionModule extends BaseModule {
    * - Hooks into `ChatRoomSync` to show a "new version" message when applicable.
    */
   load(): void {
-    VersionModule.version = ModSdkManager.ModInfo.version;
+    VersionModule.version = MOD_VERSION;
 
     VersionModule.checkVersionUpdate();
 
@@ -134,7 +134,7 @@ export class VersionModule extends BaseModule {
     
     const beepLogLength = FriendListBeepLog.push({
       MemberNumber: Player.MemberNumber,
-      MemberName: ModSdkManager.ModInfo.name,
+      MemberName: MOD_NAME,
       ChatRoomName: getText('module.version.version_update'),
       ChatRoomSpace: 'X',
       Private: false,
@@ -145,7 +145,7 @@ export class VersionModule extends BaseModule {
 
     const beepIdx = beepLogLength - 1;
     const title = CommonStringPartitionReplace(getText('module.version.new_version_toast_title'), {
-      $modName$: ModSdkManager.ModInfo.name,
+      $modName$: MOD_NAME,
       $modVersion$: VersionModule.version
     }).join('');
     const data = FriendListBeepLog[beepIdx];
