@@ -1,3 +1,4 @@
+import { sdk } from '../deeplib';
 import { ModSdkManager } from './sdk';
 
 type DeepLibMessageDictionaryEntry<Type extends string, Data> = {
@@ -36,7 +37,7 @@ export class EventChannel<TEvents extends Record<string, unknown>, TChannelName 
   private listeners: { [K in keyof TEvents]?: Listener<TEvents[K]>[]; } = {};
 
   constructor(private channelName: TChannelName) {
-    ModSdkManager.prototype.hookFunction('ChatRoomMessageProcessHidden', 0, (args, next) => {
+    sdk.hookFunction('ChatRoomMessageProcessHidden', 0, (args, next) => {
       if (!this.isChannelMessage(args[0] as UnverifiedMessage)) {
         return next(args);
       }
