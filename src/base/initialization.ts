@@ -165,15 +165,24 @@ function initModules(modulesToRegister: BaseModule[]): boolean {
   }
 
   for (const module of modules()) {
-    module.init();
+    const res = tryCatch(() => module.init(), e => e as Error);
+    if (!res.ok) {
+      modLogger.error(res.error);
+    }
   }
 
   for (const module of modules()) {
-    module.load();
+    const res = tryCatch(() => module.load(), e => e as Error);
+    if (!res.ok) {
+      modLogger.error(res.error);
+    }
   }
 
   for (const module of modules()) {
-    module.run();
+    const res = tryCatch(() => module.run(), e => e as Error);
+    if (!res.ok) {
+      modLogger.error(res.error);
+    }
   }
 
   // Running after `.load` because the version modules runs migrations.

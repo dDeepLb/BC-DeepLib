@@ -116,3 +116,29 @@ export function hasSetter<T extends object>(obj: T, prop: keyof T | string): boo
  * Converts bytes to kilobytes. 
  */
 export const byteToKB = (nByte: number) => Math.round(nByte / 100) / 10;
+
+export type Ok<T> = { ok: true; value: T };
+export type Err<E = unknown> = { ok: false; error: E };
+export type Result<T, E = unknown> = Ok<T> | Err<E>;
+
+export function tryCatch<T, E = unknown>(
+  fn: () => T,
+  mapError?: (e: unknown) => E
+): Result<T, E> {
+  try {
+    return { ok: true, value: fn() };
+  } catch (e) {
+    return { ok: false, error: mapError ? mapError(e) : (e as E) };
+  }
+}
+
+export async function tryCatchAsync<T, E = unknown>(
+  fn: () => Promise<T>,
+  mapError?: (e: unknown) => E
+): Promise<Result<T, E>> {
+  try {
+    return { ok: true, value: await fn() };
+  } catch (e) {
+    return { ok: false, error: mapError ? mapError(e) : (e as E) };
+  }
+}
