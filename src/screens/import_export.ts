@@ -1,5 +1,5 @@
 
-import { BaseModule, BaseSettingsModel, BaseSubscreen, SubscreenOptions, deepMerge, getModule, getText, hasGetter, layout, modLogger, modules } from '../deeplib';
+import { BaseModule, BaseSettingsModel, BaseSubscreen, ModuleKey, SubscreenOptions, deepMerge, getModule, getText, hasGetter, layout, modLogger, modules } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { Modal } from '../utilities/elements/modal';
 
@@ -324,7 +324,7 @@ export class GuiImportExport extends BaseSubscreen {
 
     const ret = Object.entries(checkedModules)
       .filter(([_, checked]) => checked)
-      .map(([id]) => getModule(id))
+      .map(([id]) => getModule(id as ModuleKey))
       .filter(m => !!m);
 
     if (ret.length === 0) {
@@ -355,7 +355,7 @@ export class GuiImportExport extends BaseSubscreen {
       throw new Error('Invalid import format.');
     }
 
-    const modules = Object.keys(decoded).map(id => getModule(id)).filter(m => !!m);
+    const modules = Object.keys(decoded).map(id => getModule(id as ModuleKey)).filter(m => !!m);
     const selectedModules = await this.getSelectedModules(modules, 'import');
 
     if (!selectedModules) {

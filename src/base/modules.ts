@@ -1,4 +1,10 @@
-import { BaseModule } from '../deeplib';
+import { GUI, VersionModule } from '../deeplib';
+
+export interface ModulesList {
+  VersionModule: VersionModule;
+  GUI: GUI;
+}
+export type ModuleKey = Prettify<keyof ModulesList>;
 
 /**
  * Global registry of all loaded modules, keyed by their class name.
@@ -6,7 +12,7 @@ import { BaseModule } from '../deeplib';
  * The map is populated via {@link registerModule} and accessed via {@link modules} or {@link getModule}.
  * This is the central storage for active `BaseModule` instances during the mod lifecycle.
  */
-const modulesMap: Map<string, BaseModule> = new Map<string, BaseModule>();
+const modulesMap: Map<ModuleKey, ModulesList[ModuleKey]> = new Map<ModuleKey, ModulesList[ModuleKey]>();
 
 /**
  * Retrieves all registered module instances.
@@ -24,7 +30,7 @@ const modulesMap: Map<string, BaseModule> = new Map<string, BaseModule>();
  * }
  * ```
  */
-export function modules(): BaseModule[] {
+export function modules(): ModulesList[ModuleKey][] {
   return [...modulesMap.values()];
 }
 
@@ -44,8 +50,11 @@ export function modules(): BaseModule[] {
  * registerModule(new MyGlobalModule());
  * ```
  */
-export function registerModule<T extends BaseModule>(module: T): T {
-  modulesMap.set(module.constructor.name, module);
+export function registerModule<K extends ModuleKey>(
+  key: K,
+  module: ModulesList[K]
+): ModulesList[K] {
+  modulesMap.set(key, module);
   return module;
 }
 
@@ -65,6 +74,8 @@ export function registerModule<T extends BaseModule>(module: T): T {
  * themeModule?.reloadTheme();
  * ```
  */
-export function getModule<T extends BaseModule>(moduleType: string): T | undefined {
-  return modulesMap.get(moduleType) as T | undefined;
+export function getModule<K extends ModuleKey>(
+  key: K
+): ModulesList[K] {
+  return modulesMap.get(key) as ModulesList[K];
 }

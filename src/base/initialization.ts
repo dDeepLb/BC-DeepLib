@@ -1,5 +1,5 @@
 import deeplib_style from '../styles/index.scss';
-import { BaseModule, ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, getModule } from '../deeplib';
+import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, ModuleKey, tryCatch, ModulesList, getModule } from '../deeplib';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -19,7 +19,7 @@ interface InitOptions {
    * List of modules (`BaseModule` subclasses) to register with the mod system.
    * Modules are initialized, loaded, and run in order.
    */
-  modules?: BaseModule[];
+  modules?: Partial<ModulesList>;
 
   /** 
    * Configuration for customizing the main menu when the mod is active.
@@ -127,14 +127,14 @@ async function init(options: InitOptions) {
 
   await Localization.init(options.translationOptions);
 
-  options.modules ??= [];
-  const modulesToRegister: BaseModule[] = [];
+  const optionModules = Object.entries(options.modules ?? {}) as [ModuleKey, ModulesList[ModuleKey]][];
+  const modulesToRegister: [ModuleKey, ModulesList[ModuleKey]][] = [];
 
-  if (!options.modules.some(m => m instanceof VersionModule)) {
-    modulesToRegister.push(new VersionModule());
+  if (!optionModules.some(m => m instanceof VersionModule)) {
+    modulesToRegister.push(['VersionModule', new VersionModule()]);
   }
 
-  modulesToRegister.push(...options.modules);
+  modulesToRegister.push(...optionModules);
 
   if (!initModules(modulesToRegister)) {
     unloadMod();
@@ -159,9 +159,9 @@ async function init(options: InitOptions) {
  * Registers and starts all modules.
  * Runs `init()`, `load()`, and `run()` for each module in order.
  */
-function initModules(modulesToRegister: BaseModule[]): boolean {
-  for (const module of modulesToRegister) {
-    registerModule(module);
+function initModules(modulesToRegister: [ModuleKey, ModulesList[ModuleKey]][]): boolean {
+  for (const [moduleKey, module] of modulesToRegister) {
+    registerModule(moduleKey, module);
   }
 
   for (const module of modules()) {
