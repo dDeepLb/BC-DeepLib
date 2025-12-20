@@ -72,7 +72,6 @@ export abstract class BaseModule {
 
   /**
    * Initializes the module.
-   * Default implementation registers default settings immediately.
    * Subclasses can override to perform additional setup.
    */
   init() {
