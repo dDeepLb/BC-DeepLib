@@ -19,6 +19,7 @@ esbuild.build({
   keepNames: true,
   target: 'es2022',
   platform: 'browser',
+  minify: true,
   plugins: [
     sassPlugin({
       type: 'css-text',
