@@ -1,8 +1,10 @@
 import { GUI, VersionModule } from '../deeplib';
+import { DebugModule } from '../modules/debug';
 
 export interface ModulesList {
   VersionModule: VersionModule;
   GUI: GUI;
+  DebugModule: DebugModule;
 }
 export type ModuleKey = Prettify<keyof ModulesList>;
 
