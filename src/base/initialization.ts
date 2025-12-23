@@ -1,5 +1,6 @@
 import deeplib_style from '../styles/index.scss';
 import { ModSdkManager, Localization, modules, registerModule, Style, ModStorage, MainMenuOptions, MainMenu, TranslationOptions, Logger, VersionModule, ModuleKey, tryCatch, ModulesList, getModule } from '../deeplib';
+import { DebugModule } from '../modules/debug';
 
 /** Configuration object for initializing a mod via `initMod`. */
 interface InitOptions {
@@ -130,8 +131,12 @@ async function init(options: InitOptions) {
   const optionModules = Object.entries(options.modules ?? {}) as [ModuleKey, ModulesList[ModuleKey]][];
   const modulesToRegister: [ModuleKey, ModulesList[ModuleKey]][] = [];
 
-  if (!optionModules.some(m => m instanceof VersionModule)) {
+  if (!optionModules.some(m => m[1] instanceof VersionModule)) {
     modulesToRegister.push(['VersionModule', new VersionModule()]);
+  }
+
+  if (IS_DEBUG && !optionModules.some(m => m[1] instanceof DebugModule)) {
+    modulesToRegister.push(['DebugModule', new DebugModule()]);
   }
 
   modulesToRegister.push(...optionModules);

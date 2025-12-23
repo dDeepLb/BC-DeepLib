@@ -11,6 +11,7 @@ export * from './models/settings';
 
 export * from './modules/gui';
 export * from './modules/version';
+export * from './modules/debug';
 
 export * from './screens/debug';
 export * from './screens/main_menu';

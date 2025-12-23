@@ -1,5 +1,5 @@
 
-import { BaseSubscreen, byteToKB, getText, GUI, GuiDebug, layout, modStorage, setSubscreen, SubscreenOptions } from '../deeplib';
+import { BaseSubscreen, byteToKB, getModule, getText, GUI, GuiDebug, layout, modStorage, setSubscreen, SubscreenOptions } from '../deeplib';
 import { advElement } from '../utilities/elements/elements';
 import { GuiImportExport } from './import_export';
 
@@ -206,7 +206,7 @@ export class MainMenu extends BaseSubscreen {
       const debugButton = advElement.createButton({
         id: 'deeplib-debug-button',
         onClick: () => {
-          this.setSubscreen(new GuiDebug());
+          this.setSubscreen(new GuiDebug(getModule('DebugModule')));
         },
         size: [90, 90],
         options: {
